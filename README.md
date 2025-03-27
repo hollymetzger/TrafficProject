@@ -10,5 +10,3 @@ and Washington DC. This will reduce travel time for commuters, CO2
 emissions, injuries from car crashes, work needed to maintain the
 highway, and will make Frederick county a more accessible and
 attractive place to live. 
-
-### 
