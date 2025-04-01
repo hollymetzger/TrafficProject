@@ -16,6 +16,14 @@ public class Location {
     public double getY() {
         return y;
     }
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+
+    // Public methods
+    public double getDistance(Location location) {
+        return Math.sqrt(Math.pow(this.x - location.getX(), 2) + Math.pow(this.y - location.getY(), 2));
+    }
 
     // Testing Method
     public static void doUnitTests() {
