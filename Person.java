@@ -16,6 +16,10 @@ public class Person {
     public Location getDestination() {
         return destination;
     }
+    public String toString() {
+        return "Home: " +home.toString() +
+                "\nDestination: " + destination.toString();
+    }
 
     // Public Methods
     public boolean ridesTransit() {
@@ -29,5 +33,7 @@ public class Person {
     // Testing Method
     public static void doUnitTests() {
         System.out.println("Running Person tests");
+        Person p = new Person(new Location(0, 0), new Location(10, 10));
+        System.out.println(p);
     }
 }

@@ -3,7 +3,7 @@ public class People {
     // Private fields
     private Person[] people;
     private ExponentialDistribution spawnTimeRNG;
-    private LocationRNG locationRNG;
+    private int locationRNG;
 
     // Constructor
     public People(int numberOfPeople) {
