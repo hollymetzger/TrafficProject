@@ -52,7 +52,7 @@ public class Bus extends Vehicle {
     }
 
     // Unit testing method
-    public void doUnitTests() {
-
+    public static void doUnitTests() {
+        System.out.println("Running Bus Tests");
     }
 }

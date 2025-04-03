@@ -33,7 +33,22 @@ public class Person {
     // Testing Method
     public static void doUnitTests() {
         System.out.println("Running Person tests");
+
+        int failCount = 0;
+        int testCount = 0;
+
         Person p = new Person(new Location(0, 0), new Location(10, 10));
-        System.out.println(p);
+        if (!p.getHome().toString().equals("(0.0, 0.0)")) {
+            failCount++;
+            System.out.println("FAIL: person home should have been (0.0, 0.0)");
+        }
+        testCount++;
+        if (!p.getDestination().toString().equals("(10.0, 10.0)")) {
+            failCount++;
+            System.out.println("FAIL: person destination should have been (10.0, 10.0)");
+        }
+        testCount++;
+
+        System.out.printf("Person tests passed: %d/%d\n",testCount-failCount, testCount);
     }
 }
