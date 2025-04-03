@@ -5,8 +5,9 @@ public class Bus extends Vehicle {
     private Location metro;
 
     // Constructor
-    public Bus(double speed, int maxCapacity) {
+    public Bus(double speed, int maxCapacity, Location startLocation) {
         super(speed, maxCapacity);
+        this.nextStop = startLocation;
     }
 
     // Accessors
@@ -54,5 +55,39 @@ public class Bus extends Vehicle {
     // Unit testing method
     public static void doUnitTests() {
         System.out.println("Running Bus Tests");
+
+        int testCount = 0;
+        int failCount = 0;
+
+        Bus b = new Bus(25, 5, new Location(0, 0));
+
+        if (b.getNextStop().getX() != 0) {
+            System.out.println("Fail: next stop should be 0");
+            failCount++;
+        }
+        testCount++;
+
+        b.setNextStop(new Location(22, 22));
+        if (b.getNextStop().getX() != 22) {
+            System.out.println("Fail: next stop should be 22");
+            failCount++;
+        }
+        testCount++;
+
+        Person[] people = new Person[5];
+        for (int i=0; i < 5; i++) {
+            people[i] = new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0));
+        }
+        b.pickUp(people);
+        b.metro = new Location(99.9,99.9);
+
+        // test going to metro if bus is full
+        if (b.determineNextStop().getX() != 99.9) {
+            System.out.println("Fail: next stop should be metro");
+            failCount++;
+        }
+        testCount++;
+
+        System.out.printf("Bus tests passed: %d/%d\n",testCount-failCount, testCount);
     }
 }

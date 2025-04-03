@@ -6,5 +6,6 @@ public class UnitTest {
         Person.doUnitTests();
         People.doUnitTests();
         Vehicle.doUnitTests();
+        Bus.doUnitTests();
     }
 }
