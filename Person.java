@@ -36,18 +36,21 @@ public class Person {
     }
 
     public double update(double currentTime, double dt, Location location) {
-        updateState(location);
+        updateState(dt, location);
         timeInSystem += dt;
         return 1.0;
     }
 
-    private void updateState(Location location) {
+    private void updateState(double dt, Location location) { // todo: handle unfinished states
         switch (currentState) {
             case WAITINGFORSTARTBUS:
                 // Handle waiting for the starting bus
                 break;
             case RIDINGSTARTBUS:
-                // Handle riding the starting bus
+                timeOnStartBus += dt;
+                if (location.isEqual(Parameters.METRO)) {
+                    currentState = State.WAITINGFORTRAIN;
+                }
                 break;
             case WAITINGFORTRAIN:
                 // Handle waiting for the train
