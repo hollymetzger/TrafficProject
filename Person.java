@@ -2,11 +2,17 @@ public class Person {
 
     // Private fields
     private Location home, destination;
+    private State currentState;
+
+    // data analytic fields
+    private double timeInSystem;
+    private double timeOnStartBus;
 
     // Constructor
     public Person(Location home, Location destination) {
         this.home = home;
         this.destination = destination;
+        // todo: add time in simulation for distance walked from home to nearest bus stop
     }
 
     // Accessors
@@ -15,6 +21,9 @@ public class Person {
     }
     public Location getDestination() {
         return destination;
+    }
+    public double getTimeOnStartBus() {
+        return timeOnStartBus;
     }
     public String toString() {
         return "Home: " +home.toString() +
@@ -26,8 +35,35 @@ public class Person {
         return true;
     }
 
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, Location location) {
+        updateState(location);
+        timeInSystem += dt;
         return 1.0;
+    }
+
+    private void updateState(Location location) {
+        switch (currentState) {
+            case WAITINGFORSTARTBUS:
+                // Handle waiting for the starting bus
+                break;
+            case RIDINGSTARTBUS:
+                // Handle riding the starting bus
+                break;
+            case WAITINGFORTRAIN:
+                // Handle waiting for the train
+                break;
+            case RIDINGTRAIN:
+                // Handle riding the train
+                break;
+            case WAITINGFORDESTINATIONBUS:
+                // Handle waiting for the destination bus
+                break;
+            case RIDINGDESTINATIONBUS:
+                // Handle riding the destination bus
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + currentState);
+        }
     }
 
     // Testing Method
