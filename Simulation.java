@@ -1,23 +1,46 @@
 public class Simulation {
     // Parameters for Simulation
-    double MAXTIMEONBUS;
     int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
-    double TIMEBETWEENTRAINS;
-    int DISTANCEBETWEENBUSSTOPS;
+    double TIMEBETWEENTRAINS, DISTANCEBETWEENBUSSTOPS;
     int BUSSPEED, TRAINSPEED;
+    double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
 
     // Arrays to hold objects
-    private Bus[] buses;
-    private Person[] people;
+    private People people;
+    private Buses buses;
+    private Trains trains;
 
     // Fields used while running simulation
     private double currentTime = 0;
+    private boolean isFinished;
 
     // Constructor
-    public Simulation() {
-        people = new Person[Parameters.NUMBEROFPEOPLE];
-        buses = new Bus[Parameters.NUMBEROFBUSES];
+    public Simulation(
+            int numberOfPeople, int numberOfBuses, int numberOfTrains,
+            double timeBetweenTrains, double distanceBetweenBusStops,
+            int busSpeed, int trainSpeed,
+            double maxTimeOnBus, double maxTimeWaitingForBus
+    ) {
+        // Set parameters
+        NUMBEROFPEOPLE = numberOfPeople;
+        NUMBEROFBUSES = numberOfBuses;
+        NUMBEROFTRAINS = numberOfTrains;
+        TIMEBETWEENTRAINS = timeBetweenTrains;
+        DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
+        BUSSPEED = busSpeed;
+        TRAINSPEED = trainSpeed;
+        MAXTIMEONBUS = maxTimeOnBus;
+        MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
+
+        // Declare object classes
+        people = new People(numberOfPeople);
+        buses = new Buses(numberOfBuses);
+        trains = new  Trains(numberOfTrains);
+
+        // Initialize tracking fields
+        currentTime = 0;
+        isFinished = false;
     }
 
     double update(double currentTime, double dt) {
