@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Simulation {
     // Parameters for Simulation
     int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
@@ -10,7 +12,7 @@ public class Simulation {
     private People people;
     private Buses buses;
     private Trains trains;
-    private Location[] busStops;
+    private ArrayList<Location> busStops;
 
     // Fields used while running simulation
     private double currentTime = 0;
@@ -41,6 +43,7 @@ public class Simulation {
         people = new People(numberOfPeople);
         buses = new Buses(numberOfBuses);
         trains = new  Trains(numberOfTrains);
+        busStops = new ArrayList<Location>();
         generateBusStops(FREDERICKRADIUS, DISTANCEBETWEENBUSSTOPS);
 
         // Initialize tracking fields
@@ -66,14 +69,11 @@ public class Simulation {
 
 
     // Private methods
-
     private void generateBusStops(double radius, double distance) {
-        int i = 0;
         for (double x = -radius; x <= radius; x += distance) {
             for (double y = -radius; y <= radius; y += distance) {
                 if (x * x + y * y <= radius * radius) {
-                    this.busStops[i] = new Location(x, y);
-                    i++;
+                    busStops.add(new Location(x, y));
                 }
             }
         }
