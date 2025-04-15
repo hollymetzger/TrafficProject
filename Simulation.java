@@ -14,6 +14,8 @@ public class Simulation {
     // Fields used while running simulation
     private double currentTime = 0;
     private boolean isFinished;
+    private Person[] finishedPeople;
+
 
     // Constructor
     public Simulation(
@@ -41,18 +43,16 @@ public class Simulation {
         // Initialize tracking fields
         currentTime = 0;
         isFinished = false;
+        finishedPeople = new Person[numberOfPeople];
     }
 
+    // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
-        double timeUntilNextEvent = Double.POSITIVE_INFINITY;
-
-        for (int i = -0; i < buses.length; i++) {
-            double time = buses[i].update(currentTime, dt);
-            if (time < timeUntilNextEvent) {
-                timeUntilNextEvent = time;
-            }
-        }
-
-        return timeUntilNextEvent;
+        currentTime += dt;
+        return Math.min(
+            people.update(currentTime, dt),
+            buses.update(),
+            trains.update()
+        );
     }
 }
