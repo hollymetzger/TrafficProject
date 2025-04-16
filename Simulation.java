@@ -12,7 +12,7 @@ public class Simulation {
     private People people;
     private Buses buses;
     private Trains trains;
-    private ArrayList<Location> busStops;
+    private BusStops busStops;
 
     // Fields used while running simulation
     private double currentTime = 0;
@@ -43,8 +43,7 @@ public class Simulation {
         people = new People(numberOfPeople);
         buses = new Buses(numberOfBuses);
         trains = new  Trains(numberOfTrains);
-        busStops = new ArrayList<Location>();
-        generateBusStops(FREDERICKRADIUS, DISTANCEBETWEENBUSSTOPS);
+        busStops = new BusStops(FREDERICKRADIUS, DISTANCEBETWEENBUSSTOPS);
 
         // Initialize tracking fields
         currentTime = 0;
@@ -68,14 +67,5 @@ public class Simulation {
     }
 
 
-    // Private methods
-    private void generateBusStops(double radius, double distance) {
-        for (double x = -radius; x <= radius; x += distance) {
-            for (double y = -radius; y <= radius; y += distance) {
-                if (x * x + y * y <= radius * radius) {
-                    busStops.add(new Location(x, y));
-                }
-            }
-        }
-    }
+
 }
