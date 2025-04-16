@@ -1,8 +1,12 @@
 public class Bus extends Vehicle {
     private double timeToMetroStation;
     private double distanceToNextStop;
+    private double timeSinceLastStop;
     private Location nextStop;
     private Location metro;
+
+    // data analytic fields
+    private double totalDistanceTraveled;
 
     // Constructor
     public Bus(double speed, int maxCapacity, Location startLocation) {
@@ -41,10 +45,26 @@ public class Bus extends Vehicle {
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt) {
+        timeSinceLastStop += dt;
+
+        double distance = speed*dt;
+        distanceToNextStop -= distance;
+        totalDistanceTraveled += distance;
 
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             // todo: pickup and drop off passengers
+
+            // update passengers on bus
+            for (int i = 0; i < currentCapacity; i++) {
+                Person person = passengers[i];
+                person.update(currentTime, timeSinceLastStop, nextStop); // update person with time data
+
+                if (person.getTimeOnStartBus() >= Parameters.MAXTIMEONBUS) {
+                    this.setNextStop(metro);
+                }
+            }
+
             this.setNextStop(this.determineNextStop());
         }
 

@@ -25,6 +25,10 @@ public class Location {
         return Math.sqrt(Math.pow(this.x - location.getX(), 2) + Math.pow(this.y - location.getY(), 2));
     }
 
+    public boolean isEqual(Location other) {
+        return (this.getX() == other.getX() && this.getY() == other.getY());
+    }
+
     // Testing Method
     public static void doUnitTests() {
         System.out.println("Running Location tests");

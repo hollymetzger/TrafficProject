@@ -11,10 +11,10 @@ public class People {
     }
 
     // Public Methods
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, Location location) {
         double timeUntilNextEvent = 1000000.0;
         for (int i = 0; i < this.people.length; i++) {
-            timeUntilNextEvent = Math.min(timeUntilNextEvent, this.people[i].update(currentTime, dt));
+            timeUntilNextEvent = Math.min(timeUntilNextEvent, this.people[i].update(currentTime, dt, location));
         }
         return timeUntilNextEvent;
     }
@@ -27,11 +27,12 @@ public class People {
         int testCount = 0;
 
         People people = new People(2);
-        people.people[0] = new Person(new Location(0, 0), new Location(10, 10));
-        people.people[1] = new Person(new Location(0, 0), new Location(20, 20));
+        Location loc0 = new Location(0, 0);
+        people.people[0] = new Person(loc0, new Location(10, 10));
+        people.people[1] = new Person(loc0, new Location(20, 20));
 
         // Currently, person.update is hard coded to return 1.0, so test that
-        if (people.update(1.0,1.0) != 1.0) {
+        if (people.update(1.0,1.0, loc0) != 1.0) {
             System.out.println("People test failed");
             failCount++;
         }
