@@ -13,10 +13,6 @@ public class BusStops {
 
     // Public methods
 
-    public BusStop getNearestBusStop(Location loc) {
-        // todo: implement me
-    }
-
     // Private methods
     private void generateBusStops(double radius, double distance) {
         for (double x = -radius; x <= radius; x += distance) {

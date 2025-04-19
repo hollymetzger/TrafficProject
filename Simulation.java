@@ -1,4 +1,9 @@
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 
 public class Simulation {
     // Parameters for Simulation
@@ -6,6 +11,7 @@ public class Simulation {
     double TIMEBETWEENTRAINS, DISTANCEBETWEENBUSSTOPS, FREDERICKRADIUS;
     int BUSSPEED, TRAINSPEED;
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
+    City[] cities;
 
 
     // Object holders
@@ -77,7 +83,4 @@ public class Simulation {
         //  between arrivals decreases as time goes on, then goes back up toward the end
         return arrivalTimeRNG.sample();
     }
-
-
-
 }

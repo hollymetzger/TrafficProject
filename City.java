@@ -1,14 +1,17 @@
 public class City extends Location {
     private String name;
     private int population;
-    private double radius;
+    private double radius, distance;
+    private BusStops busStops;
 
     // Constructor
-    public City (double x, double y, String nm, int pop, double r) {
+    public City (String nm, double x, double y, int pop, double r, double dis) {
         super(x, y);
         name = nm;
         population = pop;
         radius = r;
+        distance = dis;
+        busStops = new BusStops(radius, distance);
     }
 
     // Public Methods

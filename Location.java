@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Location {
 
     // Private fields
@@ -29,15 +31,17 @@ public class Location {
         return (this.getX() == other.getX() && this.getY() == other.getY());
     }
 
-    public Location getNearest(Location[] locs) {
-        Location closest = locs[0];
-        double distance = this.getDistance(locs[0]);
-        for (int i = 1; i < locs.length; i++) {
-            if (this.getDistance(locs[i]) < distance) {
-                distance = this.getDistance(locs[i]);
-                closest = locs[i];
+    public Location getNearest(ArrayList<Location> locs) {
+        Location closest = locs.get(0);
+        double distance = this.getDistance(closest);
+
+        for( Location loc : locs) {
+            if (this.getDistance(loc) < distance) {
+                distance = this.getDistance(loc);
+                closest = loc;
             }
         }
+
         return closest;
     }
     // Testing Method
@@ -60,6 +64,17 @@ public class Location {
             failCount++;
         }
         testCount++;
+
+        ArrayList<Location> locs = new ArrayList<Location>();
+        locs.add(new Location(0,0));
+        locs.add(new Location(-1,-1));
+        locs.add(new Location(1,1));
+
+        Location closest = l2.getNearest(locs);
+        if (!closest.isEqual(new Location(1,1))) {
+            System.out.println("Fail: closest location should be (1,1)");
+            failCount++;
+        } testCount++;
 
         System.out.printf("Location tests passed: %d/%d\n",testCount-failCount, testCount);
     }
