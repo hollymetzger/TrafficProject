@@ -11,12 +11,10 @@ public class People {
     }
 
     // Public Methods
-    public double update(double currentTime, double dt, Location location) {
-        double timeUntilNextEvent = 1000000.0;
-        for (int i = 0; i < this.people.length; i++) {
-            timeUntilNextEvent = Math.min(timeUntilNextEvent, this.people[i].update(currentTime, dt, location));
-        }
-        return timeUntilNextEvent;
+
+    // The People.update method handles arrivals to system
+    public double update(double currentTime, double dt) {
+        return 1.0;
     }
 
     // Testing Method
