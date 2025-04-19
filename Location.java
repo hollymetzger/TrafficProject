@@ -29,6 +29,17 @@ public class Location {
         return (this.getX() == other.getX() && this.getY() == other.getY());
     }
 
+    public Location getNearest(Location[] locs) {
+        Location closest = locs[0];
+        double distance = this.getDistance(locs[0]);
+        for (int i = 1; i < locs.length; i++) {
+            if (this.getDistance(locs[i]) < distance) {
+                distance = this.getDistance(locs[i]);
+                closest = locs[i];
+            }
+        }
+        return closest;
+    }
     // Testing Method
     public static void doUnitTests() {
         System.out.println("Running Location tests");
