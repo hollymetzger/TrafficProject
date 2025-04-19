@@ -44,4 +44,12 @@ public class Cities {
         return new City(name, x, y, population, radius, distance);
     }
 
+
+
+    // Unit Testing Method
+
+    public static void doUnitTests() {
+        // todo: add unit tests
+    }
+
 }

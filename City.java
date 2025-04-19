@@ -22,4 +22,8 @@ public class City extends Location {
 
 
     // Unit Testing Method
+
+    public static void doUnitTests() {
+        // todo: add unit tests
+    }
 }
