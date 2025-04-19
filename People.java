@@ -2,8 +2,9 @@ public class People {
 
     // Private fields
     private Person[] people;
-    private ExponentialDistribution spawnTimeRNG;
+    private ExponentialDistribution arrivalTimeRNG;
     private int locationRNG;
+    private double timeUntilNextArrival;
 
     // Constructor
     public People(int numberOfPeople) {
@@ -13,8 +14,17 @@ public class People {
     // Public Methods
 
     // The People.update method handles arrivals to system
-    public double update(double currentTime, double dt) {
-        return 1.0;
+    public double update(double currentTime, double dt, BusStops stops) {
+        timeUntilNextArrival = Math.max (0, timeUntilNextArrival-=dt);
+        if (timeUntilNextArrival == 0) {
+            generate(stops);
+        }
+        return timeUntilNextArrival;
+    }
+
+    public void generate(BusStops stops) {
+        // todo: implement this
+        //  need to create location weight data structure
     }
 
     // Testing Method

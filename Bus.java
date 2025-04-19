@@ -29,11 +29,8 @@ public class Bus extends Vehicle {
     // Public methods
 
     // Returns a Location the bus will travel to next
-    public Location determineNextStop() {
-        if (currentCapacity == maxCapacity) {
-            return metro;
-        }
-        return new Location(0,0);
+    public Location determineNextStop(BusStops stops) {
+        return determineNextStopPlaceholder();
     }
 
     // Using the location determined above, calculate distance and set this.nextStop
@@ -70,6 +67,20 @@ public class Bus extends Vehicle {
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
         return distanceToNextStop/speed; // return the time it will take to reach next stop
+    }
+
+    // Private Methods
+
+    private Location determineNextStopPlaceholder() {
+        return new Location(1.0,1.0);
+    }
+
+    private Location determineNextStopSmartly() {
+        if (currentCapacity == maxCapacity) {
+            return metro;
+        }
+        // todo: determine the next stop by comparing the bus stops' number of passengers,
+        //  longest wait time, and sum of wait times at the bus stop
     }
 
     // Unit testing method

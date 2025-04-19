@@ -29,17 +29,17 @@ public class Vehicle {
                "Capacity: " + currentCapacity + "/'" + maxCapacity;
     }
 
-    public void pickUp(Person[] pass) {
-        // add passengers from argument to this.passengers, taking the ones who have been waiting longest if
+    public void pickUp(BusStop stop) {
+        // add passengers from Bus Stop to this.passengers, taking the ones who have been waiting longest if
         // there are more than can fit
 
-        // todo: make it so the vehicle takes the first arrived passengers and leaves if/once full
-        for (int i = 0; i < pass.length; i++) {
-            this.passengers[currentCapacity++] = pass[i];
-        }
+        // todo: add passengers from stop's queue to bus, until bus is full
+
+
     }
 
     public void dropOff(Location destination) {
+        // todo: implement this
         // for person in passengers:
         //      if destination is their destination:
         //          get off vehicle

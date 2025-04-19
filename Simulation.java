@@ -8,7 +8,7 @@ public class Simulation {
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
 
-    // Arrays to hold objects
+    // Object holders
     private People people;
     private Buses buses;
     private Trains trains;
@@ -17,6 +17,7 @@ public class Simulation {
     // Fields used while running simulation
     private double currentTime = 0;
     private boolean isFinished;
+    private boolean justStarted;
     private Person[] finishedPeople;
 
 
@@ -48,11 +49,16 @@ public class Simulation {
         // Initialize tracking fields
         currentTime = 0;
         isFinished = false;
+        justStarted = true;
         finishedPeople = new Person[numberOfPeople];
+        arrivalTimeRNG = new ExponentialDistribution(1.0);
+        timeUntilNextArrival = arrivalTimeRNG.sample();
     }
 
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
+
+        // todo: if just started, dt is timeUntilNextArrival
         currentTime += dt;
         double timeUntilNextEvent = Math.min(
             people.update(currentTime, dt),
@@ -64,6 +70,12 @@ public class Simulation {
             isFinished = true;
         }
         return timeUntilNextEvent;
+    }
+
+    private double setNextArrivalTime(double currentTime) {
+        // todo: exponentially determine next arriival time, where average time
+        //  between arrivals decreases as time goes on, then goes back up toward the end
+        return arrivalTimeRNG.sample();
     }
 
 
