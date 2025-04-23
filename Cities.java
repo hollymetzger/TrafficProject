@@ -2,15 +2,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Cities {
 
     // Private Fields
-    static City[] cities;
+    static ArrayList<City> cities;
 
     // Constructor
-    public Cities(int count, String filename) {
-        cities = new City[100];
+    public Cities(String filename) {
+        cities = new ArrayList<City>();
         if (!(importFromCSV(filename, cities))) {
             System.out.println("Error while importing city data");
         }
@@ -18,11 +19,11 @@ public class Cities {
 
     // Accessors
     public int getLength() {
-        return cities.length;
+        return cities.size();
     }
 
     // Private Methods
-    private boolean importFromCSV(String filename, City[] cities) {
+    private boolean importFromCSV(String filename, ArrayList<City> cities) {
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
@@ -31,7 +32,7 @@ public class Cities {
             int i = 0;
             while( scanner.hasNextLine() ) {
                 String data = scanner.nextLine();
-                cities[i++] = makeCity(data);
+                cities.add(makeCity(data));
             }
         }  catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
@@ -79,7 +80,7 @@ public class Cities {
     public static void doUnitTests() throws Exception {
         Cities citiesTest = new Cities(7, "src/cities.csv");
         for (int i = 0; i < citiesTest.getLength(); i++) {
-            System.out.println(cities[i]);
+            System.out.println(cities.get(i));
         }
     }
 
