@@ -1,0 +1,18 @@
+# IntelliJ files
+.idea/
+*.iml
+
+# Java build output
+out/
+target/
+bin/
+build/
+
+# Temporary files
+*.class
+*.swp
+*~
+
+# Testing/Import files
+*.csv
+*.txt
