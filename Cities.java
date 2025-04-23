@@ -34,14 +34,25 @@ public class Cities {
     }
 
     private static City makeCity(String data) {
-        String[] fields = data.split(",");
-        String name = fields[0];
-        double x = Double.parseDouble(fields[1]);
-        double y = Double.parseDouble(fields[2]);
-        int population = Integer.parseInt(fields[3]);
-        double radius = Double.parseDouble(fields[4]);
-        double distance = Double.parseDouble(fields[5]);
-        return new City(name, x, y, population, radius, distance);
+        String name = null;
+        double x = 0;
+        double y = 0;
+        int population = 0;
+        double distance = 0;
+        double radius = 0;
+        try {
+            String[] fields = data.split(",");
+            name = fields[0];
+            x = Double.parseDouble(fields[1]);
+            y = Double.parseDouble(fields[2]);
+            population = Integer.parseInt(fields[3]);
+            radius = Double.parseDouble(fields[4]);
+            distance = Double.parseDouble(fields[5]);
+        } catch (NumberFormatException nfe) {
+            System.out.println("Unable to parse number(s) from this city data: ");
+            System.out.println(data);
+        }
+        return new City(name, x, y, population, distance, radius);
     }
 
 
