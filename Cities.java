@@ -78,10 +78,9 @@ public class Cities {
 
     // Unit Testing Method
     public static void doUnitTests() throws Exception {
-        Cities citiesTest = new Cities(7, "src/cities.csv");
+        Cities citiesTest = new Cities("src/cities.csv");
         for (int i = 0; i < citiesTest.getLength(); i++) {
             System.out.println(cities.get(i));
         }
     }
-
 }
