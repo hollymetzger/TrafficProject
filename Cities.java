@@ -1,5 +1,6 @@
 import java.io.File;
-import java.text.ParseException;
+import java.io.FileNotFoundException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Cities {
@@ -26,7 +27,16 @@ public class Cities {
                 String data = scanner.nextLine();
                 cities[i++] = makeCity(data);
             }
-        } catch (Exception e) {
+        }  catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            e.printStackTrace();
+            return false;
+        } catch (IllegalStateException e) {
+            System.out.println("Scanner was closed somehow");
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchElementException e) {
+            System.out.println("Scanner tried to access line beyond EOF");
             e.printStackTrace();
             return false;
         }
