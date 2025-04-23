@@ -14,6 +14,14 @@ public class City extends Location {
         busStops = new BusStops(radius, distance);
     }
 
+    // Accessors
+    public String toString() {
+        return "Name: " + name +
+                "\nPopulation: " + population +
+                "\nRadius: " + radius +
+                "\nDistance between bus stops: " + distance;
+    }
+
     // Public Methods
 
 

@@ -6,22 +6,28 @@ import java.util.Scanner;
 public class Cities {
 
     // Private Fields
-    City[] cities;
+    static City[] cities;
 
     // Constructor
-    public Cities(int count, String filename) throws Exception {
-        cities = new City[count];
+    public Cities(int count, String filename) {
+        cities = new City[100];
         if (!(importFromCSV(filename, cities))) {
             System.out.println("Error while importing city data");
         }
     }
 
+    // Accessors
+    public int getLength() {
+        return cities.length;
+    }
+
     // Private Methods
     private boolean importFromCSV(String filename, City[] cities) {
-        File file = new File( filename );
+        File file = new File(filename);
+        System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
         try {
-            scanner = new Scanner( file );
+            scanner = new Scanner(file);
             int i = 0;
             while( scanner.hasNextLine() ) {
                 String data = scanner.nextLine();
@@ -61,6 +67,8 @@ public class Cities {
         } catch (NumberFormatException nfe) {
             System.out.println("Unable to parse number(s) from this city data: ");
             System.out.println(data);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Insufficient number of fields in CSV file");
         }
         return new City(name, x, y, population, distance, radius);
     }
@@ -68,9 +76,11 @@ public class Cities {
 
 
     // Unit Testing Method
-
-    public static void doUnitTests() {
-        // todo: add unit tests
+    public static void doUnitTests() throws Exception {
+        Cities citiesTest = new Cities(7, "src/cities.csv");
+        for (int i = 0; i < citiesTest.getLength(); i++) {
+            System.out.println(cities[i]);
+        }
     }
 
 }
