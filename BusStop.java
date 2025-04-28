@@ -24,5 +24,11 @@ public class BusStop extends Location {
         //  waiting at this stop
     }
 
+    public void add(Person person) {
+        System.out.print("Added person to queue");
+        // todo: handle adding a newly generated person to the busStop
+        //  including adding walking time
+    }
+
 
 }

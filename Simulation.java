@@ -67,7 +67,7 @@ public class Simulation {
         // todo: if just started, dt is timeUntilNextArrival
         currentTime += dt;
         double timeUntilNextEvent = Math.min(
-            people.update(currentTime, dt),
+            cities.update(currentTime, dt),
             buses.update(),
             trains.update()
         );
