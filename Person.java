@@ -2,7 +2,6 @@ public class Person {
 
     // Private fields
     private Location home, destination;
-    private State currentState;
 
     // data analytic fields
     private double timeInSystem;
@@ -36,37 +35,8 @@ public class Person {
     }
 
     public double update(double currentTime, double dt, Location location) {
-        updateState(dt, location);
         timeInSystem += dt;
         return 1.0;
-    }
-
-    private void updateState(double dt, Location location) { // todo: handle unfinished states
-        switch (currentState) {
-            case WAITINGFORSTARTBUS:
-                // Handle waiting for the starting bus
-                break;
-            case RIDINGSTARTBUS:
-                timeOnStartBus += dt;
-                if (location.isEqual(Parameters.METRO)) {
-                    currentState = State.WAITINGFORTRAIN;
-                }
-                break;
-            case WAITINGFORTRAIN:
-                // Handle waiting for the train
-                break;
-            case RIDINGTRAIN:
-                // Handle riding the train
-                break;
-            case WAITINGFORDESTINATIONBUS:
-                // Handle waiting for the destination bus
-                break;
-            case RIDINGDESTINATIONBUS:
-                // Handle riding the destination bus
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + currentState);
-        }
     }
 
     // Testing Method

@@ -12,7 +12,7 @@ public class Cities {
     // Constructor
     public Cities(String filename) {
         cities = new ArrayList<City>();
-        if (!(importFromCSV(filename, cities))) {
+        if (!(importFromCSV(filename))) {
             System.out.println("Error while importing city data");
         }
     }
@@ -22,8 +22,13 @@ public class Cities {
         return cities.size();
     }
 
-    // Private Methods
-    private boolean importFromCSV(String filename, ArrayList<City> cities) {
+    // Public Methods
+
+    public double update(double currentTime, double dt) {
+        return -1.0;
+    }
+
+    public boolean importFromCSV(String filename) {
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
@@ -50,6 +55,15 @@ public class Cities {
         return true;
     }
 
+    public int getTotalPopulation() {
+        int total = 0;
+        for (City city : cities) {
+            total += city.getPopulation();
+        }
+        return total;
+    }
+
+    // Private Methods
     private static City makeCity(String data) {
         String name = null;
         double x = 0;

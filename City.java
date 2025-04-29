@@ -2,23 +2,27 @@ public class City extends Location {
     private String name;
     private int population;
     private double radius, distance;
+    private Bus[] buses;
     private BusStops busStops;
     private double timeUntilNextArrival;
     private ExponentialDistribution distanceRNG;
 
     // Constructor
-    public City (String nm, double x, double y, int pop, double r, double dis, double time) {
+    public City (String nm, double x, double y, int pop, double r, double dis) {
         super(x, y);
         name = nm;
         population = pop;
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance);
-        timeUntilNextArrival = time;
+        timeUntilNextArrival = Double.POSITIVE_INFINITY;
 
     }
 
     // Accessors
+    public int getPopulation() {
+        return population;
+    }
     public String toString() {
         return "Name: " + name +
                 "\nPopulation: " + population +
@@ -61,7 +65,11 @@ public class City extends Location {
     }
 
     // Private Methods
-
+    private double setNextArrivalTime(double currentTime) {
+        // todo: exponentially determine next arriival time, where average time
+        //  between arrivals decreases as time goes on, then goes back up toward the end
+        return arrivalTimeRNG.sample();
+    }
 
 
     // Unit Testing Method
