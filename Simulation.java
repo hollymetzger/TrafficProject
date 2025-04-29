@@ -19,7 +19,6 @@ public class Simulation {
     // Fields used while running simulation
     private double currentTime = 0;
     private boolean isFinished;
-    private boolean justStarted;
     private Person[] finishedPeople;
 
     // Constructor
@@ -31,6 +30,7 @@ public class Simulation {
             String citiesCSV
     ) {
         // Set parameters
+        NUMBEROFPEOPLE = cities.getTotalPopulation();
         NUMBEROFBUSES = numberOfBuses;
         NUMBEROFTRAINS = numberOfTrains;
         TIMEBETWEENTRAINS = timeBetweenTrains;
@@ -45,8 +45,6 @@ public class Simulation {
         // Initialize tracking fields
         currentTime = 0;
         isFinished = false;
-        justStarted = true;
-        NUMBEROFPEOPLE = cities.getTotalPopulation();
         finishedPeople = new Person[NUMBEROFPEOPLE];
     }
 

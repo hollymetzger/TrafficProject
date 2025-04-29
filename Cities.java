@@ -51,6 +51,10 @@ public class Cities {
             System.out.println("Scanner tried to access line beyond EOF");
             e.printStackTrace();
             return false;
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
         }
         return true;
     }
