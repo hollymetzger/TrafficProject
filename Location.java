@@ -31,11 +31,11 @@ public class Location {
         return (this.getX() == other.getX() && this.getY() == other.getY());
     }
 
-    public Location getNearest(ArrayList<Location> locs) {
-        Location closest = locs.get(0);
+    public <T extends Location> T getNearest(ArrayList<T> locs) {
+        T closest = locs.getFirst();
         double distance = this.getDistance(closest);
 
-        for( Location loc : locs) {
+        for (T loc : locs) {
             if (this.getDistance(loc) < distance) {
                 distance = this.getDistance(loc);
                 closest = loc;
