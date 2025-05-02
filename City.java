@@ -38,7 +38,9 @@ public class City extends Location {
          return timeOfNextEvent;
     }
 
-    public void generate() {
+    public void generateCommuter() {
+        if (population == 0) { return; } // double check not to spawn extra people
+
         // generate random point
         double theta = Math.TAU*Math.random();
         double r = distanceRNG.sample();
@@ -56,6 +58,7 @@ public class City extends Location {
         for (BusStop s : this.busStops.getStops()) {
             if (s.isEqual(stop)) {
                 s.add(person);
+                population--;
                 return;
             }
         }

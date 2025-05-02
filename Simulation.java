@@ -20,6 +20,7 @@ public class Simulation {
     private double currentTime = 0;
     private boolean isFinished;
     private Person[] finishedPeople;
+    private double timeOfNextArrival;
 
     // Constructor
     public Simulation(
@@ -46,6 +47,7 @@ public class Simulation {
         currentTime = 0;
         isFinished = false;
         finishedPeople = new Person[NUMBEROFPEOPLE];
+        timeOfNextArrival = setNextArrivalTime(currentTime);
     }
     // Accessors
     public boolean getFinished() {
@@ -62,14 +64,22 @@ public class Simulation {
 
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
-
-        // todo: if just started, dt is timeUntilNextArrival
         currentTime += dt;
+
+        // add commuters to the simulation
+        if (currentTime >= timeOfNextArrival) {
+            cities.generateCommuter();
+            timeOfNextArrival = setNextArrivalTime(currentTime);
+        }
+
+        // determine the time of the next event in the simulation
         double timeUntilNextEvent = Math.min(
+            timeOfNextArrival,
             cities.update(currentTime, dt),
             trains.update()
         );
 
+        // check if simulation is finished
         if (finishedPeople.length == NUMBEROFPEOPLE) {
             isFinished = true;
         }
@@ -81,6 +91,6 @@ public class Simulation {
     private double setNextArrivalTime(double currentTime) {
         // todo: exponentially determine next arriival time, where average time
         //  between arrivals decreases as time goes on, then goes back up toward the end
-        return arrivalTimeRNG.sample();
+        return currentTime + 1.0;
     }
 }

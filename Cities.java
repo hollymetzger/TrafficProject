@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Cities {
 
     // Private Fields
-    static ArrayList<City> cities;
+    private static ArrayList<City> cities;
 
     // Constructor
     public Cities(String filename) {
@@ -23,9 +23,12 @@ public class Cities {
     }
 
     // Public Methods
-
     public double update(double currentTime, double dt) {
-        return -1.0;
+        double timeOfNextEvent = Double.POSITIVE_INFINITY;
+        for (City city : cities) {
+            timeOfNextEvent = Math.min(city.update(currentTime, dt), timeOfNextEvent);
+        }
+        return timeOfNextEvent;
     }
 
     public boolean importFromCSV(String filename) {
@@ -66,6 +69,21 @@ public class Cities {
         }
         return total;
     }
+
+    public void generateCommuter() {
+        int randomInt = (int) (Math.random()*getTotalPopulation());
+        int populationSum = 0;
+
+        // add up the cities' populations, and once we are over the random int, generate in that city
+        for (City city : cities) {
+            populationSum += city.getPopulation();
+            if (randomInt <= populationSum) {
+                city.generateCommuter();
+            }
+        }
+    }
+
+
 
     // Private Methods
     private static City makeCity(String data) {
