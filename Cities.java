@@ -89,7 +89,7 @@ public class Cities {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Insufficient number of fields in CSV file");
         }
-        return new City(name, x, y, population, distance, radius);
+        return new City(name, x, y, population, distance, radius, 10); // todo: add bus count variable
     }
 
 

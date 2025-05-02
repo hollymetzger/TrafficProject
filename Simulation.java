@@ -47,6 +47,18 @@ public class Simulation {
         isFinished = false;
         finishedPeople = new Person[NUMBEROFPEOPLE];
     }
+    // Accessors
+    public boolean getFinished() {
+        return isFinished;
+    }
+
+    // Public Methods
+
+    public void run() {
+        while (!isFinished) {
+            update();
+        }
+    }
 
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
@@ -64,6 +76,8 @@ public class Simulation {
         return timeUntilNextEvent;
     }
 
+
+    // Private Methods
     private double setNextArrivalTime(double currentTime) {
         // todo: exponentially determine next arriival time, where average time
         //  between arrivals decreases as time goes on, then goes back up toward the end
