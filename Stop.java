@@ -32,8 +32,8 @@ public class Stop extends Location {
 
     public void add(Person person) {
         System.out.print("Added person to queue");
-        // todo: handle adding a newly generated person to the busStop
-        //  including adding walking time
+        line.enqueue(person);
+        double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
     }
 
 

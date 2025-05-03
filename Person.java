@@ -11,7 +11,6 @@ public class Person {
     public Person(Location home, Location destination) {
         this.home = home;
         this.destination = destination;
-        // todo: add time in simulation for distance walked from home to nearest bus stop
     }
 
     // Accessors
@@ -27,6 +26,12 @@ public class Person {
     public String toString() {
         return "Home: " +home.toString() +
                 "\nDestination: " + destination.toString();
+    }
+
+    // Mutators
+    // used when first adding person to bus stop
+    public void addWalkTime(double time) {
+        timeInSystem += time;
     }
 
     // Public Methods

@@ -29,10 +29,12 @@ public class Vehicle {
                "Capacity: " + currentCapacity + "/'" + maxCapacity;
     }
 
+    // add passengers from queue to this.passengers
     public void pickUp(Queue<Person> people) {
-        // add passengers from stop;s queue to this.passengers in order of arrival
-
-        while (currentCapacity)
+        while (currentCapacity < maxCapacity) {
+            passengers[currentCapacity] = people.dequeue();
+            currentCapacity++;
+        }
 
         // todo: add passengers from stop's queue to bus, until bus is full
 
