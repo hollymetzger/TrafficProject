@@ -3,29 +3,26 @@ import java.util.ArrayList;
 public class BusStops {
 
     // Private fields
-    private ArrayList<BusStop> busStops;
+    private ArrayList<Stop> busStops;
+    private Stop metro;
 
     // Constructor
-    public BusStops(double radius, double distance) {
-        busStops = new ArrayList<BusStop>();
+    public BusStops(double radius, double distance, Stop metro) {
+        busStops = new ArrayList<Stop>();
         generateBusStops(radius, distance);
     }
 
     // Accessors
-    public ArrayList<BusStop> getStops() {
+    public ArrayList<Stop> getStops() {
         return busStops;
     }
-
-    // Public Methods
-
-
 
     // Private methods
     private void generateBusStops(double radius, double distance) {
         for (double x = -radius; x <= radius; x += distance) {
             for (double y = -radius; y <= radius; y += distance) {
                 if (x * x + y * y <= radius * radius) {
-                    busStops.add(new BusStop(x, y));
+                    busStops.add(new Stop(x, y));
                 }
             }
         }

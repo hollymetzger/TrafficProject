@@ -33,7 +33,7 @@ public class City extends Location {
     public double update(double currentTime, double dt) {
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (Bus bus : buses) {
-            timeOfNextEvent = Math.min(bus.update(currentTime, dt), timeOfNextEvent);
+            timeOfNextEvent = Math.min(bus.update(currentTime, dt, busStops), timeOfNextEvent);
         }
          return timeOfNextEvent;
     }
@@ -53,9 +53,9 @@ public class City extends Location {
         Person person = new Person(home, destination);
 
         // Add the person to the queue of the nearest bus stop in the city
-        BusStop stop = home.getNearest(busStops.getStops());
+        Stop stop = home.getNearest(busStops.getStops());
 
-        for (BusStop s : this.busStops.getStops()) {
+        for (Stop s : this.busStops.getStops()) {
             if (s.isEqual(stop)) {
                 s.add(person);
                 population--;

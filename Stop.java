@@ -1,4 +1,4 @@
-public class BusStop extends Location {
+public class Stop extends Location {
 
     // Private Fields
     private Queue<Person> line;
@@ -7,11 +7,11 @@ public class BusStop extends Location {
     boolean metro;
 
     // Constructors
-    public BusStop(double x, double y) {
+    public Stop(double x, double y) {
         super(x, y);
         metro = false;
     }
-    public BusStop(double x, double y, boolean met) {
+    public Stop(double x, double y, boolean met) {
         super(x, y);
         metro = met;
     }

@@ -34,7 +34,7 @@ public class Person {
         return true;
     }
 
-    public double update(double currentTime, double dt, Location location) {
+    public double update(double currentTime, double dt) {
         timeInSystem += dt;
         return 1.0;
     }

@@ -2,14 +2,14 @@ public class Bus extends Vehicle {
     private double timeToMetroStation;
     private double distanceToNextStop;
     private double timeSinceLastStop;
-    private BusStop nextStop;
-    private BusStop metro;
+    private Stop nextStop;
+    private Stop metro;
 
     // data analytic fields
     private double totalDistanceTraveled;
 
     // Constructor
-    public Bus(double speed, int maxCapacity, BusStop startLocation) {
+    public Bus(double speed, int maxCapacity, Stop startLocation) {
         super(speed, maxCapacity);
         this.nextStop = startLocation;
     }
@@ -28,20 +28,20 @@ public class Bus extends Vehicle {
 
     // Public methods
 
-    // Returns the BusStop the bus will travel to next
-    public BusStop determineNextStop(BusStops stops) {
+    // Returns the Stop the bus will travel to next
+    public Stop determineNextStop(BusStops stops) {
         return determineNextStopPlaceholder();
     }
 
     // Using the location determined above, calculate distance and set this.nextStop
-    public void setNextStop(BusStop ns) {
-        BusStop currentStop = this.nextStop;
+    public void setNextStop(Stop ns) {
+        Stop currentStop = this.nextStop;
         this.nextStop = ns;
         this.distanceToNextStop = currentStop.getDistance(ns);
     }
 
     // Advances the bus in the simulation by dt time
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, BusStops stops) {
         timeSinceLastStop += dt;
 
         double distance = speed*dt;
@@ -59,13 +59,13 @@ public class Bus extends Vehicle {
                     this.setNextStop(metro);
                 }
             }
-            this.setNextStop(this.determineNextStop());
+            this.setNextStop(this.determineNextStop(stops));
         }
 
         // update passengers on bus
         for (int i = 0; i < currentCapacity; i++) {
             Person person = passengers[i];
-            person.update(currentTime, timeSinceLastStop, nextStop);
+            person.update(currentTime, dt);
         }
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
@@ -73,11 +73,11 @@ public class Bus extends Vehicle {
     }
 
     // Private Methods
-    private BusStop determineNextStopPlaceholder() {
-        return new BusStop(1.0,1.0);
+    private Stop determineNextStopPlaceholder() {
+        return new Stop(1.0,1.0);
     }
 
-    private BusStop determineNextStopSmartly() {
+    private Stop determineNextStopSmartly() {
         if (currentCapacity == maxCapacity) {
             return metro;
         }
@@ -93,7 +93,7 @@ public class Bus extends Vehicle {
         int testCount = 0;
         int failCount = 0;
 
-        Bus b = new Bus(25, 5, new BusStop(0, 0));
+        Bus b = new Bus(25, 5, new Stop(0, 0));
 
         if (b.getNextStop().getX() != 0) {
             System.out.println("Fail: next stop should be 0");
@@ -101,22 +101,23 @@ public class Bus extends Vehicle {
         }
         testCount++;
 
-        b.setNextStop(new BusStop(22, 22));
+        b.setNextStop(new Stop(22, 22));
         if (b.getNextStop().getX() != 22) {
             System.out.println("Fail: next stop should be 22");
             failCount++;
         }
         testCount++;
 
-        Person[] people = new Person[5];
+        Queue<Person> people = new Queue<Person>();
         for (int i=0; i < 5; i++) {
-            people[i] = new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0));
+            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0)));
         }
         b.pickUp(people);
-        b.metro = new BusStop(99.9,99.9);
+        b.metro = new Stop(99.9,99.9);
+        BusStops stops = new BusStops(10,1);
 
         // test going to metro if bus is full
-        if (b.determineNextStop().getX() != 99.9) {
+        if (b.determineNextStop(stops).getX() != 99.9) {
             System.out.println("Fail: next stop should be metro");
             failCount++;
         }
