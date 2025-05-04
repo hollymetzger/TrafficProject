@@ -32,7 +32,7 @@ public class Simulation {
             int trainSpeed,
             double maxTimeOnBus, double maxTimeWaitingForBus,
             String citiesCSV,
-            String metroStopsCSV
+            String trainStopsCSV
     ) {
         // Set parameters
         NUMBEROFPEOPLE = cities.getTotalPopulation();
@@ -44,7 +44,7 @@ public class Simulation {
         MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
 
         // Initialize objects
-        trains = new Trains(numberOfTrains, timeBetweenTrains, metroStopsCSV);
+        trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
         cities.importFromCSV(citiesCSV);
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 

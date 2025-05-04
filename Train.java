@@ -8,8 +8,9 @@ public class Train extends Vehicle {
     private boolean southbound;
 
     // Constructor
-    public Train(double speed, int maxCapacity) {
+    public Train(double speed, int maxCapacity, Stop[] s) {
         super(speed, maxCapacity);
+        stops = s;
     }
 
     // Accessors
@@ -25,14 +26,13 @@ public class Train extends Vehicle {
         distanceToNextStop -= distance;
         totalDistanceTraveled += distance;
 
-        // if we have reached the stop, unload passengers and determine next stop
+        // if we have reached the stop, unload passengers and set next stop
         if (distanceToNextStop == 0) {
-            // todo: pickup and drop off passengers
+            // todo: pickup and drop off passengers, checking if this is their stop
             setNextStop();
-
         }
 
-        // update passengers on bus
+        // update passengers on train
         for (int i = 0; i < currentCapacity; i++) {
             Person person = passengers[i];
             person.update(currentTime, dt);
@@ -45,10 +45,12 @@ public class Train extends Vehicle {
     private void setNextStop() {
         int tmp = nextStop;
 
-        nextStop += southbound ? 1 : -1;
+        nextStop += isSouthbound() ? 1 : -1;
+
+        // if we went too far, reverse it
         if (nextStop == -1 || nextStop == stops.length) {
             reverseDirection();
-            nextStop += southbound ? -2 : 2;
+            nextStop += isSouthbound() ? -2 : 2;
         }
 
         distanceToNextStop = stops[tmp].getDistance(stops[nextStop]);

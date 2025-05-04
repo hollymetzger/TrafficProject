@@ -28,6 +28,8 @@ public class Trains {
 
 
     // private methods
+
+    // Train station locations are imported from CSV
     public boolean importFromCSV(String filename) {
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
@@ -39,7 +41,7 @@ public class Trains {
                 String data = scanner.nextLine();
                 String[] fields = data.split(",");
                 String name = fields[0];
-                double x = Double.parseDouble(fields[1]);
+                double x = Double.parseDouble(fields[1]); // todo: break into makeTrainStop method?
                 double y = Double.parseDouble(fields[2]);
                 stops[i] = new Stop(x,y);
                 i++;
