@@ -19,6 +19,9 @@ public class Stop extends Location {
     public Queue<Person> getLine() {
         return line;
     }
+    public boolean isMetro() {
+        return metro;
+    }
 
     public double getLongestCurrentlyWaiting() {
         return longestCurrentlyWaiting;
@@ -34,6 +37,7 @@ public class Stop extends Location {
         System.out.print("Added person to queue");
         line.enqueue(person);
         double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
+        person.addWalkTime(walkTime);
     }
 
 

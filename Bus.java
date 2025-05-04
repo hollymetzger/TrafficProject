@@ -50,7 +50,11 @@ public class Bus extends Vehicle {
 
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
-            // todo: pickup and drop off passengers
+            if (nextStop.isMetro()) {
+                // todo: drop off passengers
+            } else {
+                pickUp(nextStop.getLine());
+            }
 
             // check if bus needs to go to metro next
             for (int i = 0; i < currentCapacity; i++) {
@@ -114,7 +118,7 @@ public class Bus extends Vehicle {
         }
         b.pickUp(people);
         b.metro = new Stop(99.9,99.9);
-        BusStops stops = new BusStops(10,1);
+        BusStops stops = new BusStops(10,1, b.metro);
 
         // test going to metro if bus is full
         if (b.determineNextStop(stops).getX() != 99.9) {

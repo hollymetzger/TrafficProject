@@ -4,8 +4,15 @@ public class Person {
     private Location home, destination;
 
     // data analytic fields
-    private double timeInSystem;
-    private double timeOnStartBus;
+    private double spawnTime; // when they arrived at the bus stop
+    private double homeBusTime; // when they got on the first bus
+    private double homeTrainStationTime; // when they arrived at first train station
+    private double trainTime; // when they boarded the train
+    private double destinationTrainStationTime; // when they arrived at the destination train station
+    private double destinationBusTime; // when they boarded the destination bus
+    private double destinationBusStopTime; // when they arrive at the final bus stop
+    private double timeOnStartBus; // the time they spent riding the start bus
+    private double totalTimeInSystem;
 
     // Constructor
     public Person(Location home, Location destination) {
