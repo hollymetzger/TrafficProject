@@ -4,19 +4,17 @@ public class City extends Location {
     private double radius, distance;
     private Bus[] buses;
     private BusStops busStops;
-    private double timeUntilNextArrival;
     private ExponentialDistribution distanceRNG;
 
     // Constructor
-    public City (String nm, double x, double y, int pop, double r, double dis) {
+    public City (String nm, double x, double y, int pop, double r, double dis, int busCount) {
         super(x, y);
         name = nm;
         population = pop;
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance);
-        timeUntilNextArrival = Double.POSITIVE_INFINITY;
-
+        buses = new Bus[busCount];
     }
 
     // Accessors
@@ -27,20 +25,22 @@ public class City extends Location {
         return "Name: " + name +
                 "\nPopulation: " + population +
                 "\nRadius: " + radius +
+                "\nNumber of buses: " + buses.length +
                 "\nDistance between bus stops: " + distance;
     }
 
     // Public Methods
-
     public double update(double currentTime, double dt) {
-        timeUntilNextArrival = Math.max (0, timeUntilNextArrival-=dt);
-        if (timeUntilNextArrival == 0) {
-            generate();
+        double timeOfNextEvent = Double.POSITIVE_INFINITY;
+        for (Bus bus : buses) {
+            timeOfNextEvent = Math.min(bus.update(currentTime, dt), timeOfNextEvent);
         }
-        return timeUntilNextArrival;
+         return timeOfNextEvent;
     }
 
-    public void generate() {
+    public void generateCommuter() {
+        if (population == 0) { return; } // double check not to spawn extra people
+
         // generate random point
         double theta = Math.TAU*Math.random();
         double r = distanceRNG.sample();
@@ -58,22 +58,14 @@ public class City extends Location {
         for (BusStop s : this.busStops.getStops()) {
             if (s.isEqual(stop)) {
                 s.add(person);
+                population--;
                 return;
             }
         }
         System.out.println("Error! Didn't add person to any bus stop!!");
     }
 
-    // Private Methods
-    private double setNextArrivalTime(double currentTime) {
-        // todo: exponentially determine next arriival time, where average time
-        //  between arrivals decreases as time goes on, then goes back up toward the end
-        return arrivalTimeRNG.sample();
-    }
-
-
     // Unit Testing Method
-
     public static void doUnitTests() {
         // todo: add unit tests
     }
