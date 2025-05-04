@@ -29,9 +29,12 @@ public class Vehicle {
                "Capacity: " + currentCapacity + "/'" + maxCapacity;
     }
 
-    public void pickUp(BusStop stop) {
-        // add passengers from Bus Stop to this.passengers, taking the ones who have been waiting longest if
-        // there are more than can fit
+    // add passengers from queue to this.passengers
+    public void pickUp(Queue<Person> people) {
+        while (currentCapacity < maxCapacity) {
+            passengers[currentCapacity] = people.dequeue();
+            currentCapacity++;
+        }
 
         // todo: add passengers from stop's queue to bus, until bus is full
 

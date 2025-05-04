@@ -1,4 +1,4 @@
-public class BusStop extends Location {
+public class Stop extends Location {
 
     // Private Fields
     private Queue<Person> line;
@@ -7,17 +7,20 @@ public class BusStop extends Location {
     boolean metro;
 
     // Constructors
-    public BusStop(double x, double y) {
+    public Stop(double x, double y) {
         super(x, y);
         metro = false;
     }
-    public BusStop(double x, double y, boolean met) {
+    public Stop(double x, double y, boolean met) {
         super(x, y);
         metro = met;
     }
     // Accessors
     public Queue<Person> getLine() {
         return line;
+    }
+    public boolean isMetro() {
+        return metro;
     }
 
     public double getLongestCurrentlyWaiting() {
@@ -32,8 +35,9 @@ public class BusStop extends Location {
 
     public void add(Person person) {
         System.out.print("Added person to queue");
-        // todo: handle adding a newly generated person to the busStop
-        //  including adding walking time
+        line.enqueue(person);
+        double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
+        person.addWalkTime(walkTime);
     }
 
 

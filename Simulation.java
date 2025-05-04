@@ -14,7 +14,7 @@ public class Simulation {
 
     // Object holders
     private Cities cities;
-    private Train[] trains;
+    private Trains trains;
 
     // Fields used while running simulation
     private double currentTime = 0;
@@ -28,7 +28,8 @@ public class Simulation {
             double timeBetweenTrains,
             int trainSpeed,
             double maxTimeOnBus, double maxTimeWaitingForBus,
-            String citiesCSV
+            String citiesCSV,
+            String metroStopsCSV
     ) {
         // Set parameters
         NUMBEROFPEOPLE = cities.getTotalPopulation();
@@ -39,8 +40,8 @@ public class Simulation {
         MAXTIMEONBUS = maxTimeOnBus;
         MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
 
-        // Initialize object classes
-        trains = new Trains(numberOfTrains);
+        // Initialize objects
+        trains = new Trains(numberOfTrains, timeBetweenTrains, metroStopsCSV);
         cities.importFromCSV(citiesCSV);
 
         // Initialize tracking fields
@@ -58,7 +59,7 @@ public class Simulation {
 
     public void run() {
         while (!isFinished) {
-            update();
+            update(1.0,1.0);
         }
     }
 

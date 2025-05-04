@@ -4,14 +4,20 @@ public class Person {
     private Location home, destination;
 
     // data analytic fields
-    private double timeInSystem;
-    private double timeOnStartBus;
+    private double spawnTime; // when they arrived at the bus stop
+    private double homeBusTime; // when they got on the first bus
+    private double homeTrainStationTime; // when they arrived at first train station
+    private double trainTime; // when they boarded the train
+    private double destinationTrainStationTime; // when they arrived at the destination train station
+    private double destinationBusTime; // when they boarded the destination bus
+    private double destinationBusStopTime; // when they arrive at the final bus stop
+    private double timeOnStartBus; // the time they spent riding the start bus
+    private double totalTimeInSystem;
 
     // Constructor
     public Person(Location home, Location destination) {
         this.home = home;
         this.destination = destination;
-        // todo: add time in simulation for distance walked from home to nearest bus stop
     }
 
     // Accessors
@@ -29,12 +35,18 @@ public class Person {
                 "\nDestination: " + destination.toString();
     }
 
+    // Mutators
+    // used when first adding person to bus stop
+    public void addWalkTime(double time) {
+        timeInSystem += time;
+    }
+
     // Public Methods
     public boolean ridesTransit() {
         return true;
     }
 
-    public double update(double currentTime, double dt, Location location) {
+    public double update(double currentTime, double dt) {
         timeInSystem += dt;
         return 1.0;
     }
