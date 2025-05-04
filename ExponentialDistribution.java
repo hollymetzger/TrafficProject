@@ -16,6 +16,7 @@ public class ExponentialDistribution extends RandomDistribution {
     public double sample() {
         return Math.log(Math.random())/(-lambda);
     }
+    public double sample(double l) { return Math.log(Math.random())/(-l); }
 
     // Testing Method
     public static void doUnitTests() {
