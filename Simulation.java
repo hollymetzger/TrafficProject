@@ -21,7 +21,8 @@ public class Simulation {
     private double currentTime = 0;
     private boolean isFinished;
     private Person[] finishedPeople;
-    private double timeOfNextArrival;
+    private int commuterCount; // the number of people who have been generated so far
+    private double timeUntilNextArrival;
     private double arrivalTimeLambda;
 
     // Constructor
@@ -51,7 +52,8 @@ public class Simulation {
         currentTime = 0;
         isFinished = false;
         finishedPeople = new Person[NUMBEROFPEOPLE];
-        timeOfNextArrival = setNextArrivalTime(currentTime);
+        timeUntilNextArrival = setTimeUntilNextArrival();
+        commuterCount = 0;
     }
     // Accessors
     public boolean getFinished() {
@@ -61,7 +63,7 @@ public class Simulation {
     // Public Methods
 
     public void run() {
-        double dt = timeOfNextArrival; // set first dt to pass into update
+        double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
         }
@@ -71,18 +73,19 @@ public class Simulation {
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
         currentTime += dt;
+        timeUntilNextArrival = Math.max(0, timeUntilNextArrival-dt);
 
         // add commuters to the simulation
-        if (currentTime >= timeOfNextArrival) {
+        if (timeUntilNextArrival == 0) {
             cities.generateCommuter();
-            timeOfNextArrival = setNextArrivalTime(currentTime);
+            timeUntilNextArrival = setTimeUntilNextArrival();
         }
 
         // determine the time of the next event in the simulation
-        double timeUntilNextEvent = Math.min(
-            timeOfNextArrival,
-            cities.update(currentTime, dt),
-            trains.update()
+        double timeUntilNextEvent = Math.min(Math.min(
+                timeUntilNextArrival,
+                cities.update(currentTime, dt)),
+                trains.update(currentTime, dt)
         );
 
         // check if simulation is finished
@@ -92,14 +95,13 @@ public class Simulation {
         return timeUntilNextEvent;
     }
 
-
     // Private Methods
-    private double setNextArrivalTime(double currentTime) {
+    private double setTimeUntilNextArrival() {
         // the rate of arrivals gradually increases until halfway through, then it decreases again
-        if (finishedPeople.length >= NUMBEROFPEOPLE/2) {
-            arrivalTimeLambda *= 1.001;
+        if (commuterCount <= NUMBEROFPEOPLE/2) {
+            arrivalTimeLambda *= 1.0005;
         } else {
-            arrivalTimeLambda *= 0.999;
+            arrivalTimeLambda *= 0.9995;
         }
         return arrivalTimeRNG.sample(arrivalTimeLambda);
     }
