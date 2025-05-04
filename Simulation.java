@@ -58,9 +58,11 @@ public class Simulation {
     // Public Methods
 
     public void run() {
+        double dt = timeOfNextArrival; // set first dt to pass into update
         while (!isFinished) {
-            update(1.0,1.0);
+            dt = update(currentTime, dt);
         }
+        // todo: export data
     }
 
     // Advance the simulation by dt, and return the time until next event after that
