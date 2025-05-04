@@ -44,7 +44,7 @@ public class Bus extends Vehicle {
     public double update(double currentTime, double dt, BusStops stops) {
 
         double distance = speed*dt;
-        distanceToNextStop -= distance;
+        distanceToNextStop = Math.max(0, distanceToNextStop-distance);
         totalDistanceTraveled += distance;
 
         // if we have reached the stop, unload passengers and determine next stop
