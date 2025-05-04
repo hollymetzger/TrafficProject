@@ -42,6 +42,7 @@ public class Trains {
                 double x = Double.parseDouble(fields[1]);
                 double y = Double.parseDouble(fields[2]);
                 stops[i] = new Stop(x,y);
+                i++;
             }
         }  catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);

@@ -15,12 +15,14 @@ public class Simulation {
     // Object holders
     private Cities cities;
     private Trains trains;
+    private ExponentialDistribution arrivalTimeRNG;
 
     // Fields used while running simulation
     private double currentTime = 0;
     private boolean isFinished;
     private Person[] finishedPeople;
     private double timeOfNextArrival;
+    private double arrivalTimeLambda;
 
     // Constructor
     public Simulation(
@@ -43,6 +45,7 @@ public class Simulation {
         // Initialize objects
         trains = new Trains(numberOfTrains, timeBetweenTrains, metroStopsCSV);
         cities.importFromCSV(citiesCSV);
+        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
         currentTime = 0;
@@ -92,8 +95,12 @@ public class Simulation {
 
     // Private Methods
     private double setNextArrivalTime(double currentTime) {
-        // todo: exponentially determine next arriival time, where average time
-        //  between arrivals decreases as time goes on, then goes back up toward the end
-        return currentTime + 1.0;
+        // the rate of arrivals gradually increases until halfway through, then it decreases again
+        if (finishedPeople.length >= NUMBEROFPEOPLE/2) {
+            arrivalTimeLambda *= 1.001;
+        } else {
+            arrivalTimeLambda *= 0.999;
+        }
+        return arrivalTimeRNG.sample(arrivalTimeLambda);
     }
 }
