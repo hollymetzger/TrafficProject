@@ -53,7 +53,7 @@ public class City extends Location {
         Person person = new Person(home, destination);
 
         // Add the person to the queue of the nearest bus stop in the city
-        home.getNearest(busStops.getStops()).add(person);
+        home.getNearest(busStops.getStops()).add(person, true);
     }
 
     // Unit Testing Method

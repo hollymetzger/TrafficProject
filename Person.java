@@ -4,7 +4,7 @@ public class Person {
     private Location home, destination;
 
     // data analytic fields
-    private double spawnTime; // when they arrived at the bus stop
+    private double busStopTime; // when they arrived at the bus stop
     private double homeBusTime; // when they got on the first bus
     private double homeTrainStationTime; // when they arrived at first train station
     private double trainTime; // when they boarded the train
@@ -12,6 +12,8 @@ public class Person {
     private double destinationBusTime; // when they boarded the destination bus
     private double destinationBusStopTime; // when they arrive at the final bus stop
     private double timeOnStartBus; // the time they spent riding the start bus
+    private double timeOnTrain; // the time they spent riding the train
+    private double timeOnEndBus; // the time they spent riding the second bus
     private double totalTimeInSystem;
 
     // Constructor
@@ -37,8 +39,8 @@ public class Person {
 
     // Mutators
     // used when first adding person to bus stop
-    public void addWalkTime(double time) {
-        timeInSystem += time;
+    public void setHomeWalkTime(double time) {
+        totalTimeInSystem += time;
     }
 
     // Public Methods
@@ -47,8 +49,8 @@ public class Person {
     }
 
     public double update(double currentTime, double dt) {
-        timeInSystem += dt;
-        return 1.0;
+        totalTimeInSystem += dt;
+        return 1.0; // todo: update time tracking fields
     }
 
     // Testing Method

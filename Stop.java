@@ -33,11 +33,12 @@ public class Stop extends Location {
         //  waiting at this stop
     }
 
-    public void add(Person person) {
-        System.out.print("Added person to queue");
+    public void add(Person person, boolean first) {
         line.enqueue(person);
-        double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-        person.addWalkTime(walkTime);
+        if (first) {
+            double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
+            person.setHomeWalkTime(walkTime);
+        }
     }
 
 
