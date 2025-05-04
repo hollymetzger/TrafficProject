@@ -3,7 +3,7 @@ public class Bus extends Vehicle {
     private double distanceToNextStop;
     private double timeSinceLastStop;
     private Stop nextStop;
-    private Stop metro;
+    private Stop train;
 
     // data analytic fields
     private double totalDistanceTraveled;
@@ -42,7 +42,6 @@ public class Bus extends Vehicle {
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops) {
-        timeSinceLastStop += dt;
 
         double distance = speed*dt;
         distanceToNextStop -= distance;
@@ -50,20 +49,28 @@ public class Bus extends Vehicle {
 
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
-            if (nextStop.isMetro()) {
+            if (nextStop.isTrain()) {
                 // todo: drop off passengers
             } else {
                 pickUp(nextStop.getLine());
             }
 
-            // check if bus needs to go to metro next
+            // check if bus needs to go to train station next
+            boolean nextIsTrain = false;
             for (int i = 0; i < currentCapacity; i++) {
                 Person person = passengers[i];
                 if (person.getTimeOnStartBus() >= Parameters.MAXTIMEONBUS) {
-                    this.setNextStop(metro);
+                    nextIsTrain = true;
                 }
             }
-            this.setNextStop(this.determineNextStop(stops));
+            if (currentCapacity == maxCapacity) {
+                nextIsTrain = true;
+            }
+            if (nextIsTrain) {
+                setNextStop(train);
+            } else {
+                this.setNextStop(this.determineNextStop(stops));
+            }
         }
 
         // update passengers on bus
