@@ -67,7 +67,7 @@ public class Simulation {
         while (!isFinished) {
             dt = update(currentTime, dt);
         }
-        // todo: export data
+        // todo: export people and vmt data
     }
 
     // Advance the simulation by dt, and return the time until next event after that

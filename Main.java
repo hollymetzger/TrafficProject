@@ -56,8 +56,7 @@ public class Main {
         Simulation currentSim = sims[0];
         while (currentSim != null) {
             currentSim.run();
-
-            // todo: export sim data to file
+            // todo: run method should export strings of data, need to handle that
         }
 
 

@@ -4,11 +4,12 @@ public class BusStops {
 
     // Private fields
     private ArrayList<Stop> busStops;
-    private Stop metro;
+    private Stop train;
 
     // Constructor
-    public BusStops(double radius, double distance, Stop metro) {
+    public BusStops(double radius, double distance, Stop t) {
         busStops = new ArrayList<Stop>();
+        train = t;
         generateBusStops(radius, distance);
     }
 
