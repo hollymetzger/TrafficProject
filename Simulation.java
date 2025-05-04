@@ -78,6 +78,7 @@ public class Simulation {
         // add commuters to the simulation
         if (timeUntilNextArrival == 0) {
             cities.generateCommuter();
+            commuterCount++;
             timeUntilNextArrival = setTimeUntilNextArrival();
         }
 

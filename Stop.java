@@ -4,23 +4,23 @@ public class Stop extends Location {
     private Queue<Person> line;
     double longestCurrentlyWaiting;
     int lineLength;
-    boolean metro;
+    boolean train;
 
     // Constructors
     public Stop(double x, double y) {
         super(x, y);
-        metro = false;
+        train = false;
     }
     public Stop(double x, double y, boolean met) {
         super(x, y);
-        metro = met;
+        train = met;
     }
     // Accessors
     public Queue<Person> getLine() {
         return line;
     }
-    public boolean isMetro() {
-        return metro;
+    public boolean isTrain() {
+        return train;
     }
 
     public double getLongestCurrentlyWaiting() {
