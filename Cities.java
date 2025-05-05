@@ -8,10 +8,12 @@ public class Cities {
 
     // Private Fields
     private static ArrayList<City> cities;
+    private static Stop train; // refers to the train station in Frederick
 
     // Constructor
-    public Cities(String filename) {
+    public Cities(String filename, Stop tr) {
         cities = new ArrayList<City>();
+        train = tr;
         if (!(importFromCSV(filename))) {
             System.out.println("Error while importing city data");
         }
@@ -107,7 +109,7 @@ public class Cities {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Insufficient number of fields in CSV file");
         }
-        return new City(name, x, y, population, distance, radius, 10); // todo: add bus count variable
+        return new City(name, x, y, population, distance, radius, 10, train); // todo: add bus count variable
     }
 
 

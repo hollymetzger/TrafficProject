@@ -19,6 +19,10 @@ public class Stop extends Location {
     public Queue<Person> getLine() {
         return line;
     }
+    public int getLineLength() {
+        int count = 0;
+
+    }
     public boolean isTrain() {
         return train;
     }

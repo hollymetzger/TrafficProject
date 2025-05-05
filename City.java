@@ -7,13 +7,13 @@ public class City extends Location {
     private ExponentialDistribution distanceRNG;
 
     // Constructor
-    public City (String nm, double x, double y, int pop, double r, double dis, int busCount) {
+    public City (String nm, double x, double y, int pop, double r, double dis, int busCount, Stop train) {
         super(x, y);
         name = nm;
         population = pop;
         radius = r;
         distance = dis;
-        busStops = new BusStops(radius, distance);
+        busStops = new BusStops(radius, distance, train);
         buses = new Bus[busCount];
     }
 
