@@ -21,6 +21,8 @@ public class Stop extends Location {
     }
     public int getLineLength() {
         int count = 0;
+        return count;
+        // todo: implement this
 
     }
     public boolean isTrain() {
@@ -35,13 +37,14 @@ public class Stop extends Location {
     public double getTotalWaitTime() {
         // todo: for each Person in queue, sum the time they have been
         //  waiting at this stop
+        return 1.0;
     }
 
     public void add(Person person, boolean first) {
         line.enqueue(person);
         if (first) {
             double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-            person.setHomeWalkTime(walkTime);
+            person.addTime(walkTime);
         }
     }
 

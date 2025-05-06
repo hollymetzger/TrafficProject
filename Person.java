@@ -38,8 +38,7 @@ public class Person {
     }
 
     // Mutators
-    // used when first adding person to bus stop
-    public void setHomeWalkTime(double time) {
+    public void addTime(double time) {
         totalTimeInSystem += time;
     }
 
