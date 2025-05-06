@@ -20,10 +20,7 @@ public class Stop extends Location {
         return line;
     }
     public int getLineLength() {
-        int count = 0;
-        return count;
-        // todo: implement this
-
+        return line.getLength();
     }
     public boolean isTrain() {
         return train;
