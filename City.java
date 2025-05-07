@@ -14,7 +14,6 @@ public class City extends Location {
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance, train);
-        buses = new Bus[busCount];
     }
 
     // Accessors
@@ -30,6 +29,11 @@ public class City extends Location {
                 "\nRadius: " + radius +
                 "\nNumber of buses: " + buses.length +
                 "\nDistance between bus stops: " + distance;
+    }
+
+    // Mutators
+    public void setBusCount(int count) {
+        buses = new Bus[count];
     }
 
     // Public Methods

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Simulation {
     // Parameters for Simulation
     int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
-    double TIMEBETWEENTRAINS;
+    double DISTANCEBETWEENBUSSTOPS, TIMEBETWEENTRAINS;
     int BUSSPEED, TRAINSPEED;
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
@@ -28,6 +28,7 @@ public class Simulation {
     // Constructor
     public Simulation(
             int numberOfBuses, int numberOfTrains,
+            double distanceBetweenBusStops,
             double timeBetweenTrains,
             int trainSpeed,
             double maxTimeOnBus, double maxTimeWaitingForBus,
@@ -38,6 +39,7 @@ public class Simulation {
         NUMBEROFPEOPLE = cities.getTotalPopulation();
         NUMBEROFBUSES = numberOfBuses;
         NUMBEROFTRAINS = numberOfTrains;
+        DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
         TIMEBETWEENTRAINS = timeBetweenTrains;
         TRAINSPEED = trainSpeed;
         MAXTIMEONBUS = maxTimeOnBus;
