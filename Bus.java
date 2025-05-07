@@ -5,8 +5,10 @@ public class Bus extends Vehicle {
     private Stop nextStop;
     private Stop train;
 
+
     // data analytic fields
     private double totalDistanceTraveled;
+    private String homeCity;
 
     // Constructor
     public Bus(double speed, int maxCapacity, Stop startLocation) {

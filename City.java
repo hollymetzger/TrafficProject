@@ -21,6 +21,9 @@ public class City extends Location {
     public int getPopulation() {
         return population;
     }
+    public String getName() {
+        return name;
+    }
     public String toString() {
         return "Name: " + name +
                 "\nPopulation: " + population +
@@ -38,7 +41,7 @@ public class City extends Location {
          return timeOfNextEvent;
     }
 
-    public void generateCommuter() {
+    public void generateCommuter(String destinationCity) {
         if (population == 0) { return; } // double check not to spawn extra people
 
         // generate random point
@@ -50,7 +53,7 @@ public class City extends Location {
         // Create Person object
         Location home = new Location(x,y);
         Location destination = new Location(x,y); // todo: generate end location same way
-        Person person = new Person(home, destination);
+        Person person = new Person(home, destination, getName(), destinationCity);
 
         // Add the person to the queue of the nearest bus stop in the city
         home.getNearest(busStops.getStops()).add(person, true);

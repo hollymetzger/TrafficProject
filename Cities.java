@@ -73,6 +73,27 @@ public class Cities {
     }
 
     public void generateCommuter() {
+
+        // randomly choose a destination city
+        // todo: make this better, maybe pass in two cities objects, one for home and one for destinations
+        //  and create method "choose city" etc
+        double GAITHERSBURG = 5.0/18;
+        double ROCKVILLE = 6.0/18;
+        double BETHESDA = 3.0/18;
+        double DC = 4.0/18;
+        String destinationCity;
+
+        double destinationDouble = Math.random();
+        if (destinationDouble < GAITHERSBURG) {
+            destinationCity = "Gaithersburg";
+        } else if (destinationDouble < GAITHERSBURG + ROCKVILLE) {
+            destinationCity = "Rockville";
+        } else if (destinationDouble < GAITHERSBURG + ROCKVILLE + BETHESDA) {
+            destinationCity = "Bethesda";
+        } else {
+            destinationCity = "Washington DC";
+        }
+
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
 
@@ -80,7 +101,7 @@ public class Cities {
         for (City city : cities) {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
-                city.generateCommuter();
+                city.generateCommuter(destinationCity);
             }
         }
     }

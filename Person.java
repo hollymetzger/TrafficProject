@@ -16,10 +16,16 @@ public class Person {
     private double timeOnEndBus; // the time they spent riding the second bus
     private double totalTimeInSystem;
 
+    private String homeCity;
+    private String destinationCity;
+
+
     // Constructor
-    public Person(Location home, Location destination) {
+    public Person(Location home, Location destination, String homeCity, String destinationCity) {
         this.home = home;
         this.destination = destination;
+        this.homeCity = homeCity;
+        this.destinationCity = destinationCity;
     }
 
     // Accessors
