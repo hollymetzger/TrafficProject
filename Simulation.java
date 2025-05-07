@@ -47,7 +47,7 @@ public class Simulation {
 
         // Initialize objects
         trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
-        cities.importFromCSV(citiesCSV);
+        cities.importFromCSV(citiesCSV, DISTANCEBETWEENBUSSTOPS);
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
