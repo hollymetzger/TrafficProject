@@ -42,8 +42,8 @@ public class Person {
     // exports in csv format for analytics
     public String toString() {
         return home.toString() + "," + destination.toString() + "," +
-                totalTimeInSystem + "," + timeOnStartBus+timeOnEndBus + "," +
-                timeOnTrain;
+                totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
+                timeOnTrain;                                            //  instead of multiplying start bus by 2
     }
 
     // Mutators
@@ -52,9 +52,9 @@ public class Person {
     }
 
     // Public Methods
-    public double update(double currentTime, double dt) {
+    public void update(double currentTime, double dt) {
         totalTimeInSystem += dt;
-        return 1.0; // todo: update time tracking fields
+        // todo: update time tracking fields
     }
 
     // Testing Method
