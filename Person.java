@@ -38,9 +38,12 @@ public class Person {
     public double getTimeOnStartBus() {
         return timeOnStartBus;
     }
+
+    // exports in csv format for analytics
     public String toString() {
-        return "Home: " +home.toString() +
-                "\nDestination: " + destination.toString();
+        return home.toString() + "," + destination.toString() + "," +
+                totalTimeInSystem + "," + timeOnStartBus+timeOnEndBus + "," +
+                timeOnTrain;
     }
 
     // Mutators

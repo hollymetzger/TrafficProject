@@ -58,22 +58,16 @@ public class Simulation {
         timeUntilNextArrival = setTimeUntilNextArrival();
         commuterCount = 0;
     }
-    // Accessors
-    public boolean getFinished() {
-        return isFinished;
-    }
 
     // Public Methods
 
     public void run() {
         System.out.println("Running simulation");
-        /*
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
         }
         // todo: export people and vmt data
-         */
     }
 
     // Advance the simulation by dt, and return the time until next event after that
