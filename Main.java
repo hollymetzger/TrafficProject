@@ -35,7 +35,7 @@ public class Main {
                             numberOfBuses, numberOfTrains,
                             distanceBetweenBusStops, timeBetweenTrains, trainSpeed,
                             maxTimeOnBus, maxTimeWaitingForBus,
-                            "cities.csv", "metro_stops.csv"
+                            "cities.csv", "trainStops.csv"
                     );
 
                     sims[simNumber] = sim;

@@ -14,7 +14,13 @@ public class Trains {
     public Trains(int trainCount, double time, String filename) {
         trains = new Train[trainCount];
         timeBetweenTrains = time;
-        importFromCSV(filename);
+        this.stops = new Stop[4];
+        importFromCSV(filename, stops);
+    }
+
+    // Accessors
+    public Stop[] getTrainStops() {
+        return stops;
     }
 
     // public methods
@@ -30,7 +36,8 @@ public class Trains {
     // private methods
 
     // Train station locations are imported from CSV
-    public boolean importFromCSV(String filename) {
+    public boolean importFromCSV(String filename, Stop[] stops) {
+        System.out.println("Importing train data");
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
         Scanner scanner = null;

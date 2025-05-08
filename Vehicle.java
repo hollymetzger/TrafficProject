@@ -37,11 +37,14 @@ public class Vehicle {
         }
     }
 
-    public void dropOff(Location destination) {
-        // todo: implement this
-        // for person in passengers:
-        //      if destination is their destination:
-        //          get off vehicle
+    // drops off all passengers on vehicle
+    public void dropOff(Stop stop) {
+        Person person = passengers.dequeue();
+        while (person != null) {
+            stop.add(person, false);
+            person = passengers.dequeue();
+        }
+
     }
 
     public static void doUnitTests() {
@@ -53,7 +56,7 @@ public class Vehicle {
         Vehicle v = new Vehicle(25, 10);
         Queue<Person> people = new Queue<Person>();
         for (int i=0; i < 5; i++) {
-            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0)));
+            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0), "home","dest"));
         }
         v.pickUp(people);
 

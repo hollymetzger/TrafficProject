@@ -52,7 +52,7 @@ public class Bus extends Vehicle {
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
-                // todo: drop off passengers
+                dropOff(nextStop);
             } else {
                 pickUp(nextStop.getLine());
             }
@@ -131,7 +131,7 @@ public class Bus extends Vehicle {
 
         Queue<Person> people = new Queue<Person>();
         for (int i=0; i < 5; i++) {
-            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0)));
+            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0), "home","dest"));
         }
         b.pickUp(people);
         b.train = new Stop(99.9,99.9);

@@ -11,10 +11,10 @@ public class Cities {
     private static Stop train; // refers to the train station in Frederick
 
     // Constructor
-    public Cities(String filename, Stop tr) {
+    public Cities(String filename, Stop tr, Double distance) {
         cities = new ArrayList<City>();
         train = tr;
-        if (!(importFromCSV(filename))) {
+        if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
         }
     }
@@ -133,7 +133,8 @@ public class Cities {
 
     // Unit Testing Method
     public static void doUnitTests() throws Exception {
-        Cities citiesTest = new Cities("src/cities.csv");
+        Stop train = new Stop(1.0,1.0);
+        Cities citiesTest = new Cities("src/cities.csv", train, 1.0);
         for (int i = 0; i < citiesTest.getLength(); i++) {
             System.out.println(cities.get(i));
         }

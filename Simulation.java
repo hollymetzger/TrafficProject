@@ -13,7 +13,7 @@ public class Simulation {
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
     // Object holders
-    private Cities cities;
+    private Cities fredrickCities;
     private Trains trains;
     private ExponentialDistribution arrivalTimeRNG;
 
@@ -33,10 +33,16 @@ public class Simulation {
             int trainSpeed,
             double maxTimeOnBus, double maxTimeWaitingForBus,
             String citiesCSV,
-            String trainStopsCSV
+            String trainStopsCSV // todo: import train stop locations
     ) {
+
+        // Initialize objects
+        trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
+        Cities fredrickCities = new Cities(citiesCSV, trains.getTrainStops()[0], DISTANCEBETWEENBUSSTOPS);
+        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
+
         // Set parameters
-        NUMBEROFPEOPLE = cities.getTotalPopulation();
+        NUMBEROFPEOPLE = fredrickCities.getTotalPopulation();
         NUMBEROFBUSES = numberOfBuses;
         NUMBEROFTRAINS = numberOfTrains;
         DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
@@ -44,11 +50,6 @@ public class Simulation {
         TRAINSPEED = trainSpeed;
         MAXTIMEONBUS = maxTimeOnBus;
         MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
-
-        // Initialize objects
-        trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
-        cities.importFromCSV(citiesCSV, DISTANCEBETWEENBUSSTOPS);
-        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
         currentTime = 0;
@@ -65,29 +66,32 @@ public class Simulation {
     // Public Methods
 
     public void run() {
+        System.out.println("Running simulation");
+        /*
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
         }
         // todo: export people and vmt data
+         */
     }
 
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
         currentTime += dt;
-        timeUntilNextArrival = Math.max(0, timeUntilNextArrival-dt);
+        timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
         // add commuters to the simulation
         if (timeUntilNextArrival == 0) {
-            cities.generateCommuter();
+            fredrickCities.generateCommuter();
             commuterCount++;
             timeUntilNextArrival = setTimeUntilNextArrival();
         }
 
-        // determine the time of the next event in the simulation
+        // update objects and determine the time of the next event in the simulation
         double timeUntilNextEvent = Math.min(Math.min(
                 timeUntilNextArrival,
-                cities.update(currentTime, dt)),
+                fredrickCities.update(currentTime, dt)),
                 trains.update(currentTime, dt)
         );
 

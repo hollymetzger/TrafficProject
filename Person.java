@@ -49,10 +49,6 @@ public class Person {
     }
 
     // Public Methods
-    public boolean ridesTransit() {
-        return true;
-    }
-
     public double update(double currentTime, double dt) {
         totalTimeInSystem += dt;
         return 1.0; // todo: update time tracking fields
@@ -65,7 +61,7 @@ public class Person {
         int failCount = 0;
         int testCount = 0;
 
-        Person p = new Person(new Location(0, 0), new Location(10, 10));
+        Person p = new Person(new Location(0, 0), new Location(10, 10), "home", "dest");
         if (!p.getHome().toString().equals("(0.0, 0.0)")) {
             failCount++;
             System.out.println("FAIL: person home should have been (0.0, 0.0)");

@@ -34,20 +34,28 @@ public class Train extends Vehicle {
 
         // update passengers on train
         for (int i = 0; i < currentCapacity; i++) {
-            Person person = passengers[i];
-            person.update(currentTime, dt);
+            Node<Person> person = passengers.getHead();
+            while (person != null) {
+                person.getData().update(currentTime,dt);
+                person = person.getNext();
+            }
         }
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
         return distanceToNextStop/speed; // return the time it will take to reach next stop
     }
 
+    public void dropOff(Stop stop) {
+
+    }
+
+
     private void setNextStop() {
         int tmp = nextStop;
 
         nextStop += isSouthbound() ? 1 : -1;
 
-        // if we went too far, reverse it
+        // if we went out of bounds, reverse it
         if (nextStop == -1 || nextStop == stops.length) {
             reverseDirection();
             nextStop += isSouthbound() ? -2 : 2;
