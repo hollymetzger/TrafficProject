@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -8,14 +10,20 @@ public class Trains {
     // Private fields
     private double timeBetweenTrains;
     private Train[] trains;
-    private Stop[] stops;
+    private Map<TrainStop, Stop> stops;
 
     // Constructor
-    public Trains(int trainCount, double time, String filename) {
+    public Trains(int trainCount, double time, Stop fTrain) {
         trains = new Train[trainCount];
         timeBetweenTrains = time;
-        this.stops = new Stop[4];
-        importFromCSV(filename, stops);
+
+        // Train stops are hard coded for simplicity
+        stops = new EnumMap<>(TrainStop.class);
+        stops.put(TrainStop.FREDERICK, fTrain); // Frederick train station (45,35)
+        stops.put(TrainStop.GAITHERSBURG, new Stop(45,65, true)); // 30 miles from Frederick to Gaitherburg
+        stops.put(TrainStop.ROCKVILLE, new Stop(45, 68, true)); // 3 miles from Gaithserburg to Rockville
+        stops.put(TrainStop.BETHESDA, new Stop(45, 76, true)); // 8 miles from Rockville to Bethesda
+        stops.put(TrainStop.WASHINGTON_DC, new Stop(45, 84, true)); // 8 miles from Bethesda to DC Metro Center
     }
 
     // Accessors

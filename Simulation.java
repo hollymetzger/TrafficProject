@@ -14,6 +14,7 @@ public class Simulation {
 
     // Object holders
     private Cities fredrickCities;
+    private Stop FrederickTrainStop;
     private Trains trains;
     private ExponentialDistribution arrivalTimeRNG;
 
@@ -37,8 +38,9 @@ public class Simulation {
     ) {
 
         // Initialize objects
-        trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
-        Cities fredrickCities = new Cities(citiesCSV, trains.getTrainStops()[0], DISTANCEBETWEENBUSSTOPS);
+        FrederickTrainStop = new Stop(45,35);
+        trains = new Trains(numberOfTrains, timeBetweenTrains, FrederickTrainStop);
+        Cities fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS);
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Set parameters

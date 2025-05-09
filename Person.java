@@ -16,16 +16,15 @@ public class Person {
     private double timeOnEndBus; // the time they spent riding the second bus
     private double totalTimeInSystem;
 
-    private String homeCity;
-    private String destinationCity;
-
+    private String homeCity; // home city is only used for printing data at the end, so we just store it as a string
+    private TrainStop destinationCity; // destination city is used in the code, so we use an enum to reduce errors
 
     // Constructor
-    public Person(Location home, Location destination, String homeCity, String destinationCity) {
+    public Person(Location home, Location destination, String homeCity) {
         this.home = home;
         this.destination = destination;
         this.homeCity = homeCity;
-        this.destinationCity = destinationCity;
+        this.destinationCity = TrainStop.getWeightedStop();
     }
 
     // Accessors
@@ -64,7 +63,7 @@ public class Person {
         int failCount = 0;
         int testCount = 0;
 
-        Person p = new Person(new Location(0, 0), new Location(10, 10), "home", "dest");
+        Person p = new Person(new Location(0, 0), new Location(10, 10), "home");
         if (!p.getHome().toString().equals("(0.0, 0.0)")) {
             failCount++;
             System.out.println("FAIL: person home should have been (0.0, 0.0)");

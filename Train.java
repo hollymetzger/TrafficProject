@@ -1,16 +1,18 @@
+import java.util.EnumMap;
+import java.util.Map;
+
 public class Train extends Vehicle {
 
     // Private fields
     private double distanceToNextStop;
     private double totalDistanceTraveled;
-    private Stop[] stops;
-    private int nextStop;
+    private Map<TrainStop, Stop> stops;
+    private TrainStop nextStop;
     private boolean southbound;
 
     // Constructor
     public Train(double speed, int maxCapacity, Stop[] s) {
         super(speed, maxCapacity);
-        stops = s;
     }
 
     // Accessors
@@ -47,6 +49,27 @@ public class Train extends Vehicle {
 
     public void dropOff(Stop stop) {
 
+    }
+
+
+
+    // Private methods
+
+    // removes the Persons who should be disembarking at this.nextStop from this.passengers and returns them as a queue
+    private Queue<Person> removeDisembarkingPassengers() {
+        Queue<Person> disembarking = new Queue<Person>();
+        Queue<Person> remaining = new Queue<Person>();
+
+        // iterate through queue and sort each node into their respective queues
+        Node<Person> passenger = passengers.getHead();
+        while (passenger != null) {
+            if (passenger.getData())
+            passenger = passenger.getNext();
+        }
+
+
+        this.passengers = remaining;
+        return disembarking;
     }
 
 
