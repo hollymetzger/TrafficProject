@@ -31,7 +31,7 @@ public class Simulation {
             int numberOfBuses, int numberOfTrains,
             double distanceBetweenBusStops,
             double timeBetweenTrains,
-            int trainSpeed,
+            int trainSpeed, int trainCapacity,
             double maxTimeOnBus, double maxTimeWaitingForBus,
             String citiesCSV,
             String trainStopsCSV // todo: import train stop locations
@@ -39,7 +39,7 @@ public class Simulation {
 
         // Initialize objects
         FrederickTrainStop = new Stop(45,35);
-        trains = new Trains(numberOfTrains, timeBetweenTrains, FrederickTrainStop);
+        trains = new Trains(numberOfTrains, timeBetweenTrains, trainSpeed, trainCapacity, FrederickTrainStop);
         Cities fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS);
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 

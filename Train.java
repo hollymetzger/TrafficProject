@@ -6,13 +6,14 @@ public class Train extends Vehicle {
     // Private fields
     private double distanceToNextStop;
     private double totalDistanceTraveled;
-    private Map<TrainStop, Stop> stops;
+    private EnumMap<TrainStop, Stop> stops;
     private TrainStop nextStop;
     private boolean southbound;
 
     // Constructor
-    public Train(double speed, int maxCapacity, Stop[] s) {
+    public Train(double speed, int maxCapacity, EnumMap<TrainStop, Stop> stopsMap) {
         super(speed, maxCapacity);
+        stops = stopsMap;
     }
 
     // Accessors
@@ -63,10 +64,13 @@ public class Train extends Vehicle {
         // iterate through queue and sort each node into their respective queues
         Node<Person> passenger = passengers.getHead();
         while (passenger != null) {
-            if (passenger.getData())
+            if (passenger.getData().getDestinationTrainStop() == this.nextStop) {
+                disembarking.enqueue(passenger.getData());
+            } else {
+                remaining.enqueue(passenger.getData());
+            }
             passenger = passenger.getNext();
         }
-
 
         this.passengers = remaining;
         return disembarking;
@@ -74,17 +78,19 @@ public class Train extends Vehicle {
 
 
     private void setNextStop() {
-        int tmp = nextStop;
+        TrainStop[] values = TrainStop.values();
+        int index = nextStop.ordinal(); // this method is called while we are at a stop, so this.nextStop is the stop this is currently at
+        Stop currentStop = stops.get(nextStop); // store current stop temporarily to calculate distance
 
-        nextStop += isSouthbound() ? 1 : -1;
+        index += isSouthbound() ? 1 : -1;
 
         // if we went out of bounds, reverse it
-        if (nextStop == -1 || nextStop == stops.length) {
+        if (index == -1 || index == values.length) {
             reverseDirection();
-            nextStop += isSouthbound() ? -2 : 2;
+            index += isSouthbound() ? -2 : 2;
         }
-
-        distanceToNextStop = stops[tmp].getDistance(stops[nextStop]);
+        nextStop = values[index];
+        distanceToNextStop = currentStop.getDistance(stops.get(nextStop));
     }
 
     private void reverseDirection() {

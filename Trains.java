@@ -10,10 +10,10 @@ public class Trains {
     // Private fields
     private double timeBetweenTrains;
     private Train[] trains;
-    private Map<TrainStop, Stop> stops;
+    private EnumMap<TrainStop, Stop> stops;
 
     // Constructor
-    public Trains(int trainCount, double time, Stop fTrain) {
+    public Trains(int trainCount, double time, double speed, int capacity, Stop fTrain) {
         trains = new Train[trainCount];
         timeBetweenTrains = time;
 
@@ -24,11 +24,10 @@ public class Trains {
         stops.put(TrainStop.ROCKVILLE, new Stop(45, 68, true)); // 3 miles from Gaithserburg to Rockville
         stops.put(TrainStop.BETHESDA, new Stop(45, 76, true)); // 8 miles from Rockville to Bethesda
         stops.put(TrainStop.WASHINGTON_DC, new Stop(45, 84, true)); // 8 miles from Bethesda to DC Metro Center
-    }
 
-    // Accessors
-    public Stop[] getTrainStops() {
-        return stops;
+        for (int i = 0; i < trainCount; i++) {
+            trains[i] = new Train(speed, capacity, stops);
+        }
     }
 
     // public methods
