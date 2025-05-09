@@ -7,19 +7,21 @@ public class City extends Location {
     private ExponentialDistribution distanceRNG;
 
     // Constructor
-    public City (String nm, double x, double y, int pop, double r, double dis, int busCount) {
+    public City (String nm, double x, double y, int pop, double r, double dis, int busCount, Stop train) {
         super(x, y);
         name = nm;
         population = pop;
         radius = r;
         distance = dis;
-        busStops = new BusStops(radius, distance);
-        buses = new Bus[busCount];
+        busStops = new BusStops(radius, distance, train);
     }
 
     // Accessors
     public int getPopulation() {
         return population;
+    }
+    public String getName() {
+        return name;
     }
     public String toString() {
         return "Name: " + name +
@@ -27,6 +29,11 @@ public class City extends Location {
                 "\nRadius: " + radius +
                 "\nNumber of buses: " + buses.length +
                 "\nDistance between bus stops: " + distance;
+    }
+
+    // Mutators
+    public void setBusCount(int count) {
+        buses = new Bus[count];
     }
 
     // Public Methods
@@ -50,19 +57,10 @@ public class City extends Location {
         // Create Person object
         Location home = new Location(x,y);
         Location destination = new Location(x,y); // todo: generate end location same way
-        Person person = new Person(home, destination);
+        Person person = new Person(home, destination, getName());
 
         // Add the person to the queue of the nearest bus stop in the city
-        Stop stop = home.getNearest(busStops.getStops());
-
-        for (Stop s : this.busStops.getStops()) {
-            if (s.isEqual(stop)) {
-                s.add(person);
-                population--;
-                return;
-            }
-        }
-        System.out.println("Error! Didn't add person to any bus stop!!");
+        home.getNearest(busStops.getStops()).add(person, true);
     }
 
     // Unit Testing Method

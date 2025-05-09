@@ -3,10 +3,12 @@ public class Bus extends Vehicle {
     private double distanceToNextStop;
     private double timeSinceLastStop;
     private Stop nextStop;
-    private Stop metro;
+    private Stop train;
+
 
     // data analytic fields
     private double totalDistanceTraveled;
+    private String homeCity;
 
     // Constructor
     public Bus(double speed, int maxCapacity, Stop startLocation) {
@@ -30,7 +32,7 @@ public class Bus extends Vehicle {
 
     // Returns the Stop the bus will travel to next
     public Stop determineNextStop(BusStops stops) {
-        return determineNextStopPlaceholder();
+        return determineNextStopPlaceholder(stops);
     }
 
     // Using the location determined above, calculate distance and set this.nextStop
@@ -42,48 +44,63 @@ public class Bus extends Vehicle {
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops) {
-        timeSinceLastStop += dt;
 
-        double distance = speed*dt;
-        distanceToNextStop -= distance;
+        double distance = speed * dt;
+        distanceToNextStop = Math.max(0, distanceToNextStop - distance);
         totalDistanceTraveled += distance;
 
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
-            if (nextStop.isMetro()) {
-                // todo: drop off passengers
+            if (nextStop.isTrain()) {
+                dropOff(nextStop);
             } else {
                 pickUp(nextStop.getLine());
             }
 
-            // check if bus needs to go to metro next
-            for (int i = 0; i < currentCapacity; i++) {
-                Person person = passengers[i];
-                if (person.getTimeOnStartBus() >= Parameters.MAXTIMEONBUS) {
-                    this.setNextStop(metro);
-                }
+            // set the next stop
+            setNextStop(determineNextStop(stops));
+
+            // update passengers on bus
+            Node<Person> passenger = passengers.getHead();
+            while (passenger != null) {
+                passenger.getData().update(currentTime, dt);
+                passenger = passenger.getNext();
             }
-            this.setNextStop(this.determineNextStop(stops));
-        }
 
-        // update passengers on bus
-        for (int i = 0; i < currentCapacity; i++) {
-            Person person = passengers[i];
-            person.update(currentTime, dt);
         }
-
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
-        return distanceToNextStop/speed; // return the time it will take to reach next stop
+        return distanceToNextStop / speed; // return the time it will take to reach next stop
     }
 
     // Private Methods
-    private Stop determineNextStopPlaceholder() {
-        return new Stop(1.0,1.0);
+
+    // Simply goes to stop with most passengers
+    private Stop determineNextStopPlaceholder(BusStops stops) {
+
+        // check if we need to go to the train station
+        if (currentCapacity == maxCapacity ||
+                passengers.getHead().getData().getTimeOnStartBus() >= Parameters.MAXTIMEONBUS
+        ) {
+            return train;
+        }
+
+        // Find stop with most amount of passengers in its queue
+        int highestPassCount = 0;
+        Stop nextStop = null;
+        for (Stop stop : stops.getStops()) {
+            if (stop.getLine().getLength() > highestPassCount) {
+                nextStop = stop;
+                highestPassCount = stop.getLine().getLength();
+            }
+        }
+        return nextStop;
     }
 
-    private Stop determineNextStopSmartly() {
-        if (currentCapacity == maxCapacity) {
-            return metro;
+    private Stop determineNextStopSmartly(BusStops stops) {
+        if (currentCapacity == maxCapacity ||
+            passengers.getHead().getData().getTimeOnStartBus() >= Parameters.MAXTIMEONBUS
+        ) {
+            return train;
         }
         // todo: determine the next stop by comparing the bus stops' number of passengers,
         //  longest wait time, and sum of wait times at the bus stop
@@ -114,11 +131,11 @@ public class Bus extends Vehicle {
 
         Queue<Person> people = new Queue<Person>();
         for (int i=0; i < 5; i++) {
-            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0)));
+            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0), "home"));
         }
         b.pickUp(people);
-        b.metro = new Stop(99.9,99.9);
-        BusStops stops = new BusStops(10,1, b.metro);
+        b.train = new Stop(99.9,99.9);
+        BusStops stops = new BusStops(10,1, b.train);
 
         // test going to metro if bus is full
         if (b.determineNextStop(stops).getX() != 99.9) {

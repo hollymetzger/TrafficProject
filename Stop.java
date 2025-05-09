@@ -4,23 +4,26 @@ public class Stop extends Location {
     private Queue<Person> line;
     double longestCurrentlyWaiting;
     int lineLength;
-    boolean metro;
+    boolean train;
 
     // Constructors
     public Stop(double x, double y) {
         super(x, y);
-        metro = false;
+        train = false;
     }
     public Stop(double x, double y, boolean met) {
         super(x, y);
-        metro = met;
+        train = met;
     }
     // Accessors
     public Queue<Person> getLine() {
         return line;
     }
-    public boolean isMetro() {
-        return metro;
+    public int getLineLength() {
+        return line.getLength();
+    }
+    public boolean isTrain() {
+        return train;
     }
 
     public double getLongestCurrentlyWaiting() {
@@ -31,13 +34,15 @@ public class Stop extends Location {
     public double getTotalWaitTime() {
         // todo: for each Person in queue, sum the time they have been
         //  waiting at this stop
+        return 1.0;
     }
 
-    public void add(Person person) {
-        System.out.print("Added person to queue");
+    public void add(Person person, boolean first) {
         line.enqueue(person);
-        double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-        person.addWalkTime(walkTime);
+        if (first) {
+            double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
+            person.addTime(walkTime);
+        }
     }
 
 

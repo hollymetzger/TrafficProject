@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Parameters {
     public static double MAXTIMEONBUS;
-    public static Location METROLOCATION;
+    public static Location TRAINLOCATION;
     public static int NUMBEROFBUSES;
     public static int NUMBEROFTRAINS;
     public static double BUSSPEED;
@@ -19,9 +19,9 @@ public class Parameters {
                 String data = scanner.nextLine();
                 String[] fields = data.split(",");
                 MAXTIMEONBUS = Double.parseDouble(fields[0]);
-                double metroX = Double.parseDouble(fields[1]);
-                double metroY = Double.parseDouble(fields[2]);
-                METROLOCATION = new Location(metroX, metroY);
+                double trainX = Double.parseDouble(fields[1]);
+                double trainY = Double.parseDouble(fields[2]);
+                TRAINLOCATION = new Location(trainX, trainY);
                 NUMBEROFBUSES = Integer.parseInt(fields[3]);
                 NUMBEROFTRAINS = Integer.parseInt(fields[4]);
                 BUSSPEED = Double.parseDouble(fields[5]);

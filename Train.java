@@ -1,16 +1,19 @@
+import java.util.EnumMap;
+import java.util.Map;
+
 public class Train extends Vehicle {
 
     // Private fields
     private double distanceToNextStop;
     private double totalDistanceTraveled;
-    private Stop[] stops;
-    private int nextStop;
+    private EnumMap<TrainStop, Stop> stops;
+    private TrainStop nextStop;
     private boolean southbound;
 
     // Constructor
-    public Train(double speed, int maxCapacity, Stop[] s) {
+    public Train(double speed, int maxCapacity, EnumMap<TrainStop, Stop> stopsMap) {
         super(speed, maxCapacity);
-        stops = s;
+        stops = stopsMap;
     }
 
     // Accessors
@@ -34,26 +37,60 @@ public class Train extends Vehicle {
 
         // update passengers on train
         for (int i = 0; i < currentCapacity; i++) {
-            Person person = passengers[i];
-            person.update(currentTime, dt);
+            Node<Person> person = passengers.getHead();
+            while (person != null) {
+                person.getData().update(currentTime,dt);
+                person = person.getNext();
+            }
         }
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
         return distanceToNextStop/speed; // return the time it will take to reach next stop
     }
 
-    private void setNextStop() {
-        int tmp = nextStop;
+    public void dropOff(Stop stop) {
 
-        nextStop += isSouthbound() ? 1 : -1;
+    }
 
-        // if we went too far, reverse it
-        if (nextStop == -1 || nextStop == stops.length) {
-            reverseDirection();
-            nextStop += isSouthbound() ? -2 : 2;
+
+
+    // Private methods
+
+    // removes the Persons who should be disembarking at this.nextStop from this.passengers and returns them as a queue
+    private Queue<Person> removeDisembarkingPassengers() {
+        Queue<Person> disembarking = new Queue<Person>();
+        Queue<Person> remaining = new Queue<Person>();
+
+        // iterate through queue and sort each node into their respective queues
+        Node<Person> passenger = passengers.getHead();
+        while (passenger != null) {
+            if (passenger.getData().getDestinationTrainStop() == this.nextStop) {
+                disembarking.enqueue(passenger.getData());
+            } else {
+                remaining.enqueue(passenger.getData());
+            }
+            passenger = passenger.getNext();
         }
 
-        distanceToNextStop = stops[tmp].getDistance(stops[nextStop]);
+        this.passengers = remaining;
+        return disembarking;
+    }
+
+
+    private void setNextStop() {
+        TrainStop[] values = TrainStop.values();
+        int index = nextStop.ordinal(); // this method is called while we are at a stop, so this.nextStop is the stop this is currently at
+        Stop currentStop = stops.get(nextStop); // store current stop temporarily to calculate distance
+
+        index += isSouthbound() ? 1 : -1;
+
+        // if we went out of bounds, reverse it
+        if (index == -1 || index == values.length) {
+            reverseDirection();
+            index += isSouthbound() ? -2 : 2;
+        }
+        nextStop = values[index];
+        distanceToNextStop = currentStop.getDistance(stops.get(nextStop));
     }
 
     private void reverseDirection() {

@@ -8,12 +8,13 @@ import java.util.Scanner;
 public class Simulation {
     // Parameters for Simulation
     int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
-    double TIMEBETWEENTRAINS;
+    double DISTANCEBETWEENBUSSTOPS, TIMEBETWEENTRAINS;
     int BUSSPEED, TRAINSPEED;
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
     // Object holders
-    private Cities cities;
+    private Cities fredrickCities;
+    private Stop FrederickTrainStop;
     private Trains trains;
     private ExponentialDistribution arrivalTimeRNG;
 
@@ -28,25 +29,29 @@ public class Simulation {
     // Constructor
     public Simulation(
             int numberOfBuses, int numberOfTrains,
+            double distanceBetweenBusStops,
             double timeBetweenTrains,
-            int trainSpeed,
+            int trainSpeed, int trainCapacity,
             double maxTimeOnBus, double maxTimeWaitingForBus,
             String citiesCSV,
-            String trainStopsCSV
+            String trainStopsCSV // todo: import train stop locations
     ) {
+
+        // Initialize objects
+        FrederickTrainStop = new Stop(45,35);
+        trains = new Trains(numberOfTrains, timeBetweenTrains, trainSpeed, trainCapacity, FrederickTrainStop);
+        Cities fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS);
+        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
+
         // Set parameters
-        NUMBEROFPEOPLE = cities.getTotalPopulation();
+        NUMBEROFPEOPLE = fredrickCities.getTotalPopulation();
         NUMBEROFBUSES = numberOfBuses;
         NUMBEROFTRAINS = numberOfTrains;
+        DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
         TIMEBETWEENTRAINS = timeBetweenTrains;
         TRAINSPEED = trainSpeed;
         MAXTIMEONBUS = maxTimeOnBus;
         MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
-
-        // Initialize objects
-        trains = new Trains(numberOfTrains, timeBetweenTrains, trainStopsCSV);
-        cities.importFromCSV(citiesCSV);
-        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
         currentTime = 0;
@@ -55,36 +60,34 @@ public class Simulation {
         timeUntilNextArrival = setTimeUntilNextArrival();
         commuterCount = 0;
     }
-    // Accessors
-    public boolean getFinished() {
-        return isFinished;
-    }
 
     // Public Methods
 
     public void run() {
+        System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
         }
-        // todo: export data
+        // todo: export people and vmt data
     }
 
     // Advance the simulation by dt, and return the time until next event after that
     double update(double currentTime, double dt) {
         currentTime += dt;
-        timeUntilNextArrival = Math.max(0, timeUntilNextArrival-dt);
+        timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
         // add commuters to the simulation
         if (timeUntilNextArrival == 0) {
-            cities.generateCommuter();
+            fredrickCities.generateCommuter();
+            commuterCount++;
             timeUntilNextArrival = setTimeUntilNextArrival();
         }
 
-        // determine the time of the next event in the simulation
+        // update objects and determine the time of the next event in the simulation
         double timeUntilNextEvent = Math.min(Math.min(
                 timeUntilNextArrival,
-                cities.update(currentTime, dt)),
+                fredrickCities.update(currentTime, dt)),
                 trains.update(currentTime, dt)
         );
 

@@ -25,16 +25,17 @@ public class Main {
                 try {
                     int numberOfBuses = Integer.parseInt(fields[0]);
                     int numberOfTrains = Integer.parseInt(fields[1]);
-                    double timeBetweenTrains = Double.parseDouble(fields[2]);
-                    int trainSpeed = Integer.parseInt(fields[3]);
-                    double maxTimeOnBus = Double.parseDouble(fields[4]);
-                    double maxTimeWaitingForBus = Double.parseDouble(fields[5]);
+                    double distanceBetweenBusStops = Double.parseDouble(fields[2]);
+                    double timeBetweenTrains = Double.parseDouble(fields[3]);
+                    int trainSpeed = Integer.parseInt(fields[4]);
+                    double maxTimeOnBus = Double.parseDouble(fields[5]);
+                    double maxTimeWaitingForBus = Double.parseDouble(fields[6]);
 
                     Simulation sim = new Simulation(
                             numberOfBuses, numberOfTrains,
-                            timeBetweenTrains, trainSpeed,
+                            distanceBetweenBusStops, timeBetweenTrains, trainSpeed,
                             maxTimeOnBus, maxTimeWaitingForBus,
-                            "cities.csv", "metro_stops.csv"
+                            "cities.csv", "trainStops.csv"
                     );
 
                     sims[simNumber] = sim;
@@ -56,8 +57,7 @@ public class Main {
         Simulation currentSim = sims[0];
         while (currentSim != null) {
             currentSim.run();
-
-            // todo: export sim data to file
+            // todo: run method should export strings of data, need to handle that
         }
 
 

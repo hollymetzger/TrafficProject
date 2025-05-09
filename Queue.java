@@ -41,6 +41,16 @@ public class Queue<T> {
         return head;
     }
 
+    public int getLength() {
+        int count = 0;
+        Node current = head;
+        while (current != null) {
+            count++;
+            current = current.next;
+        }
+        return count;
+    }
+
     public static void doUnitTests() {
         System.out.println("Running Queue tests");
 

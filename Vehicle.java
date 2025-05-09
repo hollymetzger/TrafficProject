@@ -4,14 +4,14 @@ public class Vehicle {
     protected double speed;
     protected int maxCapacity;
     protected int currentCapacity;
-    protected Person[] passengers;
+    protected Queue<Person> passengers;
 
     // Constructor
     public Vehicle(double speed, int maxCapacity) {
         this.speed = speed;
         this.maxCapacity = maxCapacity;
         this.currentCapacity = 0;
-        this.passengers = new Person[maxCapacity];
+        this.passengers = new Queue<Person>();
     }
 
     // Accessors
@@ -32,20 +32,19 @@ public class Vehicle {
     // add passengers from queue to this.passengers
     public void pickUp(Queue<Person> people) {
         while (currentCapacity < maxCapacity) {
-            passengers[currentCapacity] = people.dequeue();
+            passengers.enqueue(people.dequeue());
             currentCapacity++;
         }
-
-        // todo: add passengers from stop's queue to bus, until bus is full
-
-
     }
 
-    public void dropOff(Location destination) {
-        // todo: implement this
-        // for person in passengers:
-        //      if destination is their destination:
-        //          get off vehicle
+    // drops off all passengers on vehicle
+    public void dropOff(Stop stop) {
+        Person person = passengers.dequeue();
+        while (person != null) {
+            stop.add(person, false);
+            person = passengers.dequeue();
+        }
+
     }
 
     public static void doUnitTests() {
@@ -55,9 +54,9 @@ public class Vehicle {
         int failCount = 0;
 
         Vehicle v = new Vehicle(25, 10);
-        Person[] people = new Person[5];
+        Queue<Person> people = new Queue<Person>();
         for (int i=0; i < 5; i++) {
-            people[i] = new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0));
+            people.enqueue(new Person(new Location(i*1.0,1*1.0), new Location(i*2.0,1*2.0), "home"));
         }
         v.pickUp(people);
 
