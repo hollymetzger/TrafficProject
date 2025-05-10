@@ -9,7 +9,8 @@ public class UnitTest {
         // People.doUnitTests();
         // Vehicle.doUnitTests();
         // Bus.doUnitTests();
-        Cities.doUnitTests();
+        // Cities.doUnitTests();
+        Simulation.doArrivalUnitTests();
 
 
 

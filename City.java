@@ -14,6 +14,7 @@ public class City extends Location {
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance, train);
+        distanceRNG = new ExponentialDistribution(2.0); // todo: set resasonable distance rng lambda
     }
 
     // Accessors
@@ -65,6 +66,8 @@ public class City extends Location {
 
         // Add the person to the queue of the nearest bus stop in the city
         home.getNearest(busStops.getStops()).add(person, true);
+        System.out.println("Generating commuter in " + getName() +
+                "Adding to bus stop at " + home.getNearest(busStops.getStops()).toString());
     }
 
     // Unit Testing Method
