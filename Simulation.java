@@ -9,7 +9,7 @@ public class Simulation {
     // Parameters for Simulation
     int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
     double DISTANCEBETWEENBUSSTOPS, TIMEBETWEENTRAINS;
-    int BUSSPEED, TRAINSPEED;
+    double BUSSPEED, TRAINSPEED;
     double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
 
     // Object holders
@@ -30,8 +30,9 @@ public class Simulation {
     public Simulation(
             int numberOfBuses, int numberOfTrains,
             double distanceBetweenBusStops,
+            double busSpeed, int busCapacity,
             double timeBetweenTrains,
-            int trainSpeed, int trainCapacity,
+            double trainSpeed, int trainCapacity,
             double maxTimeOnBus, double maxTimeWaitingForBus,
             String citiesCSV,
             String trainStopsCSV // todo: import train stop locations
@@ -40,7 +41,7 @@ public class Simulation {
         // Initialize objects
         FrederickTrainStop = new Stop(45,35);
         trains = new Trains(numberOfTrains, timeBetweenTrains, trainSpeed, trainCapacity, FrederickTrainStop);
-        Cities fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS);
+        fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS, numberOfBuses, busSpeed, busCapacity);
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Set parameters
@@ -68,6 +69,7 @@ public class Simulation {
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
+            isFinished = true;
         }
         // todo: export people and vmt data
     }

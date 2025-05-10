@@ -72,7 +72,7 @@ public class Person {
             System.out.println("FAIL: person home should have been (0.0, 0.0)");
         }
         testCount++;
-        if (!p.getDestination().toString().equals("(10.0, 10.0)")) {
+        if (!p.getDestinationLoc().toString().equals("(10.0, 10.0)")) {
             failCount++;
             System.out.println("FAIL: person destination should have been (10.0, 10.0)");
         }

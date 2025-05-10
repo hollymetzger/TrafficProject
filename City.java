@@ -32,9 +32,13 @@ public class City extends Location {
     }
 
     // Mutators
-    public void setBusCount(int count) {
+    public void initBuses(int count, double speed, int capacity) {
         buses = new Bus[count];
+        for (int i = 0; i < buses.length; i++) {
+            buses[i] = new Bus(speed, capacity, new Stop(this.getX(), this.getY()));
+        }
     }
+
 
     // Public Methods
     public double update(double currentTime, double dt) {

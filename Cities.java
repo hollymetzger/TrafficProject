@@ -11,11 +11,18 @@ public class Cities {
     private static Stop train; // refers to the train station in Frederick
 
     // Constructor
-    public Cities(String filename, Stop tr, Double distance) {
+    public Cities(String filename, Stop tr, double distance, int busCount, double busSpeed, int busCapacity) {
         cities = new ArrayList<City>();
         train = tr;
         if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
+        }
+
+        // assign buses to each city per population
+        int totalPop = getTotalPopulation();
+        for (City city : cities) {
+            int buses = busCount * city.getPopulation() / totalPop;
+            city.initBuses(buses, busSpeed, busCapacity);
         }
     }
 
@@ -113,7 +120,7 @@ public class Cities {
     // Unit Testing Method
     public static void doUnitTests() throws Exception {
         Stop train = new Stop(1.0,1.0);
-        Cities citiesTest = new Cities("src/cities.csv", train, 1.0);
+        Cities citiesTest = new Cities("src/cities.csv", train, 1.0, 100, 25, 20);
         for (int i = 0; i < citiesTest.getLength(); i++) {
             System.out.println(cities.get(i));
         }
