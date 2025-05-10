@@ -12,11 +12,14 @@ public class Cities {
 
     // Constructor
     public Cities(String filename, Stop tr, double distance, int busCount, double busSpeed, int busCapacity) {
+
         cities = new ArrayList<City>();
         train = tr;
         if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
         }
+        System.out.println("cities constructor after import");
+
 
         // assign buses to each city per population
         int totalPop = getTotalPopulation();
@@ -29,6 +32,14 @@ public class Cities {
     // Accessors
     public int getLength() {
         return cities.size();
+    }
+    public String printCities() {
+        StringBuilder citiesStr = new StringBuilder();
+        for (City city : cities) {
+            citiesStr.append(city.toString());
+            citiesStr.append("\n");
+        }
+        return citiesStr.toString();
     }
 
     // Public Methods
@@ -62,15 +73,17 @@ public class Cities {
     }
 
     public boolean importFromCSV(String filename, double distance) {
+        System.out.println("running cities.import from csv");
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
-            int i = 0;
-            while( scanner.hasNextLine() ) {
+            while (scanner.hasNextLine()) {
                 String data = scanner.nextLine();
-                cities.add(makeCity(data, distance));
+                System.out.println("making city with data: " + data);
+                City newCity = makeCity(data, distance);
+                cities.add(newCity);
             }
         }  catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
@@ -111,8 +124,12 @@ public class Cities {
             System.out.println(data);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Insufficient number of fields in CSV file");
+        } catch (Exception e) {
+            System.out.println("Other Exception while parsing line: " + data);
+            e.printStackTrace();
+            return null;
         }
-        return new City(name, x, y, population, distance, radius, 10, train); // todo: add bus count variable
+        return new City(name, x, y, population, radius, distance, 10, train); // todo: add bus count variable
     }
 
 
@@ -121,8 +138,6 @@ public class Cities {
     public static void doUnitTests() throws Exception {
         Stop train = new Stop(1.0,1.0);
         Cities citiesTest = new Cities("src/cities.csv", train, 1.0, 100, 25, 20);
-        for (int i = 0; i < citiesTest.getLength(); i++) {
-            System.out.println(cities.get(i));
-        }
+
     }
 }

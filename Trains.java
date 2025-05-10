@@ -30,6 +30,13 @@ public class Trains {
         }
     }
 
+    // Accessors
+    public String toString() {
+        return "Time between trains: " + timeBetweenTrains + "\n" +
+                "Train array of length " + trains.length + "\n" +
+                stops.size() + " Stations: ";
+    }
+
     // public methods
     public double update(double currentTime, double dt) {
         double timeUntilNextEvent = Double.POSITIVE_INFINITY;

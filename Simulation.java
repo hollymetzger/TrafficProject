@@ -37,15 +37,13 @@ public class Simulation {
             String citiesCSV,
             String trainStopsCSV // todo: import train stop locations
     ) {
-
-        // Initialize objects
-        FrederickTrainStop = new Stop(45,35);
-        trains = new Trains(numberOfTrains, timeBetweenTrains, trainSpeed, trainCapacity, FrederickTrainStop);
-        fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS, numberOfBuses, busSpeed, busCapacity);
-        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
+        System.out.println("Initializing Simulation with the following parameters:\n" +
+                numberOfBuses + " buses\n" +
+                numberOfTrains + " trains\n" +
+                distanceBetweenBusStops + " distance between bus stops\n" +
+                "City data from " + citiesCSV);
 
         // Set parameters
-        NUMBEROFPEOPLE = fredrickCities.getTotalPopulation();
         NUMBEROFBUSES = numberOfBuses;
         NUMBEROFTRAINS = numberOfTrains;
         DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
@@ -53,6 +51,21 @@ public class Simulation {
         TRAINSPEED = trainSpeed;
         MAXTIMEONBUS = maxTimeOnBus;
         MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
+
+        // Initialize objects
+        System.out.println("Initializing sim objects");
+
+        FrederickTrainStop = new Stop(45,35);
+        System.out.println("Frederick train stop created at " + FrederickTrainStop.toString());
+
+        trains = new Trains(numberOfTrains, timeBetweenTrains, trainSpeed, trainCapacity, FrederickTrainStop);
+        System.out.println("Trains created:\n" + trains);
+
+        fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS, numberOfBuses, busSpeed, busCapacity);
+        System.out.println("Frederick cities created: ");
+        System.out.println(fredrickCities.printCities());
+        NUMBEROFPEOPLE = fredrickCities.getTotalPopulation(); // have to set this after cities are loaded
+        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
         currentTime = 0;
