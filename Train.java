@@ -14,24 +14,31 @@ public class Train extends Vehicle {
     public Train(double speed, int maxCapacity, EnumMap<TrainStop, Stop> stopsMap) {
         super(speed, maxCapacity);
         stops = stopsMap;
+        nextStop = TrainStop.FREDERICK;
     }
 
     // Accessors
     public boolean isSouthbound() {
         return southbound;
     }
+    public TrainStop getNextStop() {
+        return nextStop;
+    }
+    public String toString() {
+        return "Next stop: " + nextStop + "\n" +
+               "Distance to next stop: " + distanceToNextStop + "\n" +
+               "Total distance traveled: " + totalDistanceTraveled + "\n" +
+               "Southbound: " + southbound;
+    }
 
     // Public methods
     // Advances the train in the simulation by dt time
     public double update(double currentTime, double dt) {
 
-        double distance = speed*dt;
-        distanceToNextStop -= distance;
-        totalDistanceTraveled += distance;
-
         // if we have reached the stop, unload passengers and set next stop
         if (distanceToNextStop == 0) {
-            // todo: pickup and drop off passengers, checking if this is their stop
+            System.out.println("Train reached stop " + nextStop);
+            pickUp(stops.get(nextStop).getLine());
             setNextStop();
         }
 
@@ -44,7 +51,12 @@ public class Train extends Vehicle {
             }
         }
 
+        double distance = speed*dt;
+        distanceToNextStop -= distance;
+        totalDistanceTraveled += distance;
+
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
+        System.out.println("time it will take to reach next stop: " + distanceToNextStop/speed);
         return distanceToNextStop/speed; // return the time it will take to reach next stop
     }
 
@@ -87,7 +99,7 @@ public class Train extends Vehicle {
         // if we went out of bounds, reverse it
         if (index == -1 || index == values.length) {
             reverseDirection();
-            index += isSouthbound() ? -2 : 2;
+            index += isSouthbound() ? 2 : -2;
         }
         nextStop = values[index];
         distanceToNextStop = currentStop.getDistance(stops.get(nextStop));

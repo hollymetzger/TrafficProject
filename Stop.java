@@ -24,6 +24,9 @@ public class Stop extends Location {
     public int getLineLength() {
         return line.getLength();
     }
+    public boolean getBusIncoming() {
+        return busIncoming;
+    }
     public boolean isTrain() {
         return train;
     }

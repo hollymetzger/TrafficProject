@@ -98,10 +98,7 @@ public class Bus extends Vehicle {
         int highestPassCount = 0;
         Stop next = this.getNextStop(); // if the loop doesn't find any stops with > 0 passengers, it will not move on this loop
         for (Stop stop : stops.getStops()) {
-            if (stop.getLineLength() > 0) {
-                // System.out.println("passenger found at " + stop);
-            }
-            if (stop.getLine().getLength() > highestPassCount) {
+            if (stop.getLine().getLength() > highestPassCount && !stop.getBusIncoming()) {
                 next = stop;
                 highestPassCount = stop.getLine().getLength();
             }

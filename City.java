@@ -35,8 +35,12 @@ public class City extends Location {
     // Mutators
     public void initBuses(int count, double speed, int capacity) {
         buses = new Bus[count];
+        double angleBetweenBuses = Math.TAU/buses.length;
         for (int i = 0; i < buses.length; i++) {
-            buses[i] = new Bus(speed, capacity, new Stop(this.getX(), this.getY()), busStops.getTrain());
+            double theta = angleBetweenBuses*i;
+            double r = this.radius/3;
+            Stop busStartStop = convertPolar(theta, r).getNearest(busStops.getStops());
+            buses[i] = new Bus(speed, capacity, busStartStop, busStops.getTrain());
         }
     }
 
@@ -57,12 +61,10 @@ public class City extends Location {
         // generate random point
         double theta = Math.TAU*Math.random();
         double r = Math.min(distanceRNG.sample(), this.radius);
-        double x = r * Math.cos(theta);
-        double y = r * Math.sin(theta);
 
         // Create Person object
-        Location home = new Location(x,y);
-        Location destination = new Location(x,y); // todo: generate end location same way
+        Location home = convertPolar(theta, r);
+        Location destination = home; // todo: generate end location same way
         Person person = new Person(home, destination, getName());
 
         // Add the person to the queue of the nearest bus stop in the city
@@ -73,6 +75,12 @@ public class City extends Location {
 
     private double setLambda(double radius) {
         return 0.929 * Math.exp(-0.057 * radius);
+    }
+
+    private Location convertPolar(double theta, double r) {
+        double x = r * Math.cos(theta);
+        double y = r * Math.sin(theta);
+        return new Location(x,y);
     }
 
     // Unit Testing Method

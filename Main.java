@@ -39,7 +39,7 @@ public class Main {
                     Simulation sim = new Simulation(
                             numberOfBuses, numberOfTrains,
                             distanceBetweenBusStops, busSpeed, busCapacity,
-                            timeBetweenTrains, trainSpeed, trainCapacity,
+                            trainSpeed, trainCapacity,
                             maxTimeOnBus, maxTimeWaitingForBus,
                             "cities.csv", "trainStops.csv",
                             lambda
