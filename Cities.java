@@ -18,8 +18,6 @@ public class Cities {
         if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
         }
-        System.out.println("cities constructor after import");
-
 
         // assign buses to each city per population
         int totalPop = getTotalPopulation();
@@ -44,6 +42,7 @@ public class Cities {
 
     // Public Methods
     public double update(double currentTime, double dt) {
+        System.out.println("Updating cities");
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (City city : cities) {
             timeOfNextEvent = Math.min(city.update(currentTime, dt), timeOfNextEvent);
@@ -60,6 +59,7 @@ public class Cities {
     }
 
     public void generateCommuter() {
+        System.out.println("cities generating commuter");
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
 
@@ -68,6 +68,7 @@ public class Cities {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
                 city.generateCommuter();
+                return;
             }
         }
     }
@@ -129,7 +130,7 @@ public class Cities {
             e.printStackTrace();
             return null;
         }
-        return new City(name, x, y, population, radius, distance, 10, train); // todo: add bus count variable
+        return new City(name, x, y, population, radius, distance, -1, train);
     }
 
 

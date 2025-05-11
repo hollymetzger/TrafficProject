@@ -2,9 +2,9 @@ public class Stop extends Location {
 
     // Private Fields
     private Queue<Person> line;
-    double longestCurrentlyWaiting;
     int lineLength;
     boolean train;
+    boolean busIncoming;
 
     // Constructors
     public Stop(double x, double y) {
@@ -28,8 +28,9 @@ public class Stop extends Location {
         return train;
     }
 
-    public double getLongestCurrentlyWaiting() {
-        return longestCurrentlyWaiting;
+    // Mutators
+    public void setBusIncoming(boolean bus) {
+        busIncoming = bus;
     }
 
     // Public Methods

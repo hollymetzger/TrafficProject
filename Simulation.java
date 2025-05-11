@@ -101,16 +101,15 @@ public class Simulation {
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while (!isFinished) {
             dt = update(currentTime, dt);
-            isFinished = true;
         }
         // todo: export people and vmt data
     }
 
     // Advance the simulation by dt, and return the time until next event after that
-    double update(double currentTime, double dt) {
+    private double update(double currentTime, double dt) {
         System.out.println("Simulation Update Loop\n" +
                 "Current time: " + currentTime +
-                "Time until next arrival: " + timeUntilNextArrival);
+                "\nTime until next arrival: " + timeUntilNextArrival);
         currentTime += dt;
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
@@ -122,10 +121,15 @@ public class Simulation {
         }
 
         // update objects and determine the time of the next event in the simulation
+        System.out.println("time until next arrival: " + timeUntilNextArrival);
+        double fc = fredrickCities.update(currentTime, dt);
+        System.out.println("cities,update: " + fc);
+        double t = trains.update(currentTime, dt);
+        System.out.println("trains.update: " + t);
         double timeUntilNextEvent = Math.min(Math.min(
                 timeUntilNextArrival,
-                fredrickCities.update(currentTime, dt)),
-                trains.update(currentTime, dt)
+                fc),
+                t
         );
         System.out.println("Time until next event: " + timeUntilNextEvent);
 
@@ -133,6 +137,7 @@ public class Simulation {
         if (finishedPeople.length == NUMBEROFPEOPLE) {
             isFinished = true;
         }
+        System.out.println("finished update loop, time until next event is " + timeUntilNextEvent);
         return timeUntilNextEvent;
     }
 
@@ -146,6 +151,7 @@ public class Simulation {
             setArrivalLambda(getArrivalLambda()*0.9993);
         }
         this.timeUntilNextArrival = arrivalTimeRNG.sample(ARRIVALTIMELAMBDA);
+        System.out.println("next arrival will be in " + this.timeUntilNextArrival);
     }
 
     public static void doArrivalUnitTests() {

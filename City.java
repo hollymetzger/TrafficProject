@@ -14,7 +14,7 @@ public class City extends Location {
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance, train);
-        distanceRNG = new ExponentialDistribution(2.0); // todo: set resasonable distance rng lambda
+        distanceRNG = new ExponentialDistribution(3.0); // todo: set resasonable distance rng lambda
     }
 
     // Accessors
@@ -36,13 +36,14 @@ public class City extends Location {
     public void initBuses(int count, double speed, int capacity) {
         buses = new Bus[count];
         for (int i = 0; i < buses.length; i++) {
-            buses[i] = new Bus(speed, capacity, new Stop(this.getX(), this.getY()));
+            buses[i] = new Bus(speed, capacity, new Stop(this.getX(), this.getY()), busStops.getTrain());
         }
     }
 
 
     // Public Methods
     public double update(double currentTime, double dt) {
+        System.out.println("Updating " + this.getName());
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (Bus bus : buses) {
             timeOfNextEvent = Math.min(bus.update(currentTime, dt, busStops), timeOfNextEvent);
@@ -67,7 +68,7 @@ public class City extends Location {
         // Add the person to the queue of the nearest bus stop in the city
         home.getNearest(busStops.getStops()).add(person, true);
         System.out.println("Generating commuter in " + getName() +
-                "Adding to bus stop at " + home.getNearest(busStops.getStops()).toString());
+                "\nAdding to bus stop at " + home.getNearest(busStops.getStops()).toString());
     }
 
     // Unit Testing Method

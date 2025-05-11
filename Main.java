@@ -66,6 +66,7 @@ public class Main {
             currentSim.run();
             // todo: run method should export strings of data, need to handle that
             i++;
+            currentSim = sims[i];
         }
 
     } // end of main method
