@@ -14,7 +14,7 @@ public class City extends Location {
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance, train);
-        distanceRNG = new ExponentialDistribution(3.0); // todo: set resasonable distance rng lambda
+        distanceRNG = new ExponentialDistribution(setLambda(radius));
     }
 
     // Accessors
@@ -56,7 +56,7 @@ public class City extends Location {
 
         // generate random point
         double theta = Math.TAU*Math.random();
-        double r = distanceRNG.sample();
+        double r = Math.min(distanceRNG.sample(), this.radius);
         double x = r * Math.cos(theta);
         double y = r * Math.sin(theta);
 
@@ -69,6 +69,10 @@ public class City extends Location {
         home.getNearest(busStops.getStops()).add(person, true);
         System.out.println("Generating commuter in " + getName() +
                 "\nAdding to bus stop at " + home.getNearest(busStops.getStops()).toString());
+    }
+
+    private double setLambda(double radius) {
+        return 0.929 * Math.exp(-0.057 * radius);
     }
 
     // Unit Testing Method
