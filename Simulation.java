@@ -69,7 +69,7 @@ public class Simulation {
         System.out.println("Initializing sim objects");
 
         FrederickTrainStop = new Stop(45,35);
-        System.out.println("Frederick train stop created at " + FrederickTrainStop.toString());
+        System.out.println("Frederick train stop created at " + FrederickTrainStop);
 
         trains = new Trains(numberOfTrains, trainSpeed, trainCapacity, FrederickTrainStop);
         System.out.println("Trains created:\n" + trains);
@@ -120,6 +120,7 @@ public class Simulation {
     private double update(double currentTime, double dt) {
         System.out.println("Simulation Update Loop\n" +
                 "Current time: " + currentTime +
+                "\ndt for this loop: " + dt +
                 "\nTime until next arrival: " + timeUntilNextArrival);
         currentTime += dt;
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
@@ -133,16 +134,15 @@ public class Simulation {
 
         // update objects and determine the time of the next event in the simulation
         System.out.println("time until next arrival: " + timeUntilNextArrival);
-        double fc = fredrickCities.update(currentTime, dt);
-        System.out.println("cities,update: " + fc);
-        double t = trains.update(currentTime, dt);
-        System.out.println("trains.update: " + t);
+        double fcitiesTime = fredrickCities.update(currentTime, dt);
+        System.out.println("cities.update: " + fcitiesTime);
+        double trainsTime = trains.update(currentTime, dt);
+        System.out.println("trains.update: " + trainsTime);
         double timeUntilNextEvent = Math.min(Math.min(
                 timeUntilNextArrival,
-                fc),
-                t
+                fcitiesTime),
+                trainsTime
         );
-        System.out.println("Time until next event: " + timeUntilNextEvent);
 
         // check if simulation is finished
         if (finishedPeople.length == NUMBEROFPEOPLE) {

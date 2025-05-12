@@ -45,7 +45,9 @@ public class Cities {
         System.out.println("Updating cities");
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (City city : cities) {
-            timeOfNextEvent = Math.min(city.update(currentTime, dt), timeOfNextEvent);
+            double cityTime = city.update(currentTime, dt);
+            System.out.println(city.getName() + " next event in " + cityTime);
+            timeOfNextEvent = Math.min(cityTime, timeOfNextEvent);
         }
         return timeOfNextEvent;
     }

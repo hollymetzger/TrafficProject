@@ -5,7 +5,7 @@ public class Bus extends Vehicle {
     private Stop nextStop;
     private Stop train;
     private double maxTimeOnBus;
-
+    private boolean idle;
 
     // data analytic fields
     private double totalDistanceTraveled;
@@ -18,6 +18,8 @@ public class Bus extends Vehicle {
         this.nextStop = startLocation;
         train = tr;
         maxTimeOnBus = 15;
+        idle = true;
+        System.out.println("constructing bus, placing at stop " + nextStop.toString());
     }
 
     // Accessors
@@ -43,23 +45,30 @@ public class Bus extends Vehicle {
     public void setNextStop(Stop ns) {
         if (ns == null) {
             System.out.println("attempted to set next stop to null");
+        } else if (ns.isEqual(this.nextStop)) {
+            System.out.println("setting idle to true");
+            idle = true;
+            System.out.println("idle is " + idle);
         } else {
             System.out.println("setting next stop to " + ns);
+            ns.setBusIncoming(true);
+            Stop currentStop = this.nextStop;
+            this.nextStop = ns;
+            this.distanceToNextStop = currentStop.getDistance(ns);
+            idle = false;
         }
 
-        assert ns != null;
-        ns.setBusIncoming(true);
-        Stop currentStop = this.nextStop;
-        this.nextStop = ns;
-        this.distanceToNextStop = currentStop.getDistance(ns);
+
     }
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops) {
-        double distance = speed * dt;
-        distanceToNextStop = Math.max(0, distanceToNextStop - distance);
-        totalDistanceTraveled += distance;
 
+        if (distanceToNextStop > 0) {
+            double distance = speed * dt;
+            distanceToNextStop = Math.max(0, distanceToNextStop - distance);
+            totalDistanceTraveled += distance;
+        }
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
@@ -79,8 +88,14 @@ public class Bus extends Vehicle {
             }
 
         }
-        distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
-        return distanceToNextStop / speed; // return the time it will take to reach next stop
+        System.out.println(idle);
+        if (idle) {
+            System.out.println("bus not moving this loop");
+            return Double.POSITIVE_INFINITY;
+        } else {
+            System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
+            return distanceToNextStop / speed; // return the time it will take to reach next stop
+        }
     }
 
     // Private Methods

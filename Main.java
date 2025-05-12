@@ -29,19 +29,18 @@ public class Main {
                     double distanceBetweenBusStops = Double.parseDouble(fields[2]);
                     double busSpeed = Double.parseDouble(fields[3]);
                     int busCapacity = Integer.parseInt(fields[4]);
-                    double timeBetweenTrains = Double.parseDouble(fields[5]);
-                    double trainSpeed = Double.parseDouble(fields[6]);
-                    int trainCapacity = Integer.parseInt(fields[7]);
-                    double maxTimeOnBus = Double.parseDouble(fields[8]);
-                    double maxTimeWaitingForBus = Double.parseDouble(fields[9]);
-                    double lambda = Double.parseDouble(fields[10]);
+                    double trainSpeed = Double.parseDouble(fields[5]);
+                    int trainCapacity = Integer.parseInt(fields[6]);
+                    double maxTimeOnBus = Double.parseDouble(fields[7]);
+                    double maxTimeWaitingForBus = Double.parseDouble(fields[8]);
+                    double lambda = Double.parseDouble(fields[9]);
 
                     Simulation sim = new Simulation(
                             numberOfBuses, numberOfTrains,
                             distanceBetweenBusStops, busSpeed, busCapacity,
                             trainSpeed, trainCapacity,
                             maxTimeOnBus, maxTimeWaitingForBus,
-                            "cities.csv", "trainStops.csv",
+                            "test_cities.csv", "trainStops.csv",
                             lambda
                     );
 
