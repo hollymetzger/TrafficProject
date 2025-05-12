@@ -61,7 +61,12 @@ public class Train extends Vehicle {
     }
 
     public void dropOff(Stop stop) {
-
+        Queue<Person> disembarking = removeDisembarkingPassengers();
+        Person person = disembarking.dequeue();
+        while (person != null) {
+            stop.getLine().enqueue(person);
+            person = disembarking.dequeue();
+        }
     }
 
 
