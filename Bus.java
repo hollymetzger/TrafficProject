@@ -46,9 +46,7 @@ public class Bus extends Vehicle {
         if (ns == null) {
             System.out.println("attempted to set next stop to null");
         } else if (ns.isEqual(this.nextStop)) {
-            System.out.println("setting idle to true");
             idle = true;
-            System.out.println("idle is " + idle);
         } else {
             System.out.println("setting next stop to " + ns);
             ns.setBusIncoming(true);
@@ -88,7 +86,6 @@ public class Bus extends Vehicle {
             }
 
         }
-        System.out.println(idle);
         if (idle) {
             System.out.println("bus not moving this loop");
             return Double.POSITIVE_INFINITY;

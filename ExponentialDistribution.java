@@ -21,7 +21,7 @@ public class ExponentialDistribution extends RandomDistribution {
     // Testing Method
     public static void doUnitTests() {
         System.out.println("Running Exponential Distribution tests");
-        ExponentialDistribution rng = new ExponentialDistribution(0.5);
+        ExponentialDistribution rng = new ExponentialDistribution(10);
         try {
             File file = new File("Exponential RNG Results.csv");
             FileWriter writer = new FileWriter(file);

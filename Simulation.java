@@ -32,9 +32,9 @@ public class Simulation {
     private ExponentialDistribution arrivalTimeRNG;
 
     // Fields used while running simulation
-    private double currentTime = 0;
+    private double currentTime;
     private boolean isFinished;
-    private Person[] finishedPeople;
+    private Queue<Person> finishedPeople;
     private int commuterCount; // the number of people who have been generated so far
     private double timeUntilNextArrival;
     private double ARRIVALTIMELAMBDA;
@@ -83,7 +83,7 @@ public class Simulation {
         // Initialize tracking fields
         currentTime = 0;
         isFinished = false;
-        finishedPeople = new Person[NUMBEROFPEOPLE];
+        finishedPeople = new Queue<Person>();
         setTimeUntilNextArrival();
         System.out.println("setting time until first arrival to " + timeUntilNextArrival);
         commuterCount = 0;
@@ -110,7 +110,7 @@ public class Simulation {
     public void run() {
         System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
-        while (!isFinished) {
+        for (int i = 0; i < 10; i++) {
             dt = update(currentTime, dt);
         }
         // todo: export people and vmt data
@@ -122,7 +122,8 @@ public class Simulation {
                 "Current time: " + currentTime +
                 "\ndt for this loop: " + dt +
                 "\nTime until next arrival: " + timeUntilNextArrival);
-        currentTime += dt;
+        this.currentTime += dt;
+        System.out.println("after adding, current time is: " + currentTime);
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
         // add commuters to the simulation
@@ -145,10 +146,11 @@ public class Simulation {
         );
 
         // check if simulation is finished
-        if (finishedPeople.length == NUMBEROFPEOPLE) {
+        if (finishedPeople.getLength() == NUMBEROFPEOPLE) {
             isFinished = true;
         }
         System.out.println("finished update loop, time until next event is " + timeUntilNextEvent);
+        System.out.println("finished: " + isFinished);
         return timeUntilNextEvent;
     }
 
@@ -163,6 +165,7 @@ public class Simulation {
         }
         this.timeUntilNextArrival = arrivalTimeRNG.sample(ARRIVALTIMELAMBDA);
         System.out.println("next arrival will be in " + this.timeUntilNextArrival);
+
     }
 
     public static void doArrivalUnitTests() {

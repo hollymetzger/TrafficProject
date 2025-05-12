@@ -9,7 +9,7 @@ public class Main {
         // Import sim parameters from lines in a CSV file, up to 1000 per batch
         Simulation[] sims = new Simulation[1000];
 
-        File file = new File("SimParameters.csv");
+        File file = new File("test_SimParameters.csv");
         System.out.println("Reading from: " + file.getAbsolutePath());
 
         try (Scanner scanner = new Scanner(file)) {

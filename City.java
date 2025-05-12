@@ -56,7 +56,9 @@ public class City extends Location {
     }
 
     public void generateCommuter() {
-        if (population == 0) { return; } // double check not to spawn extra people
+        if (population == 0) {
+            System.out.println("tried to spawn person that doesn't exist");
+            return; } // double check not to spawn extra people
 
         // generate random point
         double theta = Math.TAU*Math.random();
