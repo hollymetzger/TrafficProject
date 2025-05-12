@@ -31,8 +31,11 @@ public class Vehicle {
 
     // add passengers from queue to this.passengers
     public void pickUp(Queue<Person> people) {
-        while (currentCapacity < maxCapacity) {
-            passengers.enqueue(people.dequeue());
+        System.out.println(this.getClass() + " Picking up passengers");
+        Person pass = people.dequeue();
+        while (currentCapacity < maxCapacity && pass != null) {
+            passengers.enqueue(pass);
+            pass = people.dequeue();
             currentCapacity++;
         }
     }

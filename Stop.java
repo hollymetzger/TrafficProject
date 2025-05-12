@@ -2,18 +2,20 @@ public class Stop extends Location {
 
     // Private Fields
     private Queue<Person> line;
-    double longestCurrentlyWaiting;
     int lineLength;
     boolean train;
+    boolean busIncoming;
 
     // Constructors
     public Stop(double x, double y) {
         super(x, y);
         train = false;
+        line = new Queue<Person>();
     }
     public Stop(double x, double y, boolean met) {
         super(x, y);
         train = met;
+        line = new Queue<Person>();
     }
     // Accessors
     public Queue<Person> getLine() {
@@ -22,12 +24,16 @@ public class Stop extends Location {
     public int getLineLength() {
         return line.getLength();
     }
+    public boolean getBusIncoming() {
+        return busIncoming;
+    }
     public boolean isTrain() {
         return train;
     }
 
-    public double getLongestCurrentlyWaiting() {
-        return longestCurrentlyWaiting;
+    // Mutators
+    public void setBusIncoming(boolean bus) {
+        busIncoming = bus;
     }
 
     // Public Methods

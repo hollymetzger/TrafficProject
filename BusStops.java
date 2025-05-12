@@ -17,6 +17,9 @@ public class BusStops {
     public ArrayList<Stop> getStops() {
         return busStops;
     }
+    public Stop getTrain() {
+        return train;
+    }
 
     // Private methods
     private void generateBusStops(double radius, double distance) {

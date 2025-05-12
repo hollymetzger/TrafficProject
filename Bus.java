@@ -4,23 +4,29 @@ public class Bus extends Vehicle {
     private double timeSinceLastStop;
     private Stop nextStop;
     private Stop train;
-
+    private double maxTimeOnBus;
+    private boolean idle;
 
     // data analytic fields
     private double totalDistanceTraveled;
     private String homeCity;
 
     // Constructor
-    public Bus(double speed, int maxCapacity, Stop startLocation) {
+    public Bus(double speed, int maxCapacity, Stop startLocation, Stop tr) {
         super(speed, maxCapacity);
+        currentCapacity = 0;
         this.nextStop = startLocation;
+        train = tr;
+        maxTimeOnBus = 15;
+        idle = true;
+        System.out.println("constructing bus, placing at stop " + nextStop.toString());
     }
 
     // Accessors
     public double getTimeToMetroStation() {
         return timeToMetroStation;
     }
-    public Location getNextStop() {
+    public Stop getNextStop() {
         return nextStop;
     }
     public String toString() {
@@ -37,18 +43,30 @@ public class Bus extends Vehicle {
 
     // Using the location determined above, calculate distance and set this.nextStop
     public void setNextStop(Stop ns) {
-        Stop currentStop = this.nextStop;
-        this.nextStop = ns;
-        this.distanceToNextStop = currentStop.getDistance(ns);
+        if (ns == null) {
+            System.out.println("attempted to set next stop to null");
+        } else if (ns.isEqual(this.nextStop)) {
+            idle = true;
+        } else {
+            System.out.println("setting next stop to " + ns);
+            ns.setBusIncoming(true);
+            Stop currentStop = this.nextStop;
+            this.nextStop = ns;
+            this.distanceToNextStop = currentStop.getDistance(ns);
+            idle = false;
+        }
+
+
     }
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops) {
 
-        double distance = speed * dt;
-        distanceToNextStop = Math.max(0, distanceToNextStop - distance);
-        totalDistanceTraveled += distance;
-
+        if (distanceToNextStop > 0) {
+            double distance = speed * dt;
+            distanceToNextStop = Math.max(0, distanceToNextStop - distance);
+            totalDistanceTraveled += distance;
+        }
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
@@ -68,32 +86,36 @@ public class Bus extends Vehicle {
             }
 
         }
-        distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
-        return distanceToNextStop / speed; // return the time it will take to reach next stop
+        if (idle) {
+            System.out.println("bus not moving this loop");
+            return Double.POSITIVE_INFINITY;
+        } else {
+            System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
+            return distanceToNextStop / speed; // return the time it will take to reach next stop
+        }
     }
 
     // Private Methods
 
     // Simply goes to stop with most passengers
     private Stop determineNextStopPlaceholder(BusStops stops) {
-
         // check if we need to go to the train station
-        if (currentCapacity == maxCapacity ||
-                passengers.getHead().getData().getTimeOnStartBus() >= Parameters.MAXTIMEONBUS
+        if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
         ) {
+            System.out.println("returning train");
             return train;
         }
 
         // Find stop with most amount of passengers in its queue
         int highestPassCount = 0;
-        Stop nextStop = null;
+        Stop next = this.getNextStop(); // if the loop doesn't find any stops with > 0 passengers, it will not move on this loop
         for (Stop stop : stops.getStops()) {
-            if (stop.getLine().getLength() > highestPassCount) {
-                nextStop = stop;
+            if (stop.getLine().getLength() > highestPassCount && !stop.getBusIncoming()) {
+                next = stop;
                 highestPassCount = stop.getLine().getLength();
             }
         }
-        return nextStop;
+        return next;
     }
 
     private Stop determineNextStopSmartly(BusStops stops) {
@@ -107,6 +129,14 @@ public class Bus extends Vehicle {
         return null;
     }
 
+    private double getLongestTimeOnBus() {
+        if (passengers.getHead() == null) {
+            return 0;
+        } else {
+            return passengers.getHead().getData().getTimeOnStartBus();
+        }
+    }
+
     // Unit testing method
     public static void doUnitTests() {
         System.out.println("Running Bus Tests");
@@ -114,7 +144,7 @@ public class Bus extends Vehicle {
         int testCount = 0;
         int failCount = 0;
 
-        Bus b = new Bus(25, 5, new Stop(0, 0));
+        Bus b = new Bus(25, 5, new Stop(0, 0), new Stop(10,10));
 
         if (b.getNextStop().getX() != 0) {
             System.out.println("Fail: next stop should be 0");

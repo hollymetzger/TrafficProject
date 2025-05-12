@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 public class Main {
     public static void main(String[] args) {
 
+        // Import sim parameters from lines in a CSV file, up to 1000 per batch
         Simulation[] sims = new Simulation[1000];
 
-        File file = new File("SimParameters.csv");
+        File file = new File("test_SimParameters.csv");
         System.out.println("Reading from: " + file.getAbsolutePath());
 
         try (Scanner scanner = new Scanner(file)) {
@@ -26,16 +27,21 @@ public class Main {
                     int numberOfBuses = Integer.parseInt(fields[0]);
                     int numberOfTrains = Integer.parseInt(fields[1]);
                     double distanceBetweenBusStops = Double.parseDouble(fields[2]);
-                    double timeBetweenTrains = Double.parseDouble(fields[3]);
-                    int trainSpeed = Integer.parseInt(fields[4]);
-                    double maxTimeOnBus = Double.parseDouble(fields[5]);
-                    double maxTimeWaitingForBus = Double.parseDouble(fields[6]);
+                    double busSpeed = Double.parseDouble(fields[3]);
+                    int busCapacity = Integer.parseInt(fields[4]);
+                    double trainSpeed = Double.parseDouble(fields[5]);
+                    int trainCapacity = Integer.parseInt(fields[6]);
+                    double maxTimeOnBus = Double.parseDouble(fields[7]);
+                    double maxTimeWaitingForBus = Double.parseDouble(fields[8]);
+                    double lambda = Double.parseDouble(fields[9]);
 
                     Simulation sim = new Simulation(
                             numberOfBuses, numberOfTrains,
-                            distanceBetweenBusStops, timeBetweenTrains, trainSpeed,
+                            distanceBetweenBusStops, busSpeed, busCapacity,
+                            trainSpeed, trainCapacity,
                             maxTimeOnBus, maxTimeWaitingForBus,
-                            "cities.csv", "trainStops.csv"
+                            "test_cities.csv", "trainStops.csv",
+                            lambda
                     );
 
                     sims[simNumber] = sim;
@@ -45,7 +51,6 @@ public class Main {
                     System.out.println("Error parsing numbers on line " + simNumber);
                     e.printStackTrace();
                 }
-
                 simNumber++;
             }
         } catch (FileNotFoundException e) {
@@ -54,12 +59,14 @@ public class Main {
         }
 
         // Run all simulations
-        Simulation currentSim = sims[0];
+        int i = 0;
+        Simulation currentSim = sims[i];
         while (currentSim != null) {
             currentSim.run();
             // todo: run method should export strings of data, need to handle that
+            i++;
+            currentSim = sims[i];
         }
-
 
     } // end of main method
 }

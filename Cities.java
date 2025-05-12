@@ -11,11 +11,19 @@ public class Cities {
     private static Stop train; // refers to the train station in Frederick
 
     // Constructor
-    public Cities(String filename, Stop tr, Double distance) {
+    public Cities(String filename, Stop tr, double distance, int busCount, double busSpeed, int busCapacity) {
+
         cities = new ArrayList<City>();
         train = tr;
         if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
+        }
+
+        // assign buses to each city per population
+        int totalPop = getTotalPopulation();
+        for (City city : cities) {
+            int buses = busCount * city.getPopulation() / totalPop;
+            city.initBuses(buses, busSpeed, busCapacity);
         }
     }
 
@@ -23,12 +31,23 @@ public class Cities {
     public int getLength() {
         return cities.size();
     }
+    public String printCities() {
+        StringBuilder citiesStr = new StringBuilder();
+        for (City city : cities) {
+            citiesStr.append(city.toString());
+            citiesStr.append("\n");
+        }
+        return citiesStr.toString();
+    }
 
     // Public Methods
     public double update(double currentTime, double dt) {
+        System.out.println("Updating cities");
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (City city : cities) {
-            timeOfNextEvent = Math.min(city.update(currentTime, dt), timeOfNextEvent);
+            double cityTime = city.update(currentTime, dt);
+            System.out.println(city.getName() + " next event in " + cityTime);
+            timeOfNextEvent = Math.min(cityTime, timeOfNextEvent);
         }
         return timeOfNextEvent;
     }
@@ -42,6 +61,7 @@ public class Cities {
     }
 
     public void generateCommuter() {
+        System.out.println("cities generating commuter");
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
 
@@ -50,20 +70,23 @@ public class Cities {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
                 city.generateCommuter();
+                return;
             }
         }
     }
 
     public boolean importFromCSV(String filename, double distance) {
+        System.out.println("running cities.import from csv");
         File file = new File(filename);
         System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
-            int i = 0;
-            while( scanner.hasNextLine() ) {
+            while (scanner.hasNextLine()) {
                 String data = scanner.nextLine();
-                cities.add(makeCity(data, distance));
+                System.out.println("making city with data: " + data);
+                City newCity = makeCity(data, distance);
+                cities.add(newCity);
             }
         }  catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
@@ -104,8 +127,12 @@ public class Cities {
             System.out.println(data);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Insufficient number of fields in CSV file");
+        } catch (Exception e) {
+            System.out.println("Other Exception while parsing line: " + data);
+            e.printStackTrace();
+            return null;
         }
-        return new City(name, x, y, population, distance, radius, 10, train); // todo: add bus count variable
+        return new City(name, x, y, population, radius, distance, -1, train);
     }
 
 
@@ -113,9 +140,7 @@ public class Cities {
     // Unit Testing Method
     public static void doUnitTests() throws Exception {
         Stop train = new Stop(1.0,1.0);
-        Cities citiesTest = new Cities("src/cities.csv", train, 1.0);
-        for (int i = 0; i < citiesTest.getLength(); i++) {
-            System.out.println(cities.get(i));
-        }
+        Cities citiesTest = new Cities("src/cities.csv", train, 1.0, 100, 25, 20);
+
     }
 }
