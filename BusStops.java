@@ -7,10 +7,10 @@ public class BusStops {
     private Stop train;
 
     // Constructor
-    public BusStops(double radius, double distance, Stop t) {
+    public BusStops(double radius, double distance, Stop t, Location center) {
         busStops = new ArrayList<Stop>();
         train = t;
-        generateBusStops(radius, distance);
+        generateBusStops(radius, distance, center);
     }
 
     // Accessors
@@ -22,11 +22,13 @@ public class BusStops {
     }
 
     // Private methods
-    private void generateBusStops(double radius, double distance) {
+    private void generateBusStops(double radius, double distance, Location center) {
         for (double x = -radius; x <= radius; x += distance) {
             for (double y = -radius; y <= radius; y += distance) {
                 if (x * x + y * y <= radius * radius) {
-                    busStops.add(new Stop(x, y));
+                    Stop stop = new Stop(x, y);
+                    stop.addVector(center);
+                    busStops.add(stop);
                 }
             }
         }

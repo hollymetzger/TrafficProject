@@ -22,6 +22,12 @@ public class Location {
         return "(" + x + ", " + y + ")";
     }
 
+    // Mutators
+    public void addVector(Location vector) {
+        this.x += vector.getX();
+        this.y += vector.getY();
+    }
+
     // Public methods
     public double getDistance(Location location) {
         return Math.sqrt(Math.pow(this.x - location.getX(), 2) + Math.pow(this.y - location.getY(), 2));

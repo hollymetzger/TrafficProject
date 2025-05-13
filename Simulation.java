@@ -68,7 +68,7 @@ public class Simulation {
         // Initialize objects
         System.out.println("Initializing sim objects");
 
-        FrederickTrainStop = new Stop(45,35);
+        FrederickTrainStop = new Stop(45,35, true);
         System.out.println("Frederick train stop created at " + FrederickTrainStop);
 
         trains = new Trains(numberOfTrains, trainSpeed, trainCapacity, FrederickTrainStop);
@@ -104,31 +104,38 @@ public class Simulation {
     public void setArrivalLambda(double l) {
         ARRIVALTIMELAMBDA = l;
     }
+    public void addTime(double dt) { this.currentTime += dt; }
 
     // Public Methods
 
     public void run() {
         System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
-        for (int i = 0; i < 10; i++) {
+        /*
+        while(finishedPeople.getLength() < NUMBEROFPEOPLE) {
             dt = update(currentTime, dt);
         }
+         */
+
+        for (int i = 0; i < 8; i++) {
+            dt = update(currentTime, dt);
+        }
+        System.out.println("Finished people: " + finishedPeople.getLength());
         // todo: export people and vmt data
     }
 
     // Advance the simulation by dt, and return the time until next event after that
     private double update(double currentTime, double dt) {
-        System.out.println("Simulation Update Loop\n" +
+        System.out.println("\n\n\nSimulation Update Loop\n" +
                 "Current time: " + currentTime +
                 "\ndt for this loop: " + dt +
                 "\nTime until next arrival: " + timeUntilNextArrival);
-        this.currentTime += dt;
-        System.out.println("after adding, current time is: " + currentTime);
+        addTime(dt);
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
-        // add commuters to the simulation
-        if (timeUntilNextArrival == 0) {
-            fredrickCities.generateCommuter();
+        // add commuters to the simulation if applicable
+        if (timeUntilNextArrival == 0 && fredrickCities.generateCommuter()) {
+            System.out.println("incing cc");
             commuterCount++;
             this.setTimeUntilNextArrival();
         }
@@ -137,7 +144,7 @@ public class Simulation {
         System.out.println("time until next arrival: " + timeUntilNextArrival);
         double fcitiesTime = fredrickCities.update(currentTime, dt);
         System.out.println("cities.update: " + fcitiesTime);
-        double trainsTime = trains.update(currentTime, dt);
+        double trainsTime = trains.update(currentTime, dt, finishedPeople);
         System.out.println("trains.update: " + trainsTime);
         double timeUntilNextEvent = Math.min(Math.min(
                 timeUntilNextArrival,
@@ -150,7 +157,7 @@ public class Simulation {
             isFinished = true;
         }
         System.out.println("finished update loop, time until next event is " + timeUntilNextEvent);
-        System.out.println("finished: " + isFinished);
+        System.out.println("finished people count: " + isFinished);
         return timeUntilNextEvent;
     }
 
@@ -160,7 +167,12 @@ public class Simulation {
         // the rate of arrivals gradually increases until halfway through, then it decreases again
         if (commuterCount <= NUMBEROFPEOPLE/2) {
             setArrivalLambda(getArrivalLambda()*1.0007);
-        } else {
+        } else if (commuterCount == NUMBEROFPEOPLE) {
+            System.out.println("no people remaining to generate");
+            timeUntilNextArrival = Double.POSITIVE_INFINITY;
+            return;
+        }
+        else {
             setArrivalLambda(getArrivalLambda()*0.9993);
         }
         this.timeUntilNextArrival = arrivalTimeRNG.sample(ARRIVALTIMELAMBDA);

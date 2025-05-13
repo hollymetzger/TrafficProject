@@ -19,7 +19,7 @@ public class Bus extends Vehicle {
         train = tr;
         maxTimeOnBus = 15;
         idle = true;
-        System.out.println("constructing bus, placing at stop " + nextStop.toString());
+        // System.out.println("constructing bus, placing at stop " + nextStop.toString());
     }
 
     // Accessors
@@ -38,17 +38,17 @@ public class Bus extends Vehicle {
 
     // Returns the Stop the bus will travel to next
     public Stop determineNextStop(BusStops stops) {
-        return determineNextStopPlaceholder(stops);
+        return determineNextStopSmartly(stops);
     }
 
     // Using the location determined above, calculate distance and set this.nextStop
     public void setNextStop(Stop ns) {
         if (ns == null) {
-            System.out.println("attempted to set next stop to null");
+            // System.out.println("attempted to set next stop to null");
         } else if (ns.isEqual(this.nextStop)) {
             idle = true;
         } else {
-            System.out.println("setting next stop to " + ns);
+            // System.out.println("setting next stop to " + ns);
             ns.setBusIncoming(true);
             Stop currentStop = this.nextStop;
             this.nextStop = ns;
@@ -71,8 +71,10 @@ public class Bus extends Vehicle {
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
                 dropOff(nextStop);
+                System.out.println("dropping off at " + nextStop);
             } else {
                 pickUp(nextStop.getLine());
+                System.out.println("Picking up at " + nextStop);
             }
 
             // set the next stop
@@ -87,10 +89,10 @@ public class Bus extends Vehicle {
 
         }
         if (idle) {
-            System.out.println("bus not moving this loop");
+            // System.out.println("bus not moving this loop");
             return Double.POSITIVE_INFINITY;
         } else {
-            System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
+            // System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
             return distanceToNextStop / speed; // return the time it will take to reach next stop
         }
     }
@@ -102,7 +104,7 @@ public class Bus extends Vehicle {
         // check if we need to go to the train station
         if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
         ) {
-            System.out.println("returning train");
+            // System.out.println("returning train");
             return train;
         }
 
@@ -119,14 +121,27 @@ public class Bus extends Vehicle {
     }
 
     private Stop determineNextStopSmartly(BusStops stops) {
-        if (currentCapacity == maxCapacity ||
-            passengers.getHead().getData().getTimeOnStartBus() >= Parameters.MAXTIMEONBUS
+        // check if we need to go to the train station
+        if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
         ) {
+            System.out.println("going to train station");
             return train;
         }
-        // todo: determine the next stop by comparing the bus stops' number of passengers,
-        //  longest wait time, and sum of wait times at the bus stop
-        return null;
+
+        // Find stop with most amount of passengers in its queue
+        int highestPassCount = 0;
+        Stop next = this.getNextStop(); // if the bus is empty and the loop doesn't find any stops with > 0 passengers, it will not move on this loop
+        for (Stop stop : stops.getStops()) {
+            if (stop.getLine().getLength() > highestPassCount && !stop.getBusIncoming()) {
+                next = stop;
+                highestPassCount = stop.getLine().getLength();
+            }
+        }
+        if (highestPassCount == 0 && !passengers.isEmpty()) {
+            System.out.println("going to train station");
+            return train;
+        }
+        return next;
     }
 
     private double getLongestTimeOnBus() {
@@ -139,7 +154,7 @@ public class Bus extends Vehicle {
 
     // Unit testing method
     public static void doUnitTests() {
-        System.out.println("Running Bus Tests");
+        // System.out.println("Running Bus Tests");
 
         int testCount = 0;
         int failCount = 0;
@@ -147,14 +162,14 @@ public class Bus extends Vehicle {
         Bus b = new Bus(25, 5, new Stop(0, 0), new Stop(10,10));
 
         if (b.getNextStop().getX() != 0) {
-            System.out.println("Fail: next stop should be 0");
+            // System.out.println("Fail: next stop should be 0");
             failCount++;
         }
         testCount++;
 
         b.setNextStop(new Stop(22, 22));
         if (b.getNextStop().getX() != 22) {
-            System.out.println("Fail: next stop should be 22");
+            // System.out.println("Fail: next stop should be 22");
             failCount++;
         }
         testCount++;
@@ -165,11 +180,11 @@ public class Bus extends Vehicle {
         }
         b.pickUp(people);
         b.train = new Stop(99.9,99.9);
-        BusStops stops = new BusStops(10,1, b.train);
+        BusStops stops = new BusStops(10.0,1.0, b.train, new Location(0,0));
 
         // test going to metro if bus is full
         if (b.determineNextStop(stops).getX() != 99.9) {
-            System.out.println("Fail: next stop should be metro");
+            // System.out.println("Fail: next stop should be metro");
             failCount++;
         }
         testCount++;

@@ -13,7 +13,7 @@ public class City extends Location {
         population = pop;
         radius = r;
         distance = dis;
-        busStops = new BusStops(radius, distance, train);
+        busStops = new BusStops(radius, distance, train, this);
         distanceRNG = new ExponentialDistribution(setLambda(radius));
     }
 
@@ -39,11 +39,13 @@ public class City extends Location {
         for (int i = 0; i < buses.length; i++) {
             double theta = angleBetweenBuses*i;
             double r = this.radius/3;
-            Stop busStartStop = convertPolar(theta, r).getNearest(busStops.getStops());
+            Location cartesian = convertPolar(theta, r);
+            cartesian.addVector(this);
+            Stop busStartStop = cartesian.getNearest(busStops.getStops());
             buses[i] = new Bus(speed, capacity, busStartStop, busStops.getTrain());
+            System.out.println("Placing bus at " + busStartStop);
         }
     }
-
 
     // Public Methods
     public double update(double currentTime, double dt) {
@@ -55,10 +57,11 @@ public class City extends Location {
          return timeOfNextEvent;
     }
 
-    public void generateCommuter() {
+    public boolean generateCommuter() {
         if (population == 0) {
             System.out.println("tried to spawn person that doesn't exist");
-            return; } // double check not to spawn extra people
+            return false;
+        } // double check not to spawn extra people
 
         // generate random point
         double theta = Math.TAU*Math.random();
@@ -66,13 +69,16 @@ public class City extends Location {
 
         // Create Person object
         Location home = convertPolar(theta, r);
+        home.addVector(this);
         Location destination = home; // todo: generate end location same way
         Person person = new Person(home, destination, getName());
+        population--;
 
         // Add the person to the queue of the nearest bus stop in the city
         home.getNearest(busStops.getStops()).add(person, true);
         System.out.println("Generating commuter in " + getName() +
                 "\nAdding to bus stop at " + home.getNearest(busStops.getStops()).toString());
+        return true;
     }
 
     private double setLambda(double radius) {
