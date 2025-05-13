@@ -37,8 +37,8 @@ public class Bus extends Vehicle {
     // Public methods
 
     // Returns the Stop the bus will travel to next
-    public Stop determineNextStop(BusStops stops) {
-        return determineNextStopSmartly(stops);
+    public Stop determineNextStop(BusStops stops, double currentTime) {
+        return determineNextStopSmartly(stops, currentTime);
     }
 
     // Using the location determined above, calculate distance and set this.nextStop
@@ -62,7 +62,6 @@ public class Bus extends Vehicle {
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops, Queue<Person> finishedPeople) {
 
-        System.out.println("\tBus distance to next stop: " + distanceToNextStop);
         if (distanceToNextStop > 0) {
             double distance = speed * dt;
             distanceToNextStop = Math.max(0, distanceToNextStop - distance);
@@ -71,25 +70,27 @@ public class Bus extends Vehicle {
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
-                System.out.println("\tCALLING FINISH PEOPLE");
-                finishPeople(currentTime, finishedPeople);
+                finishPeople(finishedPeople, currentTime);
                 // System.out.println("dropping off at " + nextStop);
             } else {
-                // picking them up - set time they got on home bus
                 Queue<Person> newPassengers = nextStop.getLine();
-                Node<Person> node = newPassengers.getHead();
-                while (node != null) {
-                    Person p = node.getData();
-                    p.setHomeBusTime(currentTime);
-                    node = node.getNext();
+
+                // set new passengers' home bus board time
+                Node<Person> passenger = newPassengers.getHead();
+                while (passenger != null) {
+                    passenger.getData().setHomeBusTime(currentTime);
+                    passenger = passenger.getNext();
                 }
-                System.out.println("Picking up at " + nextStop);
+
+                pickUp(newPassengers);
+                //System.out.println("Picking up at " + nextStop);
             }
 
             // set the next stop
-            setNextStop(determineNextStop(stops));
+            setNextStop(determineNextStop(stops, currentTime));
 
             // update passengers on bus
+            System.out.println("updating passengers on bus with time: " + dt);
             Node<Person> passenger = passengers.getHead();
             while (passenger != null) {
                 passenger.getData().update(currentTime, dt);
@@ -98,7 +99,7 @@ public class Bus extends Vehicle {
 
         }
         if (idle) {
-            // // System.out.println("bus not moving this loop");
+            // System.out.println("bus not moving this loop");
             return Double.POSITIVE_INFINITY;
         } else {
             // // System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
@@ -111,13 +112,13 @@ public class Bus extends Vehicle {
     // As a temporary method until the train code is finished, when the bus drops people
     // off at the train station, we will use a normal distribution to set each person's finish
     // time instead of simulating their entire trip.
-    private void finishPeople(Double currentTime, Queue<Person> finishedPeople) {
-        System.out.println("QQQQQQQQQQ finishing people");
+    private void finishPeople(Queue<Person> finishedPeople, double currentTime) {
         NormalDistribution normalRNG = new NormalDistribution(12.0, 3.0);
         while (!passengers.isEmpty()) {
             Person person = passengers.dequeue();
-            person.setHomeTrainStationTime(currentTime);
             person.setTimeOnEndBus(normalRNG.sample());
+            person.setHomeTrainStationTime(currentTime);
+            person.calculateTotalTime();
             finishedPeople.enqueue(person);
         }
     }
@@ -125,7 +126,7 @@ public class Bus extends Vehicle {
     // Simply goes to stop with most passengers
     private Stop determineNextStopPlaceholder(BusStops stops) {
         // check if we need to go to the train station
-        if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
+        if (currentCapacity == maxCapacity || getLongestTimeOnBus(1.0) >= maxTimeOnBus
         ) {
             // // System.out.println("returning train");
             return train;
@@ -143,9 +144,9 @@ public class Bus extends Vehicle {
         return next;
     }
 
-    private Stop determineNextStopSmartly(BusStops stops) {
+    private Stop determineNextStopSmartly(BusStops stops, double currentTime) {
         // check if we need to go to the train station
-        if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
+        if (currentCapacity == maxCapacity || getLongestTimeOnBus(currentTime) >= maxTimeOnBus
         ) {
             // System.out.println("going to train station");
             return train;
@@ -167,11 +168,12 @@ public class Bus extends Vehicle {
         return next;
     }
 
-    private double getLongestTimeOnBus() {
+    private double getLongestTimeOnBus(double currentTime) {
         if (passengers.getHead() == null) {
             return 0;
         } else {
-            return passengers.getHead().getData().getTimeOnStartBus();
+            System.out.println("Highest time passenger has spent on this bus: " + (currentTime - passengers.getHead().getData().getHomeBusTime()));
+            return currentTime - passengers.getHead().getData().getHomeBusTime();
         }
     }
 
@@ -206,7 +208,7 @@ public class Bus extends Vehicle {
         BusStops stops = new BusStops(10.0,1.0, b.train, new Location(0,0));
 
         // test going to metro if bus is full
-        if (b.determineNextStop(stops).getX() != 99.9) {
+        if (b.determineNextStop(stops, 1.0).getX() != 99.9) {
             // // System.out.println("Fail: next stop should be metro");
             failCount++;
         }

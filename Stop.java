@@ -46,8 +46,10 @@ public class Stop extends Location {
     public void add(Person person, boolean first) {
         line.enqueue(person);
         if (first) {
-            double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-            person.addTime(walkTime);
+            double walkTime = getDistance(person.getHome()) / 0.042; // average person walks 2.5mph (0.042 miles/min)
+            System.out.println("Walk time: " + walkTime);
+            System.out.println("Home: " + person.getHome());
+            person.setWalkTime(walkTime);
         }
     }
 

@@ -57,11 +57,10 @@ public class City extends Location {
             Node<Person> person = stop.getLine().getHead();
             int i = 0;
             while (person != null) {
-                person.getData().update(currentTime, dt);
+                person.getData().addTimeWaitingAtBusStop(dt); // time waiting @ bus stop
                 person = person.getNext();
                 i++;
             }
-            if (i > 0) {System.out.println("added " + dt + " to " + i + " people at " + stop);}
         }
 
         // update buses

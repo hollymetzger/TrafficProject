@@ -4,13 +4,10 @@ public class Person {
     private Location home, destination;
 
     // data analytic fields
-    private double busStopTime; // when they arrived at the bus stop
+    private double timeWalking; // time they spent walking
+    private double timeWaitingAtBusStop;
     private double homeBusTime; // when they got on the first bus
     private double homeTrainStationTime; // when they arrived at first train station
-    private double trainTime; // when they boarded the train
-    private double destinationTrainStationTime; // when they arrived at the destination train station
-    private double destinationBusTime; // when they boarded the destination bus
-    private double destinationBusStopTime; // when they arrive at the final bus stop
     private double timeOnStartBus; // the time they spent riding the start bus
     private double timeOnTrain; // the time they spent riding the train
     private double timeOnEndBus; // the time they spent riding the second bus
@@ -38,11 +35,34 @@ public class Person {
     public TrainStop getDestinationTrainStop() {
         return destinationTrainStop;
     }
-    public double getTimeOnStartBus() {
-        return timeOnStartBus;
+    public double getHomeBusTime() {
+        return homeBusTime;
+    }
+    public void calculateTotalTime() {
+        System.out.println("Time Walking: " + timeWalking);
+        System.out.println("timeWaitingAtBusStop: " + timeWaitingAtBusStop);
+        System.out.println("timeOnStartBus: " + timeOnStartBus);
+        System.out.println("Time timeOnTrain: " + timeOnTrain);
+        System.out.println("Time timeOnEndBus: " + timeOnEndBus);
+        totalTimeInSystem =
+                timeWalking +
+                timeWaitingAtBusStop +
+                timeOnStartBus +
+                timeOnTrain +
+                timeOnEndBus +
+                8.0; // assume 8 minutes waiting for train at worst
+
+        System.out.println("Time total: " + totalTimeInSystem);
     }
 
     // Mutators
+    public void addTimeWaitingAtBusStop(double time) {
+        timeWaitingAtBusStop += time;
+    }
+    public void setWalkTime(double time) {
+        timeWalking = time;
+        totalTimeInSystem += time; // walk time
+    }
     public void setHomeBusTime(double currentTime) {
         homeBusTime = currentTime;
     }
@@ -50,13 +70,9 @@ public class Person {
         homeTrainStationTime = currentTime;
     }
     private void setTimeOnStartBus() {
+        System.out.println("time boarded bus: " + homeBusTime + "\nTime got off bus: " + homeTrainStationTime);
         timeOnStartBus = homeTrainStationTime - homeBusTime;
     }
-    public void addTime(double time) {
-        this.totalTimeInSystem += time;
-    }
-
-
     private void setTimeOnTrain() {
         switch (destinationTrainStop) {
             case TrainStop.GAITHERSBURG:
@@ -79,16 +95,20 @@ public class Person {
 
     // exports in csv format for analytics
     public String toString() {
+        setTimeOnStartBus();
         return homeCity + "," +
                 destinationTrainStop + "," +
-                totalTimeInSystem + "," +
+                timeWalking + "," +
                 timeOnStartBus + "," +
                 timeOnTrain + "," +
-                timeOnEndBus;
+                timeOnEndBus + "," +
+                totalTimeInSystem;
     }
 
     // Public Methods
     public void update(double currentTime, double dt) {
+        System.out.println("Total time in system before loop: " + totalTimeInSystem);
+        System.out.println("Adding " + dt);
         totalTimeInSystem += dt;
     }
 

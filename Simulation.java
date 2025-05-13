@@ -112,16 +112,16 @@ public class Simulation {
         // System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
 
-
-        for (int i = 0; i < 10; i++) {
+        while(!finished) {
             dt = update(currentTime, dt);
         }
 
         /* Testing loop, only runs 10 loops
 
-        while(!finished) {
+        for (int i = 0; i < 10; i++) {
             dt = update(currentTime, dt);
         }
+
          */
         // System.out.println("Finished people: " + finishedPeople.getLength());
         printPeopleData();
@@ -160,7 +160,7 @@ public class Simulation {
 
     // Private Methods
     private void setTimeUntilNextArrival() {
-        System.out.println("current commuter count in sim is " + this.commuterCount);
+        //System.out.println("current commuter count in sim is " + this.commuterCount);
         // the rate of arrivals gradually increases until halfway through, then it decreases again
         if (commuterCount <= NUMBEROFPEOPLE/2) {
             setArrivalLambda(getArrivalLambda()*1.0007);
@@ -178,9 +178,18 @@ public class Simulation {
     }
 
     private void printPeopleData() {
-        while (!finishedPeople.isEmpty()) {
-            Person person = finishedPeople.dequeue();
-            System.out.println(person);
+
+        System.out.println("Saving people data");
+        try {
+            File file = new File("Simulation_Persons_Output.csv");
+            FileWriter writer = new FileWriter(file);
+            while (!finishedPeople.isEmpty()) {
+                Person person = finishedPeople.dequeue();
+                writer.write(person.toString() + "\n");
+            }
+            System.out.println("File created at " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
