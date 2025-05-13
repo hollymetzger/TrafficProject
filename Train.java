@@ -57,7 +57,7 @@ public class Train extends Vehicle {
         totalDistanceTraveled += distance;
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
-        // System.out.println("time it will take to reach next stop: " + distanceToNextStop/speed);
+        System.out.println("train returning " + distanceToNextStop/speed);
         return distanceToNextStop/speed; // return the time it will take to reach next stop
     }
 

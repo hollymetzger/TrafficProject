@@ -52,23 +52,26 @@ public class Trains {
     public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
         double timeUntilNextEvent = Double.POSITIVE_INFINITY;
 
+        timeUntilNextTrainLeaves -= dt;
+        if (timeUntilNextTrainLeaves <= 0) {
+            System.out.println("Adding train to sim with speed " + trainSpeed);
+            Train newTrain = new Train(trainSpeed, trainCapacity, stops);
+            trains.add(newTrain);
+            timeUntilNextTrainLeaves = timeBetweenTrains;
+        }
+
         // move trains along track, pickup/dropoff as needed
         // when trains get to dc, after dropping off passengers, they are moved to the finished trains list
         for (int i = 0; i < trains.size(); i++) {
+            System.out.println("Train #" + i);
             timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt, finishedPeople), timeUntilNextEvent);
+            System.out.println("now time until next train event is " + timeUntilNextEvent);
             if (trains.get(i).getNextStop() == TrainStop.WASHINGTON_DC) {
                 finishedTrains.add(trains.remove(i));
             }
         }
 
-        timeUntilNextTrainLeaves -= dt;
-        if (timeUntilNextTrainLeaves <= 0) {
-            // System.out.println("Adding train to sim");
-            Train newTrain = new Train(trainSpeed, trainCapacity, stops);
-            trains.add(newTrain);
-            newTrain.update(currentTime, 0.0, finishedPeople);
-            timeUntilNextTrainLeaves = timeBetweenTrains;
-        }
+
         // System.out.println("Time until next train event: " + timeUntilNextEvent);
         return timeUntilNextEvent;
     }
