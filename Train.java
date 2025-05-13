@@ -33,12 +33,13 @@ public class Train extends Vehicle {
 
     // Public methods
     // Advances the train in the simulation by dt time
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
 
         // if we have reached the stop, unload passengers and set next stop
         if (distanceToNextStop == 0) {
-            System.out.println("Train reached stop " + nextStop);
+            // System.out.println("Train reached stop " + nextStop);
             pickUp(stops.get(nextStop).getLine());
+            dropOff(stops.get(nextStop), finishedPeople);
             setNextStop();
         }
 
@@ -56,16 +57,18 @@ public class Train extends Vehicle {
         totalDistanceTraveled += distance;
 
         distanceToNextStop = Math.max(distanceToNextStop - dt * speed, 0); // get closer to stop
-        System.out.println("time it will take to reach next stop: " + distanceToNextStop/speed);
+        // System.out.println("time it will take to reach next stop: " + distanceToNextStop/speed);
         return distanceToNextStop/speed; // return the time it will take to reach next stop
     }
 
-    public void dropOff(Stop stop) {
+    public void dropOff(Stop stop, Queue<Person> finishedPeople) {
         Queue<Person> disembarking = removeDisembarkingPassengers();
-        Person person = disembarking.dequeue();
-        while (person != null) {
-            stop.getLine().enqueue(person);
-            person = disembarking.dequeue();
+        while (!disembarking.isEmpty()) {
+            Person person = disembarking.dequeue();
+            //  stop.getLine().enqueue(person); this should be the next line but for now i will
+            // finish them here
+            finishedPeople.enqueue(person);
+
         }
     }
 

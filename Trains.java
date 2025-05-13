@@ -44,18 +44,18 @@ public class Trains {
     }
     public void printTrainsStatus() {
         for (Train train : trains) {
-            System.out.println(train.toString());
+            // System.out.println(train.toString());
         }
     }
 
     // public methods
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
         double timeUntilNextEvent = Double.POSITIVE_INFINITY;
 
         // move trains along track, pickup/dropoff as needed
         // when trains get to dc, after dropping off passengers, they are moved to the finished trains list
         for (int i = 0; i < trains.size(); i++) {
-            timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt), timeUntilNextEvent);
+            timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt, finishedPeople), timeUntilNextEvent);
             if (trains.get(i).getNextStop() == TrainStop.WASHINGTON_DC) {
                 finishedTrains.add(trains.remove(i));
             }
@@ -63,13 +63,13 @@ public class Trains {
 
         timeUntilNextTrainLeaves -= dt;
         if (timeUntilNextTrainLeaves <= 0) {
-            System.out.println("Adding train to sim");
+            // System.out.println("Adding train to sim");
             Train newTrain = new Train(trainSpeed, trainCapacity, stops);
             trains.add(newTrain);
-            newTrain.update(currentTime, 0.0);
+            newTrain.update(currentTime, 0.0, finishedPeople);
             timeUntilNextTrainLeaves = timeBetweenTrains;
         }
-        System.out.println("Time until next train event: " + timeUntilNextEvent);
+        // System.out.println("Time until next train event: " + timeUntilNextEvent);
         return timeUntilNextEvent;
     }
 
@@ -78,9 +78,9 @@ public class Trains {
 
     // Train station locations are imported from CSV
     public boolean importFromCSV(String filename, Stop[] stops) {
-        System.out.println("Importing train data");
+        // System.out.println("Importing train data");
         File file = new File(filename);
-        System.out.println(file.getAbsolutePath());
+        // System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
@@ -95,15 +95,15 @@ public class Trains {
                 i++;
             }
         }  catch (FileNotFoundException e) {
-            System.out.println("File not found: " + filename);
+            // System.out.println("File not found: " + filename);
             e.printStackTrace();
             return false;
         } catch (IllegalStateException e) {
-            System.out.println("Scanner was closed somehow");
+            // System.out.println("Scanner was closed somehow");
             e.printStackTrace();
             return false;
         } catch (NoSuchElementException e) {
-            System.out.println("Scanner tried to access line beyond EOF");
+            // System.out.println("Scanner tried to access line beyond EOF");
             e.printStackTrace();
             return false;
         } finally {
@@ -129,12 +129,13 @@ public class Trains {
                 "testTrain.csv",
                 1.0
         );
+        Queue<Person> fin = new Queue<Person>();
 
         Trains testTrains = testSim.getTrains();
-        System.out.println(testTrains.toString());
-        testTrains.update(0.0, 8.0);
+        // System.out.println(testTrains.toString());
+        testTrains.update(0.0, 8.0, fin);
         testTrains.printTrainsStatus();
-        testTrains.update(8.0, 1.0);
+        testTrains.update(8.0, 1.0, fin);
         testTrains.printTrainsStatus();
     }
 }
