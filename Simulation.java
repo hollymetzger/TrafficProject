@@ -68,7 +68,7 @@ public class Simulation {
         // Initialize objects
         System.out.println("Initializing sim objects");
 
-        FrederickTrainStop = new Stop(45,35);
+        FrederickTrainStop = new Stop(45,35, true);
         System.out.println("Frederick train stop created at " + FrederickTrainStop);
 
         trains = new Trains(numberOfTrains, trainSpeed, trainCapacity, FrederickTrainStop);
@@ -117,7 +117,7 @@ public class Simulation {
         }
          */
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 8; i++) {
             dt = update(currentTime, dt);
         }
         System.out.println("Finished people: " + finishedPeople.getLength());

@@ -12,9 +12,9 @@ public class Stop extends Location {
         train = false;
         line = new Queue<Person>();
     }
-    public Stop(double x, double y, boolean met) {
+    public Stop(double x, double y, boolean tr) {
         super(x, y);
-        train = met;
+        train = tr;
         line = new Queue<Person>();
     }
     // Accessors

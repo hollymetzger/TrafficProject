@@ -71,9 +71,10 @@ public class Bus extends Vehicle {
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
                 dropOff(nextStop);
-                // System.out.println("dropping off at " + nextStop);
+                System.out.println("dropping off at " + nextStop);
             } else {
                 pickUp(nextStop.getLine());
+                System.out.println("Picking up at " + nextStop);
             }
 
             // set the next stop
