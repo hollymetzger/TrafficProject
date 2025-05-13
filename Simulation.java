@@ -112,15 +112,16 @@ public class Simulation {
         // System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
 
-        while(!finished) {
+
+        for (int i = 0; i < 10; i++) {
             dt = update(currentTime, dt);
         }
 
         /* Testing loop, only runs 10 loops
-        for (int i = 0; i < 20; i++) {
+
+        while(!finished) {
             dt = update(currentTime, dt);
         }
-
          */
         // System.out.println("Finished people: " + finishedPeople.getLength());
         printPeopleData();
@@ -147,7 +148,6 @@ public class Simulation {
                 timeUntilNextArrival,
                 fcitiesTime
         );
-
         // check if simulation is finished
         if (finishedPeople.getLength() == NUMBEROFPEOPLE) {
             finished = true;

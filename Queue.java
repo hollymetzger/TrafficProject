@@ -43,7 +43,7 @@ public class Queue<T> {
 
     public int getLength() {
         int count = 0;
-        Node current = head;
+        Node<T> current = head;
         while (current != null) {
             count++;
             current = current.next;

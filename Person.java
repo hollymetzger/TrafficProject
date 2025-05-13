@@ -43,7 +43,7 @@ public class Person {
     }
 
     // Mutators
-    public void sethomeBusTime(double currentTime) {
+    public void setHomeBusTime(double currentTime) {
         homeBusTime = currentTime;
     }
     public void setHomeTrainStationTime(double currentTime) {
@@ -52,6 +52,10 @@ public class Person {
     private void setTimeOnStartBus() {
         timeOnStartBus = homeTrainStationTime - homeBusTime;
     }
+    public void addTime(double time) {
+        this.totalTimeInSystem += time;
+    }
+
 
     private void setTimeOnTrain() {
         switch (destinationTrainStop) {
@@ -75,21 +79,17 @@ public class Person {
 
     // exports in csv format for analytics
     public String toString() {
-        return homeCity + "," + destinationTrainStop + "," +
-                (timeOnTrain + timeOnEndBus + timeOnStartBus) + "," + // total time in system
+        return homeCity + "," +
+                destinationTrainStop + "," +
+                totalTimeInSystem + "," +
                 timeOnStartBus + "," +
-                timeOnTrain + "," + timeOnEndBus;
-    }
-
-    // Mutators
-    public void addTime(double time) {
-        totalTimeInSystem += time;
+                timeOnTrain + "," +
+                timeOnEndBus;
     }
 
     // Public Methods
     public void update(double currentTime, double dt) {
         totalTimeInSystem += dt;
-        // todo: update time tracking fields
     }
 
     // Testing Method

@@ -19,7 +19,7 @@ public class Bus extends Vehicle {
         train = tr;
         maxTimeOnBus = 15;
         idle = true;
-        // // System.out.println("constructing bus, placing at stop " + nextStop.toString());
+        // System.out.println("constructing bus, placing at stop " + nextStop.toString());
     }
 
     // Accessors
@@ -62,6 +62,7 @@ public class Bus extends Vehicle {
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops, Queue<Person> finishedPeople) {
 
+        System.out.println("\tBus distance to next stop: " + distanceToNextStop);
         if (distanceToNextStop > 0) {
             double distance = speed * dt;
             distanceToNextStop = Math.max(0, distanceToNextStop - distance);
@@ -70,10 +71,18 @@ public class Bus extends Vehicle {
         // if we have reached the stop, unload passengers and determine next stop
         if (distanceToNextStop == 0) {
             if (nextStop.isTrain()) {
-                finishPeople(finishedPeople);
+                System.out.println("\tCALLING FINISH PEOPLE");
+                finishPeople(currentTime, finishedPeople);
                 // System.out.println("dropping off at " + nextStop);
             } else {
-                pickUp(nextStop.getLine());
+                // picking them up - set time they got on home bus
+                Queue<Person> newPassengers = nextStop.getLine();
+                Node<Person> node = newPassengers.getHead();
+                while (node != null) {
+                    Person p = node.getData();
+                    p.setHomeBusTime(currentTime);
+                    node = node.getNext();
+                }
                 System.out.println("Picking up at " + nextStop);
             }
 
@@ -102,10 +111,12 @@ public class Bus extends Vehicle {
     // As a temporary method until the train code is finished, when the bus drops people
     // off at the train station, we will use a normal distribution to set each person's finish
     // time instead of simulating their entire trip.
-    private void finishPeople(Queue<Person> finishedPeople) {
+    private void finishPeople(Double currentTime, Queue<Person> finishedPeople) {
+        System.out.println("QQQQQQQQQQ finishing people");
         NormalDistribution normalRNG = new NormalDistribution(12.0, 3.0);
         while (!passengers.isEmpty()) {
             Person person = passengers.dequeue();
+            person.setHomeTrainStationTime(currentTime);
             person.setTimeOnEndBus(normalRNG.sample());
             finishedPeople.enqueue(person);
         }
