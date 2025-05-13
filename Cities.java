@@ -41,12 +41,12 @@ public class Cities {
     }
 
     // Public Methods
-    public double update(double currentTime, double dt) {
-        System.out.println("Updating cities");
+    public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
+        // System.out.println("Updating cities");
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (City city : cities) {
-            double cityTime = city.update(currentTime, dt);
-            System.out.println(city.getName() + " next event in " + cityTime);
+            double cityTime = city.update(currentTime, dt, finishedPeople);
+            // System.out.println(city.getName() + " next event in " + cityTime);
             timeOfNextEvent = Math.min(cityTime, timeOfNextEvent);
         }
         return timeOfNextEvent;
@@ -62,20 +62,27 @@ public class Cities {
 
     public boolean generateCommuter() {
         System.out.println("cities generating commuter");
+
+        // make a list of all cities with people remaining
+        ArrayList<City> validCities= new ArrayList<City>();
+        for (City city : cities) {
+            if (city.getPopulation() > 0) {
+                validCities.add(city);
+            }
+        }
+        // if no valid cities remain, don't generate and return false
+        if (validCities.isEmpty()) { return false; }
+
+        // add up the cities' populations, and once we are over the random int, generate in that city
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
         boolean gen = false;
 
-        // add up the cities' populations, and once we are over the random int, generate in that city
-        for (City city : cities) {
+        for (City city : validCities) {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
                 gen = city.generateCommuter();
-                if (gen) {
-                    System.out.println("generated");
-                } else {
-                    System.out.println("didn't generate");
-                }
+                break;
             }
         }
         return gen;

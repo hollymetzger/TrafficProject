@@ -51,7 +51,7 @@ public class Vehicle {
     }
 
     public static void doUnitTests() {
-        System.out.println("Running Vehicle Tests");
+        // System.out.println("Running Vehicle Tests");
 
         int testCount = 0;
         int failCount = 0;
@@ -64,11 +64,11 @@ public class Vehicle {
         v.pickUp(people);
 
         if (v.currentCapacity != 5) {
-            System.out.println(("Fail: current capacity should be 5"));
+            // System.out.println(("Fail: current capacity should be 5"));
             failCount++;
         }
         testCount++;
 
-        System.out.printf("Vehicle tests passed: %d/%d\n",testCount-failCount, testCount);
+        // System.out.printf("Vehicle tests passed: %d/%d\n",testCount-failCount, testCount);
     }
 }

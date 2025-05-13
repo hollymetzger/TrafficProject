@@ -14,9 +14,9 @@ public class UnitTest {
         // Bus.doUnitTests();
         // Cities.doUnitTests();
         // Simulation.doArrivalUnitTests();
-        ExponentialDistribution.doUnitTests();
-        analyze("Exponential RNG Results.csv");
-
+        // ExponentialDistribution.doUnitTests();
+        // analyze("Exponential RNG Results.csv");
+        NormalDistribution.doUnitTests();
         // Trains.doUnitTests();
 
     }

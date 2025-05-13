@@ -48,11 +48,11 @@ public class City extends Location {
     }
 
     // Public Methods
-    public double update(double currentTime, double dt) {
+    public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
         System.out.println("Updating " + this.getName());
         double timeOfNextEvent = Double.POSITIVE_INFINITY;
         for (Bus bus : buses) {
-            timeOfNextEvent = Math.min(bus.update(currentTime, dt, busStops), timeOfNextEvent);
+            timeOfNextEvent = Math.min(bus.update(currentTime, dt, busStops, finishedPeople), timeOfNextEvent);
         }
          return timeOfNextEvent;
     }

@@ -25,6 +25,7 @@ public class Person {
         this.destination = destination;
         this.homeCity = homeCity;
         this.destinationTrainStop = TrainStop.getWeightedStop();
+        this.setTimeOnTrain();
     }
 
     // Accessors
@@ -41,11 +42,43 @@ public class Person {
         return timeOnStartBus;
     }
 
+    // Mutators
+    public void sethomeBusTime(double currentTime) {
+        homeBusTime = currentTime;
+    }
+    public void setHomeTrainStationTime(double currentTime) {
+        homeTrainStationTime = currentTime;
+    }
+    private void setTimeOnStartBus() {
+        timeOnStartBus = homeTrainStationTime - homeBusTime;
+    }
+
+    private void setTimeOnTrain() {
+        switch (destinationTrainStop) {
+            case TrainStop.GAITHERSBURG:
+                timeOnTrain = 24.0;
+                break;
+            case TrainStop.ROCKVILLE:
+                timeOnTrain = 29.0;
+                break;
+            case TrainStop.BETHESDA:
+                timeOnTrain = 44.0;
+                break;
+            case TrainStop.WASHINGTON_DC:
+                timeOnTrain = 54.0;
+                break;
+        }
+    }
+    public void setTimeOnEndBus(double time) {
+        timeOnEndBus  = time;
+    }
+
     // exports in csv format for analytics
     public String toString() {
-        return home.toString() + "," + destination.toString() + "," +
-                totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
-                timeOnTrain;                                            //  instead of multiplying start bus by 2
+        return homeCity + "," + destinationTrainStop + "," +
+                (timeOnTrain + timeOnEndBus + timeOnStartBus) + "," + // total time in system
+                timeOnStartBus + "," +
+                timeOnTrain + "," + timeOnEndBus;
     }
 
     // Mutators
@@ -61,7 +94,7 @@ public class Person {
 
     // Testing Method
     public static void doUnitTests() {
-        System.out.println("Running Person tests");
+        // System.out.println("Running Person tests");
 
         int failCount = 0;
         int testCount = 0;
@@ -69,15 +102,15 @@ public class Person {
         Person p = new Person(new Location(0, 0), new Location(10, 10), "home");
         if (!p.getHome().toString().equals("(0.0, 0.0)")) {
             failCount++;
-            System.out.println("FAIL: person home should have been (0.0, 0.0)");
+            // System.out.println("FAIL: person home should have been (0.0, 0.0)");
         }
         testCount++;
         if (!p.getDestinationLoc().toString().equals("(10.0, 10.0)")) {
             failCount++;
-            System.out.println("FAIL: person destination should have been (10.0, 10.0)");
+            // System.out.println("FAIL: person destination should have been (10.0, 10.0)");
         }
         testCount++;
 
-        System.out.printf("Person tests passed: %d/%d\n",testCount-failCount, testCount);
+        // System.out.printf("Person tests passed: %d/%d\n",testCount-failCount, testCount);
     }
 }
