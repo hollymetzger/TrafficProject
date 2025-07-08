@@ -76,7 +76,6 @@ public class Simulation {
 
         fredrickCities = new Cities(citiesCSV, FrederickTrainStop, busStopDistance, numBuses, busSpeed, busCapacity);
         System.out.println("Frederick cities created: ");
-        System.out.println(fredrickCities.printCities());
         numPeople = fredrickCities.getTotalPopulation(); // have to set this after cities are loaded
         arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
@@ -111,13 +110,7 @@ public class Simulation {
     public void run() {
         System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
-        /*
         while(finishedPeople.getLength() < numPeople) {
-            dt = update(currentTime, dt);
-        }
-         */
-
-        for (int i = 0; i < 8; i++) {
             dt = update(currentTime, dt);
         }
         System.out.println("Finished people: " + finishedPeople.getLength());
@@ -133,7 +126,7 @@ public class Simulation {
         addTime(dt);
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
-        // add commuters to the simulation if applicable
+        // add commuters to the simulation
         if (timeUntilNextArrival == 0 && fredrickCities.generateCommuter()) {
             System.out.println("incing cc");
             commuterCount++;
