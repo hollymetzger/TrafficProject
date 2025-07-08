@@ -64,21 +64,16 @@ public class Cities {
         System.out.println("cities generating commuter");
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
-        boolean gen = false;
+        boolean commuterAdded = false;
 
         // add up the cities' populations, and once we are over the random int, generate in that city
         for (City city : cities) {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
-                gen = city.generateCommuter();
-                if (gen) {
-                    System.out.println("generated");
-                } else {
-                    System.out.println("didn't generate");
-                }
+                commuterAdded = city.generateCommuter();
             }
         }
-        return gen;
+        return commuterAdded;
     }
 
     public boolean importFromCSV(String filename, double distance) {
