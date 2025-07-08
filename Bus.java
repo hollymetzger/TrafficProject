@@ -15,20 +15,22 @@ public class Bus extends Vehicle {
     public Bus(double speed, int maxCapacity, Stop startLocation, Stop tr) {
         super(speed, maxCapacity);
         currentCapacity = 0;
-        this.nextStop = startLocation;
+        nextStop = startLocation;
         train = tr;
         maxTimeOnBus = 15;
         idle = true;
-        // System.out.println("constructing bus, placing at stop " + nextStop.toString());
+        distanceToNextStop = 0;
     }
 
     // Accessors
     public double getTimeToMetroStation() {
         return timeToMetroStation;
     }
+
     public Stop getNextStop() {
         return nextStop;
     }
+
     public String toString() {
         return super.toString() + "\n" +
                "Next stop: " + nextStop.toString();
@@ -43,24 +45,22 @@ public class Bus extends Vehicle {
 
     // Using the location determined above, calculate distance and set this.nextStop
     public void setNextStop(Stop ns) {
-        if (ns == null) {
-            // System.out.println("attempted to set next stop to null");
-        } else if (ns.isEqual(this.nextStop)) {
+        if (ns.isEqual(nextStop)) {
             idle = true;
         } else {
-            // System.out.println("setting next stop to " + ns);
             ns.setBusIncoming(true);
-            Stop currentStop = this.nextStop;
-            this.nextStop = ns;
-            this.distanceToNextStop = currentStop.getDistance(ns);
+            Stop currentStop = nextStop;
+            nextStop = ns;
+            distanceToNextStop = currentStop.getDistance(ns);
             idle = false;
         }
-
-
     }
 
     // Advances the bus in the simulation by dt time
     public double update(double currentTime, double dt, BusStops stops) {
+        if (idle) {
+            return Double.POSITIVE_INFINITY;
+        }
 
         if (distanceToNextStop > 0) {
             double distance = speed * dt;
@@ -88,13 +88,7 @@ public class Bus extends Vehicle {
             }
 
         }
-        if (idle) {
-            // System.out.println("bus not moving this loop");
-            return Double.POSITIVE_INFINITY;
-        } else {
-            // System.out.println("Bus reaching next stop in " + distanceToNextStop / speed);
-            return distanceToNextStop / speed; // return the time it will take to reach next stop
-        }
+        return distanceToNextStop / speed; // return the time it will take to reach next stop
     }
 
     // Private Methods
@@ -121,6 +115,8 @@ public class Bus extends Vehicle {
     }
 
     private Stop determineNextStopSmartly(BusStops stops) {
+        // todo: check if there are any people to pick up, if not set bus to idle
+
         // check if we need to go to the train station
         if (currentCapacity == maxCapacity || getLongestTimeOnBus() >= maxTimeOnBus
         ) {
