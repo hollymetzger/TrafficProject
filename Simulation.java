@@ -20,10 +20,10 @@ a train going 75 mph will have a speed of 1.25 miles/minute
 
 public class Simulation {
     // Parameters for Simulation
-    int NUMBEROFPEOPLE, NUMBEROFBUSES, NUMBEROFTRAINS;
-    double DISTANCEBETWEENBUSSTOPS;
-    double BUSSPEED, TRAINSPEED;
-    double MAXTIMEONBUS, MAXTIMEWAITINGFORBUS;
+    int numPeople, numBuses, numTrains;
+    double busStopDistance;
+    double busSpeed, trainSpeed;
+    double maxTimeOnBus, maxTimeWaitingForBus;
 
     // Object holders
     private Cities fredrickCities;
@@ -37,12 +37,12 @@ public class Simulation {
     private Queue<Person> finishedPeople;
     private int commuterCount; // the number of people who have been generated so far
     private double timeUntilNextArrival;
-    private double ARRIVALTIMELAMBDA;
+    private double arrivalTimeLambda;
 
     // Constructor
     public Simulation(
-            int numberOfBuses, int numberOfTrains,
-            double distanceBetweenBusStops,
+            int numBuses, int numTrains,
+            double busStopDistance,
             double busSpeed, int busCapacity,
             double trainSpeed, int trainCapacity,
             double maxTimeOnBus, double maxTimeWaitingForBus,
@@ -51,19 +51,19 @@ public class Simulation {
             double arrivalTimeLambda
     ) {
         System.out.println("Initializing Simulation with the following parameters:\n" +
-                numberOfBuses + " buses\n" +
-                numberOfTrains + " trains\n" +
-                distanceBetweenBusStops + " distance between bus stops\n" +
+                numBuses + " buses\n" +
+                numTrains + " trains\n" +
+                busStopDistance + " distance between bus stops\n" +
                 "City data from " + citiesCSV);
 
         // Set parameters
-        NUMBEROFBUSES = numberOfBuses;
-        NUMBEROFTRAINS = numberOfTrains;
-        DISTANCEBETWEENBUSSTOPS = distanceBetweenBusStops;
-        TRAINSPEED = trainSpeed;
-        MAXTIMEONBUS = maxTimeOnBus;
-        MAXTIMEWAITINGFORBUS = maxTimeWaitingForBus;
-        ARRIVALTIMELAMBDA = arrivalTimeLambda;
+        this.numBuses = numBuses;
+        this.numTrains = numTrains;
+        this.busStopDistance = busStopDistance;
+        this.trainSpeed = trainSpeed;
+        this.maxTimeOnBus = maxTimeOnBus;
+        this.maxTimeWaitingForBus = maxTimeWaitingForBus;
+        this.arrivalTimeLambda = arrivalTimeLambda;
 
         // Initialize objects
         System.out.println("Initializing sim objects");
@@ -71,14 +71,14 @@ public class Simulation {
         FrederickTrainStop = new Stop(45,35, true);
         System.out.println("Frederick train stop created at " + FrederickTrainStop);
 
-        trains = new Trains(numberOfTrains, trainSpeed, trainCapacity, FrederickTrainStop);
+        trains = new Trains(numTrains, trainSpeed, trainCapacity, FrederickTrainStop);
         System.out.println("Trains created:\n" + trains);
 
-        fredrickCities = new Cities(citiesCSV, FrederickTrainStop, DISTANCEBETWEENBUSSTOPS, numberOfBuses, busSpeed, busCapacity);
+        fredrickCities = new Cities(citiesCSV, FrederickTrainStop, busStopDistance, numBuses, busSpeed, busCapacity);
         System.out.println("Frederick cities created: ");
         System.out.println(fredrickCities.printCities());
-        NUMBEROFPEOPLE = fredrickCities.getTotalPopulation(); // have to set this after cities are loaded
-        arrivalTimeRNG = new ExponentialDistribution(ARRIVALTIMELAMBDA);
+        numPeople = fredrickCities.getTotalPopulation(); // have to set this after cities are loaded
+        arrivalTimeRNG = new ExponentialDistribution(arrivalTimeLambda);
 
         // Initialize tracking fields
         currentTime = 0;
@@ -91,7 +91,7 @@ public class Simulation {
 
     // Accessors
     public double getArrivalLambda() {
-        return ARRIVALTIMELAMBDA;
+        return arrivalTimeLambda;
     }
     public double getTimeUntilNextArrival() {
         return timeUntilNextArrival;
@@ -102,7 +102,7 @@ public class Simulation {
 
     // Mutators
     public void setArrivalLambda(double l) {
-        ARRIVALTIMELAMBDA = l;
+        arrivalTimeLambda = l;
     }
     public void addTime(double dt) { this.currentTime += dt; }
 
@@ -112,7 +112,7 @@ public class Simulation {
         System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
         /*
-        while(finishedPeople.getLength() < NUMBEROFPEOPLE) {
+        while(finishedPeople.getLength() < numPeople) {
             dt = update(currentTime, dt);
         }
          */
@@ -153,7 +153,7 @@ public class Simulation {
         );
 
         // check if simulation is finished
-        if (finishedPeople.getLength() == NUMBEROFPEOPLE) {
+        if (finishedPeople.getLength() == numPeople) {
             isFinished = true;
         }
         System.out.println("finished update loop, time until next event is " + timeUntilNextEvent);
@@ -165,9 +165,9 @@ public class Simulation {
     private void setTimeUntilNextArrival() {
         System.out.println("current commuter count in sim is " + this.commuterCount);
         // the rate of arrivals gradually increases until halfway through, then it decreases again
-        if (commuterCount <= NUMBEROFPEOPLE/2) {
+        if (commuterCount <= numPeople/2) {
             setArrivalLambda(getArrivalLambda()*1.0007);
-        } else if (commuterCount == NUMBEROFPEOPLE) {
+        } else if (commuterCount == numPeople) {
             System.out.println("no people remaining to generate");
             timeUntilNextArrival = Double.POSITIVE_INFINITY;
             return;
@@ -175,7 +175,7 @@ public class Simulation {
         else {
             setArrivalLambda(getArrivalLambda()*0.9993);
         }
-        this.timeUntilNextArrival = arrivalTimeRNG.sample(ARRIVALTIMELAMBDA);
+        this.timeUntilNextArrival = arrivalTimeRNG.sample(arrivalTimeLambda);
         System.out.println("next arrival will be in " + this.timeUntilNextArrival);
 
     }
@@ -186,12 +186,12 @@ public class Simulation {
         // test, 0, 0, 5000, 10
         System.out.println("Running simulation arrival unit tests");
         Simulation testSim = new Simulation(0,0,1,1,1,1,1,1,1,"testCities.csv", "testTrain.csv",2.0);
-        System.out.println("Test sim number of people is " + testSim.NUMBEROFPEOPLE);
+        System.out.println("Test sim number of people is " + testSim.numPeople);
         try {
             File file = new File("Arrival_Results.csv");
             FileWriter writer = new FileWriter(file);
 
-            for (int i = 0; i < testSim.NUMBEROFPEOPLE; i++) {
+            for (int i = 0; i < testSim.numPeople; i++) {
                 if (i%100 == 0) {
                     writer.write("\n");
                     System.out.println("Test sim lambda is " + testSim.getArrivalLambda());
