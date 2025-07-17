@@ -68,7 +68,7 @@ public class Simulation {
         // Initialize objects
         System.out.println("Initializing sim objects");
 
-        FrederickTrainStop = new Stop(45,35, true);
+        FrederickTrainStop = new Stop(45,35, true, "Frederick");
         System.out.println("Frederick train stop created at " + FrederickTrainStop);
 
         trains = new Trains(numTrains, trainSpeed, trainCapacity, FrederickTrainStop);

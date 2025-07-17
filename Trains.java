@@ -1,3 +1,10 @@
+/*
+
+The class which imports and handles trains and train stops
+
+ */
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -44,7 +51,7 @@ public class Trains {
     }
     public void printTrainsStatus() {
         for (Train train : trains) {
-            // System.out.println(train.toString());
+            System.out.println(train.toString());
         }
     }
 
@@ -89,24 +96,19 @@ public class Trains {
             scanner = new Scanner(file);
             int i = 0;
             while( scanner.hasNextLine() ) {
-                String data = scanner.nextLine();
-                String[] fields = data.split(",");
-                String name = fields[0];
-                double x = Double.parseDouble(fields[1]); // todo: break into makeTrainStop method?
-                double y = Double.parseDouble(fields[2]);
-                stops[i] = new Stop(x,y);
+                stops[i] = makeTrainStop(scanner.nextLine());
                 i++;
             }
         }  catch (FileNotFoundException e) {
-            // System.out.println("File not found: " + filename);
+            System.out.println("File not found: " + filename);
             e.printStackTrace();
             return false;
         } catch (IllegalStateException e) {
-            // System.out.println("Scanner was closed somehow");
+            System.out.println("Scanner was closed somehow");
             e.printStackTrace();
             return false;
         } catch (NoSuchElementException e) {
-            // System.out.println("Scanner tried to access line beyond EOF");
+            System.out.println("Scanner tried to access line beyond EOF");
             e.printStackTrace();
             return false;
         } finally {
@@ -115,6 +117,14 @@ public class Trains {
             }
         }
         return true;
+    }
+
+    private Stop makeTrainStop(String data) {
+        String[] fields = data.split(",");
+        String name = fields[0];
+        double x = Double.parseDouble(fields[1]);
+        double y = Double.parseDouble(fields[2]);
+        return new Stop(x, y);
     }
 
 

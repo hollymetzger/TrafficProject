@@ -5,16 +5,19 @@ public class Stop extends Location {
     int lineLength;
     boolean train;
     boolean busIncoming;
+    String name;
 
     // Constructors
     public Stop(double x, double y) {
         super(x, y);
         train = false;
+        name = "n/a";
         line = new Queue<Person>();
     }
-    public Stop(double x, double y, boolean tr) {
+    public Stop(double x, double y, boolean tr, String nm) {
         super(x, y);
         train = tr;
+        name = nm;
         line = new Queue<Person>();
     }
     // Accessors
