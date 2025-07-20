@@ -109,6 +109,10 @@ public class Cities {
         return true;
     }
 
+    public City getWeightedDestinationCity() {
+
+    }
+
     // Private Methods
     private static City makeCity(String data, double distance) {
         String name = null;

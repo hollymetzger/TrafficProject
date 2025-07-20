@@ -67,7 +67,7 @@ public class Trains {
             System.out.println("Train #" + i);
             timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt, finishedPeople), timeUntilNextEvent);
             System.out.println("now time until next train event is " + timeUntilNextEvent);
-            if (trains.get(i).getNextStop() == TrainStop.WASHINGTON_DC) {
+            if (trains.get(i).getNextStop().isEqual(stops[stops.length-1])) {
                 finishedTrains.add(trains.remove(i));
             }
         }

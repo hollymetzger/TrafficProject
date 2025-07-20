@@ -84,7 +84,7 @@ public class Train extends Vehicle {
         // iterate through queue and sort each node into their respective queues
         Node<Person> passenger = passengers.getHead();
         while (passenger != null) {
-            if (passenger.getData().getDestinationTrainStop().isEqual(this.nextStop.getName())) {
+            if (passenger.getData().getDestinationCity().getName().isEqual(this.nextStop.getName())) {
                 disembarking.enqueue(passenger.getData());
             } else {
                 remaining.enqueue(passenger.getData());
