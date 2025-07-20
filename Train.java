@@ -6,22 +6,22 @@ public class Train extends Vehicle {
     // Private fields
     private double distanceToNextStop;
     private double totalDistanceTraveled;
-    private EnumMap<TrainStop, Stop> stops;
-    private TrainStop nextStop;
+    private Stop[] stops;
+    private Stop nextStop;
     private boolean southbound;
 
     // Constructor
-    public Train(double speed, int maxCapacity, EnumMap<TrainStop, Stop> stopsMap) {
+    public Train(double speed, int maxCapacity, Stop[] sts) {
         super(speed, maxCapacity);
-        stops = stopsMap;
-        nextStop = TrainStop.FREDERICK;
+        stops = sts;
+        nextStop = stops[0];
     }
 
     // Accessors
     public boolean isSouthbound() {
         return southbound;
     }
-    public TrainStop getNextStop() {
+    public Stop getNextStop() {
         return nextStop;
     }
     public String toString() {
@@ -38,8 +38,8 @@ public class Train extends Vehicle {
         // if we have reached the stop, unload passengers and set next stop
         if (distanceToNextStop == 0) {
             // System.out.println("Train reached stop " + nextStop);
-            pickUp(stops.get(nextStop).getLine());
-            dropOff(stops.get(nextStop), finishedPeople);
+            pickUp(nextStop.getLine());
+            dropOff(nextStop, finishedPeople);
             setNextStop();
         }
 
@@ -84,7 +84,7 @@ public class Train extends Vehicle {
         // iterate through queue and sort each node into their respective queues
         Node<Person> passenger = passengers.getHead();
         while (passenger != null) {
-            if (passenger.getData().getDestinationTrainStop() == this.nextStop) {
+            if (passenger.getData().getDestinationTrainStop().isEqual(this.nextStop.getName())) {
                 disembarking.enqueue(passenger.getData());
             } else {
                 remaining.enqueue(passenger.getData());

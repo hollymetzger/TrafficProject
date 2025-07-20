@@ -17,7 +17,7 @@ public class Person {
     private double totalTimeInSystem;
 
     private String homeCity; // home city is only used for printing data at the end, so we just store it as a string
-    private TrainStop destinationTrainStop; // destination city is used in the code, so we use an enum to reduce errors
+    private String destinationTrainStop; // destination city is used in the code, so we use an enum to reduce errors
 
     // Constructor
     public Person(Location home, Location destination, String homeCity) {

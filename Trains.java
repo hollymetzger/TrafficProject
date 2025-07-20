@@ -19,7 +19,7 @@ public class Trains {
     private int trainCapacity;
     private ArrayList<Train> trains;
     private ArrayList<Train> finishedTrains;
-    private EnumMap<TrainStop, Stop> stops;
+    private Stop[] stops;
 
     // Constructor
     public Trains(int tc, double speed, int capacity, Stop fTrain) {
@@ -30,14 +30,8 @@ public class Trains {
         timeUntilNextTrainLeaves = timeBetweenTrains;
         trains = new ArrayList<Train>();
         finishedTrains = new ArrayList<Train>();
+        importFromCSV("TrainStops.csv", stops);
 
-        // Train stops are hard coded for simplicity
-        stops = new EnumMap<>(TrainStop.class);
-        stops.put(TrainStop.FREDERICK, fTrain); // Frederick train station (45,35)
-        stops.put(TrainStop.GAITHERSBURG, new Stop(45,65, true)); // 30 miles from Frederick to Gaitherburg
-        stops.put(TrainStop.ROCKVILLE, new Stop(45, 68, true)); // 3 miles from Gaithserburg to Rockville
-        stops.put(TrainStop.BETHESDA, new Stop(45, 76, true)); // 8 miles from Rockville to Bethesda
-        stops.put(TrainStop.WASHINGTON_DC, new Stop(45, 84, true)); // 8 miles from Bethesda to DC Metro Center
     }
 
     // Accessors
@@ -47,7 +41,7 @@ public class Trains {
                 "Time until next train leaves: " + timeUntilNextTrainLeaves + "\n" +
                 "Train speed: " + trainSpeed + "\n" +
                 "Train max capacity: " + trainCapacity + "\n" +
-                stops.size() + " Stations";
+                stops.length + " Stations";
     }
     public void printTrainsStatus() {
         for (Train train : trains) {
@@ -124,7 +118,7 @@ public class Trains {
         String name = fields[0];
         double x = Double.parseDouble(fields[1]);
         double y = Double.parseDouble(fields[2]);
-        return new Stop(x, y);
+        return new Stop(x, y, true, name);
     }
 
 
