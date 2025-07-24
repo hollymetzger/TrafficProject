@@ -22,7 +22,7 @@ public class Trains {
     private Stop[] stops;
 
     // Constructor
-    public Trains(int tc, double speed, int capacity, Stop fTrain) {
+    public Trains(int tc, double speed, int capacity, Stop ftrain) {
         trainCount = tc;
         trainSpeed = speed;
         trainCapacity = capacity;
@@ -30,11 +30,11 @@ public class Trains {
         timeUntilNextTrainLeaves = timeBetweenTrains;
         trains = new ArrayList<Train>();
         finishedTrains = new ArrayList<Train>();
-        importFromCSV("TrainStops.csv", stops);
-
+        importFromCSV("TrainStops.csv");
     }
 
     // Accessors
+    public Stop[] getStops() { return stops; }
     public String toString() {
         return "Number of trains: " + trainCount + "\n" +
                "Time between trains: " + timeBetweenTrains + "\n" +
@@ -81,17 +81,16 @@ public class Trains {
     // private methods
 
     // Train station locations are imported from CSV
-    public boolean importFromCSV(String filename, Stop[] stops) {
+    public boolean importFromCSV(String filename) {
         // System.out.println("Importing train data");
         File file = new File(filename);
         // System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
+        ArrayList<Stop> alStops = new ArrayList<Stop>();
         try {
             scanner = new Scanner(file);
-            int i = 0;
             while( scanner.hasNextLine() ) {
-                stops[i] = makeTrainStop(scanner.nextLine());
-                i++;
+                alStops.add(makeTrainStop(scanner.nextLine()));
             }
         }  catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
@@ -110,6 +109,9 @@ public class Trains {
                 scanner.close();
             }
         }
+        Stop[] arStops = new Stop[alStops.size()];
+        arStops = alStops.toArray(arStops);
+        this.stops = arStops;
         return true;
     }
 
@@ -119,6 +121,17 @@ public class Trains {
         double x = Double.parseDouble(fields[1]);
         double y = Double.parseDouble(fields[2]);
         return new Stop(x, y, true, name);
+    }
+
+
+    // Testing methods
+
+    public static void testImport() {
+        Trains testtrains = new Trains(5,5,5, new Stop(-1,-1,true,"placeholder"));
+        System.out.println(testtrains.getStops().length + " stops");
+        for (Stop s : testtrains.getStops()) {
+            System.out.println(s);
+        }
     }
 
 

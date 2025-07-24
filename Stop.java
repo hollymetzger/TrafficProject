@@ -34,6 +34,10 @@ public class Stop extends Location {
     public boolean isTrain() {
         return train;
     }
+    public String toString() { return "Location: " + super.toString() +
+            "\nTrain: " + isTrain() +
+            "\nName: " + getName();
+    }
 
     // Mutators
     public void setBusIncoming(boolean bus) {
