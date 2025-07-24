@@ -7,14 +7,14 @@ public class Train extends Vehicle {
     private double distanceToNextStop;
     private double totalDistanceTraveled;
     private Stop[] stops;
-    private Stop nextStop;
+    private int nextStop;
     private boolean southbound;
 
     // Constructor
     public Train(double speed, int maxCapacity, Stop[] sts) {
         super(speed, maxCapacity);
         stops = sts;
-        nextStop = stops[0];
+        nextStop = 0;
     }
 
     // Accessors
@@ -22,10 +22,10 @@ public class Train extends Vehicle {
         return southbound;
     }
     public Stop getNextStop() {
-        return nextStop;
+        return stops[nextStop];
     }
     public String toString() {
-        return "Next stop: " + nextStop + "\n" +
+        return "Next stop: " + stops[nextStop] + "\n" +
                "Distance to next stop: " + distanceToNextStop + "\n" +
                "Total distance traveled: " + totalDistanceTraveled + "\n" +
                "Southbound: " + southbound;
@@ -38,8 +38,8 @@ public class Train extends Vehicle {
         // if we have reached the stop, unload passengers and set next stop
         if (distanceToNextStop == 0) {
             // System.out.println("Train reached stop " + nextStop);
-            pickUp(nextStop.getLine());
-            dropOff(nextStop, finishedPeople);
+            pickUp(stops[nextStop].getLine());
+            dropOff(stops[nextStop], finishedPeople);
             setNextStop();
         }
 
@@ -84,7 +84,7 @@ public class Train extends Vehicle {
         // iterate through queue and sort each node into their respective queues
         Node<Person> passenger = passengers.getHead();
         while (passenger != null) {
-            if (passenger.getData().getDestinationCity().getName().isEqual(this.nextStop.getName())) {
+            if (passenger.getData().getDestinationCity().getName().equals(this.stops[nextStop].getName())) {
                 disembarking.enqueue(passenger.getData());
             } else {
                 remaining.enqueue(passenger.getData());
@@ -98,19 +98,18 @@ public class Train extends Vehicle {
 
 
     private void setNextStop() {
-        TrainStop[] values = TrainStop.values();
-        int index = nextStop.ordinal(); // this method is called while we are at a stop, so this.nextStop is the stop this is currently at
-        Stop currentStop = stops.get(nextStop); // store current stop temporarily to calculate distance
+        int index = nextStop; // this method is called while we are at a stop, so this.nextStop is the stop this is currently at
+        Stop currentStop = stops[nextStop]; // store current stop temporarily to calculate distance
 
         index += isSouthbound() ? 1 : -1;
 
         // if we went out of bounds, reverse it
-        if (index == -1 || index == values.length) {
+        if (index == -1 || index == stops.length) {
             reverseDirection();
             index += isSouthbound() ? 2 : -2;
         }
-        nextStop = values[index];
-        distanceToNextStop = currentStop.getDistance(stops.get(nextStop));
+        nextStop = index;
+        distanceToNextStop = currentStop.getDistance(stops[nextStop]);
     }
 
     private void reverseDirection() {

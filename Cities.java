@@ -10,6 +10,7 @@ public class Cities {
     private static ArrayList<City> cities;
     private static Stop train; // refers to the train station in Frederick
 
+
     // Constructor
     public Cities(String filename, Stop tr, double distance, int busCount, double busSpeed, int busCapacity) {
 
@@ -18,6 +19,9 @@ public class Cities {
         if (!(importFromCSV(filename, distance))) {
             System.out.println("Error while importing city data");
         }
+
+        // convert destination cities worker count to proportion
+
 
         // assign buses to each city per population
         int totalPop = getTotalPopulation();
@@ -109,8 +113,25 @@ public class Cities {
         return true;
     }
 
-    public City getWeightedDestinationCity() {
+    /* public City getWeightedDestinationCity() {
+        int randomInt = (int) (Math.random()*getTotalPopulation());
+        // add up the cities' populations, and once we are over the random int, generate in that city
+        for (City city : cities) {
+            populationSum += city.getPopulation();
+            if (randomInt <= populationSum) {
+                commuterAdded = city.generateCommuter();
+            }
+        }
+    } */
 
+    // adds the total number of workers to proportionally assign destination cities to persons
+    // since this isn't tracked and doesn't change, it is only called once in the constructor and stored statically
+    private int sumWorkers() {
+        int total = 0;
+        for (City city : cities) {
+            total += city.getWorkers();
+        }
+        return total;
     }
 
     // Private Methods
@@ -119,6 +140,7 @@ public class Cities {
         double x = 0;
         double y = 0;
         int population = 0;
+        int workers = 0;
         double radius = 0;
         try {
             String[] fields = data.split(",");
@@ -126,7 +148,8 @@ public class Cities {
             x = Double.parseDouble(fields[1]);
             y = Double.parseDouble(fields[2]);
             population = Integer.parseInt(fields[3]);
-            radius = Double.parseDouble(fields[4]);
+            workers = Integer.parseInt(fields[4]);
+            radius = Double.parseDouble(fields[5]);
         } catch (NumberFormatException nfe) {
             System.out.println("Unable to parse number(s) from this city data: ");
             System.out.println(data);
@@ -137,7 +160,7 @@ public class Cities {
             e.printStackTrace();
             return null;
         }
-        return new City(name, x, y, population, radius, distance, -1, train);
+        return new City(name, x, y, population, workers, radius, distance, -1, train);
     }
 
 

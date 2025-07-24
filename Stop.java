@@ -30,6 +30,7 @@ public class Stop extends Location {
     public boolean getBusIncoming() {
         return busIncoming;
     }
+    public String getName() { return name; }
     public boolean isTrain() {
         return train;
     }

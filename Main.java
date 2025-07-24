@@ -9,7 +9,7 @@ public class Main {
         // Import sim parameters from lines in a CSV file, up to 1000 per batch
         Simulation[] sims = new Simulation[1000];
 
-        File file = new File("test_SimParameters.csv");
+        File file = new File("SimParameters.csv");
         System.out.println("Reading from: " + file.getAbsolutePath());
 
         try (Scanner scanner = new Scanner(file)) {
@@ -17,6 +17,10 @@ public class Main {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] fields = line.split(",");
+
+                if (fields[0].charAt(0) == '#') {
+                    continue;
+                }
 
                 if (fields.length < 6) {
                     System.out.println("Skipping line " + simNumber + ": not enough fields.");
