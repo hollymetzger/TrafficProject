@@ -17,14 +17,14 @@ public class Person {
     private double totalTimeInSystem;
 
     private String homeCity; // home city is only used for printing data at the end, so we just store it as a string
-    private TrainStop destinationTrainStop; // destination city is used in the code, so we use an enum to reduce errors
+    private City destinationCity; // destination city is used in the code, so we use an enum to reduce errors
 
     // Constructor
     public Person(Location home, Location destination, String homeCity) {
         this.home = home;
         this.destination = destination;
         this.homeCity = homeCity;
-        this.destinationTrainStop = TrainStop.getWeightedStop();
+        this.destinationCity = null; // todo: set dest train stop according to dest location city
     }
 
     // Accessors
@@ -34,8 +34,8 @@ public class Person {
     public Location getDestinationLoc() {
         return destination;
     }
-    public TrainStop getDestinationTrainStop() {
-        return destinationTrainStop;
+    public City getDestinationCity() {
+        return destinationCity;
     }
     public double getTimeOnStartBus() {
         return timeOnStartBus;

@@ -12,10 +12,11 @@ public class UnitTest {
         // People.doUnitTests();
         // Vehicle.doUnitTests();
         // Bus.doUnitTests();
+        Trains.testImport();
         // Cities.doUnitTests();
         // Simulation.doArrivalUnitTests();
-        ExponentialDistribution.doUnitTests();
-        analyze("Exponential RNG Results.csv");
+        // ExponentialDistribution.doUnitTests();
+        // analyze("Exponential RNG Results.csv");
 
         // Trains.doUnitTests();
 

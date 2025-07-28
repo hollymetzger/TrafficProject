@@ -1,16 +1,20 @@
 public class City extends Location {
     private String name;
-    private int population;
+
+    // todo change to residents for clarity?
+    private int population; // number of people who live in this city
+    private int workers; // number of people who commute into this city. not used for exact tracking, only to proportionally assign
     private double radius, distance;
     private Bus[] buses;
     private BusStops busStops;
     private ExponentialDistribution distanceRNG;
 
     // Constructor
-    public City (String nm, double x, double y, int pop, double r, double dis, int busCount, Stop train) {
+    public City (String nm, double x, double y, int pop, int w, double r, double dis, int busCount, Stop train) {
         super(x, y);
         name = nm;
         population = pop;
+        workers = w;
         radius = r;
         distance = dis;
         busStops = new BusStops(radius, distance, train, this);
@@ -21,6 +25,7 @@ public class City extends Location {
     public int getPopulation() {
         return population;
     }
+    public int getWorkers() { return workers; }
     public String getName() {
         return name;
     }

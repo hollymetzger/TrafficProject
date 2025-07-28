@@ -1,3 +1,10 @@
+/*
+
+The class which imports and handles trains and train stops
+
+ */
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -12,10 +19,10 @@ public class Trains {
     private int trainCapacity;
     private ArrayList<Train> trains;
     private ArrayList<Train> finishedTrains;
-    private EnumMap<TrainStop, Stop> stops;
+    private Stop[] stops;
 
     // Constructor
-    public Trains(int tc, double speed, int capacity, Stop fTrain) {
+    public Trains(int tc, double speed, int capacity, Stop ftrain) {
         trainCount = tc;
         trainSpeed = speed;
         trainCapacity = capacity;
@@ -23,28 +30,22 @@ public class Trains {
         timeUntilNextTrainLeaves = timeBetweenTrains;
         trains = new ArrayList<Train>();
         finishedTrains = new ArrayList<Train>();
-
-        // Train stops are hard coded for simplicity
-        stops = new EnumMap<>(TrainStop.class);
-        stops.put(TrainStop.FREDERICK, fTrain); // Frederick train station (45,35)
-        stops.put(TrainStop.GAITHERSBURG, new Stop(45,65, true)); // 30 miles from Frederick to Gaitherburg
-        stops.put(TrainStop.ROCKVILLE, new Stop(45, 68, true)); // 3 miles from Gaithserburg to Rockville
-        stops.put(TrainStop.BETHESDA, new Stop(45, 76, true)); // 8 miles from Rockville to Bethesda
-        stops.put(TrainStop.WASHINGTON_DC, new Stop(45, 84, true)); // 8 miles from Bethesda to DC Metro Center
+        importFromCSV("TrainStops.csv");
     }
 
     // Accessors
+    public Stop[] getStops() { return stops; }
     public String toString() {
         return "Number of trains: " + trainCount + "\n" +
                "Time between trains: " + timeBetweenTrains + "\n" +
                 "Time until next train leaves: " + timeUntilNextTrainLeaves + "\n" +
                 "Train speed: " + trainSpeed + "\n" +
                 "Train max capacity: " + trainCapacity + "\n" +
-                stops.size() + " Stations";
+                stops.length + " Stations";
     }
     public void printTrainsStatus() {
         for (Train train : trains) {
-            // System.out.println(train.toString());
+            System.out.println(train.toString());
         }
     }
 
@@ -66,7 +67,7 @@ public class Trains {
             System.out.println("Train #" + i);
             timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt, finishedPeople), timeUntilNextEvent);
             System.out.println("now time until next train event is " + timeUntilNextEvent);
-            if (trains.get(i).getNextStop() == TrainStop.WASHINGTON_DC) {
+            if (trains.get(i).getNextStop().isEqual(stops[stops.length-1])) {
                 finishedTrains.add(trains.remove(i));
             }
         }
@@ -80,33 +81,27 @@ public class Trains {
     // private methods
 
     // Train station locations are imported from CSV
-    public boolean importFromCSV(String filename, Stop[] stops) {
+    public boolean importFromCSV(String filename) {
         // System.out.println("Importing train data");
         File file = new File(filename);
         // System.out.println(file.getAbsolutePath());
         Scanner scanner = null;
+        ArrayList<Stop> alStops = new ArrayList<Stop>();
         try {
             scanner = new Scanner(file);
-            int i = 0;
             while( scanner.hasNextLine() ) {
-                String data = scanner.nextLine();
-                String[] fields = data.split(",");
-                String name = fields[0];
-                double x = Double.parseDouble(fields[1]); // todo: break into makeTrainStop method?
-                double y = Double.parseDouble(fields[2]);
-                stops[i] = new Stop(x,y);
-                i++;
+                alStops.add(makeTrainStop(scanner.nextLine()));
             }
         }  catch (FileNotFoundException e) {
-            // System.out.println("File not found: " + filename);
+            System.out.println("File not found: " + filename);
             e.printStackTrace();
             return false;
         } catch (IllegalStateException e) {
-            // System.out.println("Scanner was closed somehow");
+            System.out.println("Scanner was closed somehow");
             e.printStackTrace();
             return false;
         } catch (NoSuchElementException e) {
-            // System.out.println("Scanner tried to access line beyond EOF");
+            System.out.println("Scanner tried to access line beyond EOF");
             e.printStackTrace();
             return false;
         } finally {
@@ -114,7 +109,29 @@ public class Trains {
                 scanner.close();
             }
         }
+        Stop[] arStops = new Stop[alStops.size()];
+        arStops = alStops.toArray(arStops);
+        this.stops = arStops;
         return true;
+    }
+
+    private Stop makeTrainStop(String data) {
+        String[] fields = data.split(",");
+        String name = fields[0];
+        double x = Double.parseDouble(fields[1]);
+        double y = Double.parseDouble(fields[2]);
+        return new Stop(x, y, true, name);
+    }
+
+
+    // Testing methods
+
+    public static void testImport() {
+        Trains testtrains = new Trains(5,5,5, new Stop(-1,-1,true,"placeholder"));
+        System.out.println(testtrains.getStops().length + " stops");
+        for (Stop s : testtrains.getStops()) {
+            System.out.println(s);
+        }
     }
 
 
