@@ -112,6 +112,10 @@ public class Simulation {
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while(finishedPeople.getLength() < numPeople) {
             dt = update(currentTime, dt);
+            // end run if something went wrong in update()
+            if (dt == -1.0) {
+                return;
+            }
         }
         System.out.println("Finished people: " + finishedPeople.getLength());
         // todo: export people and vmt data
@@ -119,7 +123,8 @@ public class Simulation {
 
     // Advance the simulation by dt, and return the time until next event after that
     private double update(double currentTime, double dt) {
-        System.out.println("\n\n\nSimulation Update Loop\n" +
+
+                System.out.println("\n\n\nSimulation Update Loop\n" +
                 "Current time: " + currentTime +
                 "\ndt for this loop: " + dt +
                 "\nTime until next arrival: " + timeUntilNextArrival);
@@ -151,6 +156,13 @@ public class Simulation {
         }
         System.out.println("finished update loop, time until next event is " + timeUntilNextEvent);
         System.out.println("finished people count: " + isFinished);
+
+        // check if current time is NaN
+        if (Double.isNaN(currentTime)) {
+            System.out.println("Error! Current Time = NaN");
+            return -1.0;
+        }
+
         return timeUntilNextEvent;
     }
 

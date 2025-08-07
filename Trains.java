@@ -122,8 +122,7 @@ public class Trains {
         double y = Double.parseDouble(fields[2]);
         return new Stop(x, y, true, name);
     }
-
-
+    
     // Testing methods
 
     public static void testImport() {
