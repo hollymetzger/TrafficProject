@@ -51,9 +51,15 @@ public class Trains {
 
     // public methods
     public double update(double currentTime, double dt, Queue<Person> finishedPeople) {
+        // error handling
+        if (Double.isNaN(dt) || Double.isNaN(currentTime)) {
+            System.out.println("Error: Trains.update got NaN as argument");
+            return -1;
+        }
         double timeUntilNextEvent = Double.POSITIVE_INFINITY;
 
         timeUntilNextTrainLeaves -= dt;
+        System.out.println("Time until next train leaves: " + timeUntilNextTrainLeaves);
         if (timeUntilNextTrainLeaves <= 0) {
             System.out.println("Adding train to sim with speed " + trainSpeed);
             Train newTrain = new Train(trainSpeed, trainCapacity, stops);
@@ -63,17 +69,22 @@ public class Trains {
 
         // move trains along track, pickup/dropoff as needed
         // when trains get to dc, after dropping off passengers, they are moved to the finished trains list
+        System.out.println("trains.size is " + trains.size());
         for (int i = 0; i < trains.size(); i++) {
             System.out.println("Train #" + i);
-            timeUntilNextEvent = Math.min(trains.get(i).update(currentTime, dt, finishedPeople), timeUntilNextEvent);
+            double thisTrainDt = trains.get(i).update(currentTime, dt, finishedPeople);
+            System.out.println("Train " + i + ": " + thisTrainDt);
+            // timeUntilNextEvent = Math.min(Math.min(thisTrainDt, timeUntilNextEvent), timeUntilNextTrainLeaves);
             System.out.println("now time until next train event is " + timeUntilNextEvent);
             if (trains.get(i).getNextStop().isEqual(stops[stops.length-1])) {
                 finishedTrains.add(trains.remove(i));
             }
         }
 
-
-        // System.out.println("Time until next train event: " + timeUntilNextEvent);
+        if (Double.isNaN(timeUntilNextEvent) || Double.isInfinite(timeUntilNextEvent)) {
+            System.out.println("Error: Trains.update returning NaN");
+        }
+        System.out.println("Time until next train event: " + timeUntilNextEvent);
         return timeUntilNextEvent;
     }
 
