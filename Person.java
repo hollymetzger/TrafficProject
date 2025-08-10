@@ -11,20 +11,21 @@ public class Person {
     private double destinationTrainStationTime; // when they arrived at the destination train station
     private double destinationBusTime; // when they boarded the destination bus
     private double destinationBusStopTime; // when they arrive at the final bus stop
+    private double finalDestinationTime; // when they deboard bus at their final destination
     private double timeOnStartBus; // the time they spent riding the start bus
     private double timeOnTrain; // the time they spent riding the train
     private double timeOnEndBus; // the time they spent riding the second bus
     private double totalTimeInSystem;
 
-    private String homeCity; // home city is only used for printing data at the end, so we just store it as a string
-    private City destinationCity; // destination city is used in the code, so we use an enum to reduce errors
+    private String homeCity;
+    private String destinationCity;
 
     // Constructor
-    public Person(Location home, Location destination, String homeCity) {
+    public Person(Location home, Location destination, String homeCity, String destCity) {
         this.home = home;
         this.destination = destination;
         this.homeCity = homeCity;
-        this.destinationCity = null; // todo: set dest train stop according to dest location city
+        this.destinationCity = destCity;
     }
 
     // Accessors
@@ -34,29 +35,27 @@ public class Person {
     public Location getDestinationLoc() {
         return destination;
     }
-    public City getDestinationCity() {
+    public String getDestinationCity() {
         return destinationCity;
     }
     public double getTimeOnStartBus() {
         return timeOnStartBus;
     }
 
+    // Mutators
+    public void setBusStopTime(double currentTime) { this.busStopTime = currentTime; }
+    public void setHomeTrainStationTime(double currentTime) { this.homeTrainStationTime = currentTime; }
+    public void setTrainTime(double currentTime) { this.trainTime = currentTime; }
+    public void setDestinationTrainStationTime(double currentTime) { this.destinationTrainStationTime = currentTime; }
+    public void setDestinationBusTime(double currentTime) { this.destinationBusTime = currentTime; }
+    public void setDestinationBusStopTime(double currentTime) { this.destinationBusStopTime = currentTime; }
+    public void setFinalDestinationTime(double currentTime) { this.finalDestinationTime = currentTime; }
+
     // exports in csv format for analytics
     public String toString() {
         return home.toString() + "," + destination.toString() + "," +
                 totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
                 timeOnTrain;                                            //  instead of multiplying start bus by 2
-    }
-
-    // Mutators
-    public void addTime(double time) {
-        totalTimeInSystem += time;
-    }
-
-    // Public Methods
-    public void update(double currentTime, double dt) {
-        totalTimeInSystem += dt;
-        // todo: update time tracking fields
     }
 
     // Testing Method
