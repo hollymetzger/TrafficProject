@@ -4,6 +4,7 @@ public class Person {
     private Location home, destination;
 
     // data analytic fields
+    private double homeWalkTime; // the time it took for a person to walk to the bus stop nearest their home location
     private double busStopTime; // when they arrived at the bus stop
     private double homeBusTime; // when they got on the first bus
     private double homeTrainStationTime; // when they arrived at first train station
@@ -11,7 +12,8 @@ public class Person {
     private double destinationTrainStationTime; // when they arrived at the destination train station
     private double destinationBusTime; // when they boarded the destination bus
     private double destinationBusStopTime; // when they arrive at the final bus stop
-    private double finalDestinationTime; // when they deboard bus at their final destination
+    private double destinationWalkTime; // the time it took for this to walk from bus stop to final location
+
     private double timeOnStartBus; // the time they spent riding the start bus
     private double timeOnTrain; // the time they spent riding the train
     private double timeOnEndBus; // the time they spent riding the second bus
@@ -42,20 +44,26 @@ public class Person {
         return timeOnStartBus;
     }
 
+    // toString prints in csv format for analytics
+    public String toString() {
+        return home.toString() + "," + destination.toString() + "," +
+                totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
+                timeOnTrain;                                            //  instead of multiplying start bus by 2
+    }
+
     // Mutators
+    public void setHomeWalkTime(double time) { this.homeWalkTime = time; }
     public void setBusStopTime(double currentTime) { this.busStopTime = currentTime; }
     public void setHomeTrainStationTime(double currentTime) { this.homeTrainStationTime = currentTime; }
     public void setTrainTime(double currentTime) { this.trainTime = currentTime; }
     public void setDestinationTrainStationTime(double currentTime) { this.destinationTrainStationTime = currentTime; }
     public void setDestinationBusTime(double currentTime) { this.destinationBusTime = currentTime; }
     public void setDestinationBusStopTime(double currentTime) { this.destinationBusStopTime = currentTime; }
-    public void setFinalDestinationTime(double currentTime) { this.finalDestinationTime = currentTime; }
+    public void setDestinationWalkTime(double time) { this.destinationWalkTime = time; }
 
-    // exports in csv format for analytics
-    public String toString() {
-        return home.toString() + "," + destination.toString() + "," +
-                totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
-                timeOnTrain;                                            //  instead of multiplying start bus by 2
+    // private methods
+    private boolean calculate() {
+        return true;
     }
 
     // Testing Method
@@ -65,7 +73,7 @@ public class Person {
         int failCount = 0;
         int testCount = 0;
 
-        Person p = new Person(new Location(0, 0), new Location(10, 10), "home");
+        Person p = new Person(new Location(0, 0), new Location(10, 10), "home", "destination");
         if (!p.getHome().toString().equals("(0.0, 0.0)")) {
             failCount++;
             System.out.println("FAIL: person home should have been (0.0, 0.0)");
@@ -76,7 +84,12 @@ public class Person {
             System.out.println("FAIL: person destination should have been (10.0, 10.0)");
         }
         testCount++;
+        p.setBusStopTime(10.0);
+        p.setDestinationBusStopTime(60.0);
+
 
         System.out.printf("Person tests passed: %d/%d\n",testCount-failCount, testCount);
+
+        System.out.println("total time in system befofe calculating: " + p.totalTimeInSystem);
     }
 }

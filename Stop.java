@@ -47,7 +47,8 @@ public class Stop extends Location {
     // Public Methods
     public double getTotalWaitTime() {
         // todo: for each Person in queue, sum the time they have been
-        //  waiting at this stop
+        //  waiting at this stop. need to add currentTime as a param bc person class only stores time that they
+        //  arrived at the stop now how long they've been waiting
         return 1.0;
     }
 
@@ -55,7 +56,7 @@ public class Stop extends Location {
         line.enqueue(person);
         if (first) {
             double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-            person.addTime(walkTime);
+            person.setHomeWalkTime(walkTime);
         }
     }
 

@@ -8,11 +8,11 @@ public class UnitTest {
         System.out.println("Running Unit Tests");
 
         // Location.doUnitTests();
-        // Person.doUnitTests();
+        Person.doUnitTests();
         // People.doUnitTests();
         // Vehicle.doUnitTests();
         // Bus.doUnitTests();
-        Trains.testImport();
+        // Trains.testImport();
         // Cities.doUnitTests();
         // Simulation.doArrivalUnitTests();
         // ExponentialDistribution.doUnitTests();
