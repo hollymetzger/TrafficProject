@@ -43,15 +43,6 @@ public class Train extends Vehicle {
             setNextStop();
         }
 
-        // update passengers on train
-        for (int i = 0; i < currentCapacity; i++) {
-            Node<Person> person = passengers.getHead();
-            while (person != null) {
-                person.getData().update(currentTime,dt);
-                person = person.getNext();
-            }
-        }
-
         double distance = speed*dt;
         distanceToNextStop -= distance;
         totalDistanceTraveled += distance;
@@ -84,7 +75,7 @@ public class Train extends Vehicle {
         // iterate through queue and sort each node into their respective queues
         Node<Person> passenger = passengers.getHead();
         while (passenger != null) {
-            if (passenger.getData().getDestinationCity().getName().equals(this.stops[nextStop].getName())) {
+            if (passenger.getData().getDestinationCity().equals(this.stops[nextStop].getName())) {
                 disembarking.enqueue(passenger.getData());
             } else {
                 remaining.enqueue(passenger.getData());

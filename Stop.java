@@ -59,6 +59,4 @@ public class Stop extends Location {
             person.setHomeWalkTime(walkTime);
         }
     }
-
-
 }

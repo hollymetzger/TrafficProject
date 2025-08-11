@@ -77,7 +77,7 @@ public class City extends Location {
         Location home = convertPolar(theta, r);
         home.addVector(this);
         Location destination = home; // todo: generate end location same way
-        Person person = new Person(home, destination, getName());
+        Person person = new Person(home, destination, getName(), "destination"); // todo set destination
         population--;
 
         // Add the person to the queue of the nearest bus stop in the city

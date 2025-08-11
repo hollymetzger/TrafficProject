@@ -14,9 +14,10 @@ public class Person {
     private double destinationBusStopTime; // when they arrive at the final bus stop
     private double destinationWalkTime; // the time it took for this to walk from bus stop to final location
 
-    private double timeOnStartBus; // the time they spent riding the start bus
+    private double timeOnHomeBus; // the time they spent riding the start bus
     private double timeOnTrain; // the time they spent riding the train
     private double timeOnEndBus; // the time they spent riding the second bus
+    private double timeWaiting; // the time they spent waiting at stops
     private double totalTimeInSystem;
 
     private String homeCity;
@@ -41,13 +42,13 @@ public class Person {
         return destinationCity;
     }
     public double getTimeOnStartBus() {
-        return timeOnStartBus;
+        return timeOnHomeBus;
     }
 
     // toString prints in csv format for analytics
     public String toString() {
         return home.toString() + "," + destination.toString() + "," +
-                totalTimeInSystem + "," + timeOnStartBus*2 + "," +      // todo: when i add the end bus portion use that
+                totalTimeInSystem + "," + timeOnHomeBus*2 + "," +      // todo: when i add the end bus portion use that
                 timeOnTrain;                                            //  instead of multiplying start bus by 2
     }
 
@@ -62,8 +63,13 @@ public class Person {
     public void setDestinationWalkTime(double time) { this.destinationWalkTime = time; }
 
     // private methods
-    private boolean calculate() {
-        return true;
+    private void calculate() {
+        timeOnHomeBus = homeTrainStationTime - homeBusTime;
+        timeOnTrain = destinationTrainStationTime - trainTime;
+        timeOnEndBus = destinationBusStopTime - destinationBusTime;
+        timeWaiting = (homeBusTime - busStopTime) +
+                (trainTime - homeTrainStationTime) +
+                (destinationBusTime - destinationTrainStationTime);
     }
 
     // Testing Method
