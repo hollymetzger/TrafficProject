@@ -132,7 +132,7 @@ public class Simulation {
         timeUntilNextArrival = Math.max(0, timeUntilNextArrival - dt);
 
         // add commuters to the simulation
-        if (timeUntilNextArrival == 0 && fredrickCities.generateCommuter()) {
+        if (timeUntilNextArrival == 0 && fredrickCities.generateCommuter(currentTime)) {
             System.out.println("incing cc");
             commuterCount++;
             this.setTimeUntilNextArrival();

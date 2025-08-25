@@ -52,11 +52,11 @@ public class Stop extends Location {
         return 1.0;
     }
 
-    public void add(Person person, boolean first) {
+    public void add(Person person, boolean first, double currentTime) {
         line.enqueue(person);
         if (first) {
             double walkTime = getDistance(person.getHome()) / 2.5; // average person walks 2.5mph
-            person.setHomeWalkTime(walkTime);
+            person.setLeftHouseTime(currentTime - walkTime);
         }
     }
 }

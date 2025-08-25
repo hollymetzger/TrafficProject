@@ -44,7 +44,7 @@ public class Vehicle {
     public void dropOff(Stop stop) {
         Person person = passengers.dequeue();
         while (person != null) {
-            stop.add(person, false);
+            stop.add(person, false, 0);
             person = passengers.dequeue();
         }
 
