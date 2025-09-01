@@ -64,7 +64,7 @@ public class Cities {
         return total;
     }
 
-    public boolean generateCommuter() {
+    public boolean generateCommuter(double currentTime) {
         System.out.println("cities generating commuter");
         int randomInt = (int) (Math.random()*getTotalPopulation());
         int populationSum = 0;
@@ -74,7 +74,7 @@ public class Cities {
         for (City city : cities) {
             populationSum += city.getPopulation();
             if (randomInt <= populationSum) {
-                commuterAdded = city.generateCommuter();
+                commuterAdded = city.generateCommuter(currentTime);
             }
         }
         return commuterAdded;

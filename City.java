@@ -62,7 +62,7 @@ public class City extends Location {
          return timeOfNextEvent;
     }
 
-    public boolean generateCommuter() {
+    public boolean generateCommuter(double currentTime) {
         // double check not to spawn extra people
         if (population == 0) {
             System.out.println("tried to spawn person that doesn't exist");
@@ -77,11 +77,11 @@ public class City extends Location {
         Location home = convertPolar(theta, r);
         home.addVector(this);
         Location destination = home; // todo: generate end location same way
-        Person person = new Person(home, destination, getName());
+        Person person = new Person(home, destination, getName(), "destination"); // todo set destination
         population--;
 
         // Add the person to the queue of the nearest bus stop in the city
-        home.getNearest(busStops.getStops()).add(person, true);
+        home.getNearest(busStops.getStops()).add(person, true, currentTime);
         System.out.println("Generating commuter in " + getName() +
                 "\nAdding to bus stop at " + home.getNearest(busStops.getStops()).toString());
         return true;
