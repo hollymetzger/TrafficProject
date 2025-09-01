@@ -106,8 +106,23 @@ public class Simulation {
     public void addTime(double dt) { this.currentTime += dt; }
 
     // Public Methods
-
     public void run() {
+        runSetLoops(5);
+    }
+
+   // Private Methods
+    private void runSetLoops(int loops) {
+        double dt = timeUntilNextArrival;
+        for (int i = 0; i < loops; i++) {
+            dt = update(currentTime, dt);
+            // end run if something went wrong in update()
+            if (dt == -1.0) {
+                return;
+            }
+        }
+    }
+
+    private void runTrackPeople() {
         System.out.println("Running simulation");
         double dt = timeUntilNextArrival; // set first dt to pass into update
         while(finishedPeople.getLength() < numPeople) {
@@ -120,7 +135,6 @@ public class Simulation {
         System.out.println("Finished people: " + finishedPeople.getLength());
         // todo: export people and vmt data
     }
-
     // Advance the simulation by dt, and return the time until next event after that
     private double update(double currentTime, double dt) {
 
